@@ -1,0 +1,430 @@
+body {
+    .ui-breadcrumb {
+        background-color: $headerBgColor;
+        padding: $headerPadding;
+        
+        ul {
+            li {
+                float: none;
+                display: inline-block;
+                vertical-align: middle;
+                
+                .ui-menuitem-link {
+                    font-size: $fontSize + 2;
+                    color: $headerTextColor;
+                    margin: 0;
+                }
+                
+                &.ui-breadcrumb-chevron {
+                    @include icon_override("\f105");
+                    font-size: $fontSize + 2;
+                    margin: 0 .45em;
+                    color:$headerIconColor;
+                }
+                
+                &:first-child {
+                    font-size: $fontSize + 2;
+                    
+                    a.ui-icon-home {
+                        color:$headerIconColor;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+    
+    .ui-steps {
+        position: relative;
+        
+        .ui-steps-item {
+            background-color: transparent;
+            text-align: center;
+                        
+            .ui-menuitem-link {
+                display: inline-block;
+                text-align: center;
+                background-color: transparent;
+                overflow: hidden;
+                
+                .ui-steps-number {
+                    display: inline-block;
+                    background-color: $primaryColor;
+                    @include border-radius(5px);
+                    padding: 0.5em 1em;
+                    font-weight: bold;
+                    font-size: 1em;
+                    color: #ffffff;
+                    position: relative;
+                    top: 1.1em;
+                    margin-bottom: 1em;
+                    border: 1px solid lighten($primaryColor,15%);
+                }
+                
+                .ui-steps-title {
+                    display: block;
+                    margin-top: 0.45em;
+                    color: $textSecondaryColor;
+                }
+            }
+            
+            &.ui-state-disabled {
+                @include opacity(1);
+                .ui-steps-number {
+                    background-color: $headerBgColor;
+                    border-color: $headerBorderColor;
+                    color: $headerTextColor;
+                }
+            }
+            
+            &.ui-state-highlight {
+                .ui-steps-number {
+                    background-color: $primaryColor;
+                }
+                
+                .ui-steps-title { 
+                    font-weight: 700;
+                    color: $textColor;
+                }
+            }
+            
+            &:last-child {
+                .ui-menuitem-link {
+                    display: block;
+                }
+            }
+        }
+
+        &:before {
+            content:' ';
+            border: 1px solid $primaryColor;
+            width: 100%;
+            top: 45%;
+            left: 0;
+            display: block;
+            position: absolute;
+        }
+    }
+    
+    .ui-menu {
+        padding: 0;
+        
+        &.ui-shadow, .ui-shadow {
+            border: $overlayBorder;
+            @include overlay-shadow();
+        }
+        
+        .ui-menu-list {
+            .ui-widget-header {
+                margin: 1px 0 1px 0;
+                width: 100%;
+                box-sizing: border-box;
+                border: 0 none;
+                background-color: darken($dividerColor,5%);
+                @include border-radius(0);
+                
+                h3 {
+                    padding: $headerPadding;
+                    font-weight: 700;
+                    
+                    .ui-icon-triangle-1-s {
+                        margin-top: -0.75em;    
+                    }
+                }
+                
+                .ui-icon {
+                    color: $headerIconColor;
+                }
+                
+                &.ui-state-hover {
+                    background-color: $headerHoverBgColor;
+                    
+                    .ui-icon {
+                        color: $headerIconHoverColor;
+                    }
+                }
+                
+                &:first-child {
+                    margin-top: 0;
+                }
+            }
+            
+            .ui-menuitem {
+                margin: 0;
+                @include border-radius(0);
+                
+                &.ui-state-hover {
+                    @include menu-item-hover();
+                    
+                    .ui-menuitem-link {
+                        color: #ffffff;
+                    }
+                }
+                                
+                .ui-menuitem-link {
+                    padding: $listItemPadding;
+                    width: 100%;
+                    box-sizing: border-box;
+                    @include border-radius(0);
+                    color: $textColor;
+                    
+                    &:hover {
+                        @include menu-item-hover();
+                    }
+                    
+                    .ui-menuitem-icon {
+                        margin-right: .3em;
+                        position: relative;
+                        top: 1px;
+                    }
+                                        
+                    .ui-submenu-icon {
+                        line-height: 1.3;
+                        vertical-align: middle;
+                    }
+                }
+                
+                &.ui-menuitem-active {
+                    > .ui-menuitem-link {
+                        background-color: $primaryColor;
+                        color: #ffffff;
+                    }
+                }
+                
+                &:first-child {
+                    .ui-menuitem-link {
+                        @include border-radius-top($borderRadius);
+                    }
+                }
+                
+                &:last-child {
+                    .ui-menuitem-link {
+                        @include border-radius-bottom($borderRadius);
+                    }
+                }
+            }
+            
+            .ui-menu-child {
+                padding: 0;
+                
+                &.ui-shadow {
+                    @include overlay-shadow();
+                }
+            }
+            
+        }
+        
+        &.ui-menubar {
+            background-color: $headerBgColor;
+            border-color: $headerBorderColor;
+            
+            .ui-menubar-root-list {
+                > li {
+                    > a {
+                        line-height: 1.25;
+                        @include border-radius(0);
+                    }
+                    
+                    &:first-child {
+                        .ui-menuitem-link {
+                            @include border-radius(0);
+                            @include border-radius-left($borderRadius);
+                        }
+                    }
+                    
+                    &:last-child {
+                        .ui-menuitem-link {
+                            @include border-radius(0);
+                        }
+                    }
+                }
+            }
+
+        }
+        
+        &.ui-megamenu {            
+            &.ui-megamenu-vertical { 
+                > .ui-menu-list {
+                    .ui-menuitem {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+        
+        &.ui-slidemenu {
+            .ui-menuitem {
+                &.ui-menu-parent {
+                    .ui-menuitem-link {
+                        border-radius: 0;
+                    }
+                }
+            }
+            
+            .ui-slidemenu-backward {
+                padding: $headerPadding;
+                width: 100%;
+                box-sizing: border-box;
+                @include border-radius(0);
+                border: 0 none;
+                border-top: 1px solid $headerBorderColor;
+
+                span:last-child {
+                    vertical-align: bottom;
+                }
+                
+                &:hover {
+                    background-color: $headerHoverBgColor;
+                }
+                
+                .ui-icon-triangle-1-w {
+                    @include icon_override("\f104");
+                    position: relative;
+                    top: 2px;
+                }
+            }
+            
+            .ui-menu-child {
+                padding: 0;
+                
+                &.ui-shadow {
+                    @include no-shadow();
+                }
+            }
+        }
+    }
+    
+    .ui-tabmenu {
+        border: 0 none;
+        
+        .ui-tabmenu-nav {
+            padding: 0;
+            
+            .ui-tabmenuitem {
+                margin: 0;
+                position: static;
+                @include transition(background-color $transitionDuration);
+                @include border-radius(0);
+                
+                .ui-menuitem-link {
+                    color: $headerTextColor;
+                    padding: $headerPadding;
+                    
+                    .ui-menuitem-icon, .ui-menuitem-text {
+                        vertical-align: middle;
+                        display: inline-block;
+                        float: none;
+                        line-height: 1;
+                    }
+                    
+                    .ui-menuitem-icon {
+                        color: $headerIconColor;
+                    }
+                }
+                
+                &:not(.ui-state-active):not(.ui-state-disabled):hover {
+                    background-color: $headerHoverBgColor;
+                    
+                    .ui-menuitem-icon {
+                        color: $headerIconHoverColor;
+                    }
+                }
+                
+                &.ui-state-active {
+                    .ui-menuitem-link {
+                        background-color:$primaryColor;
+                        color:$primaryTextColor;
+                        
+                        .ui-menuitem-icon {
+                            color:$primaryTextColor;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    .ui-menubutton {
+        .ui-button.ui-button-text-icon-left {
+             .ui-icon {
+                 margin-top: -0.75em;
+             }
+         }
+    }
+        
+    .ui-panelmenu {
+        .ui-icon {
+            position: static;
+        }
+        
+        .ui-panelmenu-header {
+            background-color: $headerBgColor;
+            padding: 0;
+            font-size: $fontSize;
+            color: $headerTextColor;
+            border: 1px solid $headerBorderColor;
+            @include transition(background-color $transitionDuration);
+                        
+            a {
+                padding: $headerPadding;
+                color: $headerTextColor;
+            }
+            
+            &:not(.ui-state-active):hover {
+                background-color: $headerHoverBgColor;
+                
+                .ui-icon {
+                    color: $headerIconHoverColor;
+                }
+            }
+            
+            &.ui-state-active {
+                background-color: $primaryColor;
+                
+                a {
+                    color: $primaryTextColor;
+                }
+
+                .ui-icon {
+                    color: $primaryTextColor;
+                }
+            }
+        }
+        
+        .ui-panelmenu-panel {
+            margin-top: 2px;
+            
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+        
+        .ui-panelmenu-content {
+            .ui-menuitem-link {
+                padding: $listItemPadding;
+                color: $textColor;
+                @include transition(background-color );
+                
+                &:hover {
+                    @include list-item-hover();
+                }
+                                
+                > span.ui-icon {
+                    display: inline-block;
+                    vertical-align: middle;
+                    left: auto;
+                    margin-right: 0.3em;
+                    
+                    &.ui-panelmenu-icon.ui-icon-triangle-1-s {
+                        margin-top: -0.3em;
+                    }
+                }
+                
+                .ui-menuitem-text {
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+}

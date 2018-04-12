@@ -1,0 +1,132 @@
+<!-- <p-growl [value]="msgs" sticky="sticky">
+  </p-growl> -->
+<div class="ui-fluid licence-bg">
+    <div class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0 m-b-10">
+        <div class="journal-heading">
+            <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+            <h1>Trial Balance - Groups</h1>
+            <div class="ui-toolbar-group-right inlineflex">
+                <button [routerLink]="['/reports/list']" icon="fa-window-close " pbutton="" type="button" class="ui-button ui-widget ui-state-default center-icon ui-corner-all ui-button-icon-only">
+                    <span class="ui-button-icon-left center-icon ui-clickable fa fa-times"></span>
+                    <span class="ui-button-text ui-clickable">ui-btn</span>
+                </button>
+                <button (click)="pdfdownload()" icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                    <span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span>
+                    <span class="ui-button-text ui-clickable">ui-btn</span>
+                </button>
+                <!-- <button icon="fa-print" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-print"></span>
+            <span class="ui-button-text ui-clickable">ui-btn</span></button> -->
+
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-lg-12 ul-md-12 p-t-0 tb-list-view ui-border-0">
+        <div class="clearfix "></div>
+        <p-tabView #tbtabview [activeIndex]="activetabindex" [controlClose]="true" (onClose)="handleTabClose($event,tbtabview)" class="left width100per" >
+            <p-tabPanel header="Trial Balance">
+                <!-- Left Side -->
+                <!-- <p-contextMenu #tb_cmenu [model]="cmenu_items"></p-contextMenu> -->
+                <p-treeTable class="tabel left" #tbTreeTable [value]="TBtreeData" selectionMode="single" [(selection)]="selectedAccount"
+                    (onNodeSelect)="onnodeSelect($event)" [style]="{'margin':'5px'}">
+                    <p-header>
+                        Trail Balance ({{finyear.finyear}})
+                        <!-- <button pButton style="float: right" type="button" icon="fa-compress" (click)="expandNodeAll(tbTreeTable)" iconPos="left"></button> -->
+                    </p-header>
+                    <p-column [style]="{'width':'22%','text-align':'left'}" field="accountname" header="Particular">
+                        <!-- <ng-template let-col let-account="rowData" pTemplate="header">
+                            <span style="text-align: left">Particular</span>
+                        </ng-template> -->
+                        <ng-template let-col let-account="rowData" pTemplate="body">
+                            <span style="text-align: left;font-weight: bold;" (click)="addTabViewledger(account,tbtabview)" title="{{account.data.accountname}}">{{account.data.accountname}}</span>
+                            <!-- <button *ngIf="account.data.level ==2 " pButton (click)="addTabViewledger(account,tbtabview)" icon="fa-eye"></button> -->
+                        </ng-template>
+                    </p-column>
+                    <!-- <p-column [style]="{'width':'10%'}" field="crdr" header="Particular">
+              <ng-template let-col let-account="rowData" pTemplate="header">
+                <span style="text-align: left">Symbol</span>
+              </ng-template>
+              <ng-template let-col let-account="rowData" pTemplate="body">
+                <span style="text-align: left;font-weight: bold;">{{account.data.crdr}}</span>
+              </ng-template>
+            </p-column> -->
+                    <p-column [style]="{'width':'17%'}" field="openingbalance" header="Opening Balance" styleClass="text-right">
+                        <!-- <ng-template let-col let-account="rowData" pTemplate="header">
+                            <div style="width:100%">Opening Balance</div>
+                        </ng-template> -->
+                        <ng-template let-col let-account="rowData" pTemplate="body">
+                            <div style="width:180px">{{account.data.openingbalance | currency : currency_sy : 'symbol'}}</div>
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'width':'17%'}" field="debit" header="Debit" styleClass="text-right">
+                        <!-- <ng-template let-col let-account="rowData" pTemplate="header">
+                            <div style="width:100%">Debit</div>
+                        </ng-template> -->
+                        <ng-template let-col let-account="rowData" pTemplate="body">
+                            <div style="width:180px">{{account.data.debit | currency : currency_sy : 'symbol'}}</div>
+                        </ng-template>
+                    </p-column>
+
+                    <p-column [style]="{'width':'17%'}" field="credit" header="Credit" styleClass="text-right">
+                        <!-- <ng-template let-col let-account="rowData" pTemplate="header">
+                            <div style="width:100%;text-align: right">Credit</div>
+                        </ng-template> -->
+                        <ng-template let-col let-account="rowData" pTemplate="body">
+                            <div style="width:180px">{{account.data.credit | currency : currency_sy : 'symbol'}}</div>
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'width':'17%'}" field="closingbalance" header="Closing Balance" styleClass="text-right">
+                        <!-- <ng-template let-col let-account="rowData" pTemplate="header">
+                            <div style="width:100%;text-align: right">Closing Balance</div>
+                        </ng-template> -->
+                        <ng-template let-col let-account="rowData" pTemplate="body">
+                            <div style="width:180px">{{account.data.closingbalance | currency : currency_sy : 'symbol'}}</div>
+                        </ng-template>
+                    </p-column>
+
+                    <p-footer class="tree_footer" [style]="{'width':'100%','padding':'0','min-height' : '30px','margin-bottom':'20px'}">
+                        <div *ngIf=" (TBcTotal - TBdTotal) > 0 || (TBdTotal - TBcTotal) > 0 " style="width:100%">
+                            <div class="left tree_footercols text-right" style="width:24%">
+                                <span>Difference : </span>
+                            </div>
+                            <div class="left tree_footercols text-right" style="width:19%"></div>
+                            <div class="left tree_footercols text-right" style="width:19%">
+                                <span *ngIf='(TBcTotal - TBdTotal) > 0 '>{{ (TBcTotal - TBdTotal) | currency : currency_sy : 'symbol' }}</span>
+                            </div>
+                            <div class="left tree_footercols  text-right" style="width:19%">
+                                <span *ngIf='(TBdTotal - TBcTotal) > 0 '>{{ (TBdTotal - TBcTotal) | currency : currency_sy : 'symbol' }}</span>
+                            </div>
+                            <div class="left tree_footercols text-right" style="width:19%"></div>
+                        </div>
+                        <div style="width:100%;clear: both;">
+                            <div class="left tree_footercols text-right" style="width:24%">
+                                <span>Grand Total : </span>
+                            </div>
+                            <div class="left tree_footercols text-right" style="width:19%">
+                                <!-- <span>{{ TBopeningTotal | currency : currency_sy : 'symbol' }}</span> -->
+                            </div>
+                            <div class="left tree_footercols  text-right" style="width:19%">
+                                <span>{{ GrandDTotal | currency : currency_sy : 'symbol' }}</span>
+                            </div>
+                            <div class="left tree_footercols  text-right" style="width:19%">
+                                <span>{{ GrandcTotal | currency : currency_sy : 'symbol' }}</span>
+                            </div>
+                            <div class="left tree_footercols text-right" style="width:19%">
+                                <!-- <span>{{TBclodingTotal | currency : currency_sy : 'symbol' }}</span> -->
+                            </div>
+                        </div>
+                    </p-footer>
+
+                </p-treeTable>
+                <!-- <p>Selected Nodes: <span *ngFor="let file of selectedFiles ">{{file.data.name}} </span></p> -->
+            </p-tabPanel>
+            <!-- <p-tabPanel *ngFor="let ledger of tabbedledgers; " header="{{ledger}} ">
+            Content 1 {{ledger}}
+        </p-tabPanel> -->
+
+            <p-tabPanel [closable]="true " *ngFor="let ledger of tabbedledgers; " header="{{ledger.accountname}} ">
+                <app-ledger [externalinput]=true externalsubaccheadid="{{ledger.accountid}} " externalstartdate="" externalenddate=" "></app-ledger>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0 p-b-0">
+    <div class=" journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1 class="">Bank transfer</h1>
+        <div class="ui-toolbar-group-right ui-corner-all">
+            <button pButton type="button" label="Add" icon="fa-plus" (click)="AddTransfer(btview)"></button>
+        </div>
+    </div>
+    <div class=" bank-list  bank-list-3 ui-g-12 product-list">
+        <p-tabView [controlClose]="true" (onClose)="handleClose($event,btview)" #btview [activeIndex]="activetabindex">
+            <p-tabPanel [selected]="list" header="Transfer" leftIcon="fa-book">
+
+                <p-dataTable [value]="allbanktransfer" selectionMode="single" scrollable="true" [paginator]="true" [rows]="10" [responsive]="true" #banktransfertable>
+                    <p-column field="journalno" header="Trans.No" [filter]="show" [style]="{'width':'18%'}" [sortable]="true" filterMatchMode="contains"></p-column>
+                    <p-column field="journaldt" styleClass="col-button" [filter]="show" [style]="{'width':'18%'}" filterMatchMode="contains" [sortable]="true">
+                        <ng-template pTemplate="header">
+                            Trans Date
+                        </ng-template>
+                        <ng-template let-allbanktransfer="rowData" pTemplate="body">
+                            {{allbanktransfer.journaldt | date:datafromat}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="accheadname" header="Bank Name" [filter]="show" [style]="{'width':'23%','text-align':'left'}" [sortable]="true" filterMatchMode="contains"></p-column>
+                    <p-column field="fromaccno" header="Account No" [filter]="show" [style]="{'width':'23%','text-align':'left'}" [sortable]="true" filterMatchMode="contains"></p-column>
+                    <p-column field="createdby" header="Created By" [filter]="show" [sortable]="true" [style]="{'width':'21%','text-align':'left'}" filterMatchMode="contains">
+                        <ng-template let-createdBy="rowData" pTemplate="body" style="text-align:right">
+                            {{createdBy.createdby}}<br>
+                            <span class="dd_datespan">{{createdBy.createddt | date:displaydtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="journaltotal" styleClass="col-button" [filter]="show" [style]="{'width':'15%'}" [style]="{'text-align': 'center'}" filterMatchMode="contains">
+                        <ng-template pTemplate="header">
+                            Amount
+                        </ng-template>
+                        <ng-template let-journalTot="rowData" pTemplate="body">
+                            {{journalTot.journaltotal | currency : currency_Symbol : 'symbol'}}
+                        </ng-template>
+                    </p-column>
+                    <!--<p-column field="journaltotal" header=" Amount  (₹)" [filter]="show" [sortable]="true"></p-column>-->
+                    <p-column styleClass="col-button" [style]="{'width':'18%'}" [style]="{'text-align': 'center'}">
+                        <ng-template pTemplate="header">
+                            <p><button pButton icon="fa-search" id="banktransf_search_icon" (click)="showhidefilter(banktransfertable,'banktransf_search_icon')"></button></p>
+                        </ng-template>
+                        <ng-template let-selectedtrf="rowData" pTemplate="body" style="text-align:center">
+                            <button type="button" pButton (click)="addTabViewtransfer(selectedtrf,btview)" icon="fa-eye"></button>
+                            <button type="button" pButton icon="fa-pencil" (click)="viewtransfer(selectedtrf,btview)"></button>
+                            <a pButton type="button" (click)="pdfdownload(selectedtrf.journalid,selectedtrf.journalno)" icon="fa-arrow-down"></a>
+                            <button type="button" pButton icon="fa-trash" (click)="deleteRecord(selectedtrf)"></button>
+                            
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </p-tabPanel>
+            <p-tabPanel [selected]="addnew" header="Add Transfer" leftIcon="fa-plus" *ngIf="addtrf" [closable]="true" #fileInput>
+                <app-banktransfer [tranfls]="tranfls" (notifyNewBankTransaction)="notifyNewBankTransfer($event)"></app-banktransfer>
+            </p-tabPanel>
+            <p-tabPanel [selected]="editpro" header="Edit transfer" leftIcon="fa-pencil" *ngIf="edittrf" [closable]="true" #fileInput>
+                <app-banktransfer [tranfls]="tranfls" (notifyNewBankTransaction)="notifyNewBankTransfer($event)"></app-banktransfer>
+            </p-tabPanel>
+            <p-tabPanel [closable]="true" *ngFor="let transfer of selectedtrf; let i = index" header="{{transfer.journalno}}" leftIcon="fa-eye">
+                <div class="my_dynamica_lead_tabPanel">
+                    <!-- I can add content to this div with tabView.onChange() api -->
+                    <app-view-banktransfer journalid="{{transfer.journalid}}"></app-view-banktransfer>
+                </div>
+
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

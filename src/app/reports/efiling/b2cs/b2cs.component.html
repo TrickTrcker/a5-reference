@@ -1,0 +1,57 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0 p-b-0">
+
+  <div class="journal-heading m-b-10">
+    <div class="ui-helper-clearfix">
+      <div class="ui-g-12 ui-lg-4 ui-md-4 p-t-0 p-b-0">
+        <img class="infobook-logo ui-toolbar-group-left">
+        <h1 class="pull-left">B2CS</h1>
+      </div>
+      <div class="ui-toolbar-group-left ui-g-12 ui-lg-7 ui-md-7 p-t-0 p-b-0 text-right">
+        <span class="">{{selectedyear}}</span><br>
+        <span style="font-size:12px" class="pcs-label inv-view-label">{{startDate}}  -  {{endDate}}</span>
+
+      </div>
+      <div class="ui-toolbar-group-right ui-corner-all brand-overlay ui-g-12 ui-lg-1 ui-md-1 p-t-0 p-b-0 text-right inlineflex" style="padding-left: 4%;">
+
+        <button (click)="ExporttoCSV()" icon="fa-file-excel" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-file-excel-o"></span>
+                            <span class="ui-button-text ui-clickable">ui-btn</span>
+                          </button>
+        <button (click)="redirecttoprev()" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                                    <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                                    <span class="ui-button-text ui-clickable">ui-btn</span>
+                                  </button>
+      </div>
+    </div>
+  </div>
+  <div class="user-list ui-g-12 product-list">
+    <p-dataTable #dt [value]="b2csdata" selectionmode="single" [paginator]="true" [rows]="10" exportFilename="b2b" #dt>
+      <div class="ui-datatable ui-widget ui-datatable-reflow">
+        <div class="ui-datatable-tablewrapper">
+          <p-column field="type" header="Type" [style]="{'width': '14%'}" [sortable]="true"></p-column>
+          <p-column field="placeofsupply" header="Place Of Supply" [sortable]="true" hidden="true"></p-column>
+         
+          <p-column field="rate" header="Rate" [sortable]="true" [style]="{'text-align':'right'}">
+            <ng-template let-rate="rowData" pTemplate="body" style="text-align: left">
+              <span>{{rate.rate}}%</span>
+            </ng-template>
+          </p-column>
+
+          <p-column field="taxablevalue" header="Taxable Value" [sortable]="true" [style]="{'text-align':'right'}">
+            <ng-template let-taxablevalue="rowData" pTemplate="body" style="text-align: left">
+              <span>{{taxablevalue.taxablevalue  }}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="cessamount" header="Cess Amount" [sortable]="true" [style]="{'text-align':'right'}">
+            <ng-template let-cessamount="rowData" pTemplate="body" style="text-align: left">
+              <span>{{cessamount.cessamount  }}</span>
+            </ng-template>
+          </p-column>
+         
+
+        </div>
+      </div>
+    </p-dataTable>
+
+  </div>
+</div>

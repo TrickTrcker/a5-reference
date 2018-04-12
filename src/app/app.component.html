@@ -1,0 +1,35 @@
+<div class="layout-wrapper" 
+    [ngClass]="{'layout-menu-slim': slimMenu, 
+                'layout-menu-overlay': overlayMenu, 
+                'layout-menu-static': staticMenu,
+                'layout-menu-static-inactive': staticMenuInactive,
+                'layout-menu-overlay-active': overlayMenuActive,
+                'layout-menu-active': mobileMenuActive}">
+    
+    <app-topbar></app-topbar>
+    <app-notifications></app-notifications>
+    <div class="layout-main">
+        <app-menu [reset]="resetSlim"></app-menu>        
+        <div class="layout-content confirmation-box"> 
+            <!-- For Success Message --> 
+            <p-messages id="successMessage" [(value)]="successMessage"></p-messages> 
+
+             <!-- For Error Message -->               
+            <p-growl [(value)]="messages"  life="3000"></p-growl>
+            <!-- Service loader -->
+            <p-confirmDialog class="conform-lightbox" header="Confirmation" [closable]="false" closeOnEscape="false" acceptLabel="Yes" width="300"></p-confirmDialog>
+            <spinner [backgroundColor]="'#06b3bb'"></spinner>
+            <!-- Views -->
+            <router-outlet></router-outlet>
+        </div>
+       
+        <app-footer></app-footer>
+        <!-- <hotkeys-cheatsheet></hotkeys-cheatsheet> -->
+        <p-dialog header="Help - Shortcut Key" [(visible)]="helpdoc_display" modal="modal" width="700" [responsive]="true">
+                <!-- <hotkeys-cheatsheet [cheatsheet]="cheatsheet"></hotkeys-cheatsheet> -->
+           <app-help-doc [cheatsheet]="cheatsheet"></app-help-doc>
+        </p-dialog>
+    </div>     
+    
+    <div class="layout-mask" *ngIf="mobileMenuActive"></div>   
+</div>

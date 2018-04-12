@@ -1,0 +1,19 @@
+.bank-input{
+    border:1px solid #d5d5d5;
+    input{
+      border:0;
+      min-height: 31px;
+      height: auto;
+      }
+     .ui-dropdown{
+         width: 100%;
+         border:0 none;
+         min-height: 31px;
+         &:hover{
+           border:0 none;
+         }
+     } 
+   }
+   .width-brand{
+    width: 300px;
+   }

@@ -1,0 +1,76 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0">
+    <div class="journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/layout/images/e-finance.png">
+        <h1 class="">Products</h1>
+        <div class="ui-toolbar-group-right ui-corner-all inlineflex">
+            <!-- <button _ngcontent-c4="" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" icon="fa-arrow-down" pbutton="" type="button"><span _ngcontent-c4="" class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span _ngcontent-c4="" class="ui-button-text ui-clickable">ui-btn</span></button> -->
+            <button pButton type="button" label="Add" icon="fa-plus" (click)="Addproducts(protabview)"></button>
+            <button (click)="pdfdownload()" icon="fa-arrow-down " pbutton="" type="button" class="ui-button ui-widget ui-state-default center-icon ui-corner-all ui-button-icon-only">
+                <span class="ui-button-icon-left center-icon ui-clickable fa fa-arrow-down"></span>
+                <span class="ui-button-text ui-clickable">ui-btn</span>
+            </button>
+        </div>
+
+    </div>
+
+    <div class="ui-g-12 ui-lg-12 invoice-list-tab p-b-0">
+        <p-tabView [controlClose]="true" (onClose)="handleClose($event,protabview)" #protabview>
+            <p-tabPanel [selected]="list" header="Product List" leftIcon="fa-book" class="clearfix">
+                <p-dataTable [value]="allproducts" selectionMode="single" [paginator]="true" [rows]="10" [responsive]="true" #dt>
+                    <p-column field="productcode" header="Product Code" [filter]="show" [style]="{'width':'14%','text-align':'left'}" [sortable]="true" filterMatchMode="contains"></p-column>
+
+                    <p-column field="prodname" header="Product Name" [filter]="show" [style]="{'width':'15%','text-align':'left'}" [sortable]="true" filterMatchMode="contains">
+                        <ng-template let-selectedprod="rowData" pTemplate="body">
+                            <span>{{ selectedprod.prodname}}</span>
+                            <br>
+                            <span class="dd_datespan">{{ selectedprod.uomdesc }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="category.categoryname" header="Category" [filter]="show" [style]="{'width':'15%','text-align':'left'}" [sortable]="true" filterMatchMode="contains"></p-column>                    
+                    <p-column field="brand.brandname" header="Brand" [filter]="show" [style]="{'width':'12%','text-align':'left'}" [sortable]="true" filterMatchMode="contains"></p-column>
+
+                    <!-- <p-column field="uomdesc" header="UOM" [filter]="show" [style]="{'width':'17%','text-align':'left'}" [sortable]="true" filterMatchMode="contains"></p-column> -->
+                    <p-column field="mrp" header="Price" [sortable]="true" [filter]="show" [style]="{'text-align': 'right','width':'15%'}" filterMatchMode="contains">
+                        <ng-template let-mrp="rowData" pTemplate="body">
+                            <span style="text-align:left">{{mrp.mrp | currency : currency_sy :  'symbol' }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="lastupdatedby" header="Updated By" [style]="{'text-align': 'left','width': '17%'}" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                            <span>{{ selectedinvoice.lastupdatedby }}</span>
+                            <br>
+                            <span class="dd_datespan">{{ selectedinvoice.lastupdateddt | date: dateformat }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column class="p-b-0" field=status header="Status" [filter]="show" [sortable]="true" filterMatchMode="equals" [style]="{'text-align': 'center','width': '11%'}">
+                        <ng-template pTemplate="filter" let-col>
+                            <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                        </ng-template>
+                    </p-column>
+                    <p-column styleClass="col-button" [style]="{'text-align': 'center','width': '8%'}" filterMatchMode="contains">
+                        <ng-template pTemplate="header">
+                            <label><button pButton icon="fa-search" id="addproduct_search_icon" (click)="showhidefilter(dt,'addproduct_search_icon')"></button>
+                            </label>
+                        </ng-template>
+                        <ng-template let-selectedpro="rowData" pTemplate="body" style="text-align:center">
+                            <!-- <button type="button" pButton icon="fa-eye" (click)="viewproduct(selectedpro,protabview)"></button> -->
+                            <button type="button" pButton icon="fa-pencil" (click)="Editproduct(selectedpro,protabview)"></button>
+
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </p-tabPanel>
+            <p-tabPanel [selected]="addnew" header="Add Product" leftIcon="fa-plus" *ngIf="addproduct" style="display:inline-grid;" [closable]="true" #fileInput>
+                <app-products [prodtls]="prodtls" (notifyNewProduct)="notifyNewProduct($event)"></app-products>
+            </p-tabPanel>
+            <p-tabPanel [selected]="editpro" header="Edit Product" leftIcon="fa-pencil" *ngIf="editproduct" [closable]="true" #fileInput>
+                <app-products [prodtls]="prodtls" (notifyNewProduct)="notifyNewProduct($event)"></app-products>
+            </p-tabPanel>
+            <p-tabPanel [closable]="true" *ngFor="let product of selectedpro; let i = index" header="{{product.prodname}}" leftIcon="fa-eye">
+                <div class="my_dynamica_lead_tabPanel">
+                    <app-view-products [product]="product"></app-view-products>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

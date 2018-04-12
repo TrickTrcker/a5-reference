@@ -1,0 +1,71 @@
+<div class="ui-g-12 p-l-0 p-r-0 licence-bg">
+    <div class="journal-heading m-b-10">
+        <div class="ui-helper-clearfix">
+            <div class="ui-g-12 ui-lg-4 ui-md-4 p-t-0 p-b-0">
+                <img class="infobook-logo ui-toolbar-group-left">
+                <h1 class="pull-left">Tax Liability on Advance Paid </h1>
+            </div>
+            <div class="ui-toolbar-group-left ui-g-12 ui-lg-7 ui-md-7 p-t-0 p-b-0 text-right">
+                <span class="">{{selectedyear}}</span><br>
+                <span style="font-size:12px" class="pcs-label inv-view-label">{{startDate}}  -  {{endDate}}</span>
+
+            </div>
+            <div class="ui-toolbar-group-right ui-corner-all brand-overlay ui-g-12 ui-lg-1 ui-md-1 p-t-0 p-b-0 text-right inlineflex" style="padding-left: 4%;">
+                <button (click)="ExporttoCSV()" icon="fa-file-excel-o" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                                <span class="ui-button-icon-left ui-clickable fa fa-fw fa-file-excel-o"></span>
+                                <span class="ui-button-text ui-clickable">ui-btn</span>
+                              </button> <button (click)="redirecttoprev()" icon="fa-check" pbutton="" type="button"
+                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                      </button>
+            </div>
+        </div>
+    </div>
+    <div class="user-list-1 ui-g-12 product-list">
+        <p-dataTable [value]="atdata" selectionmode="single" [paginator]="true" [rows]="10" exportFilename="at" *ngIf="isExist == true"
+            #dt>
+            <div class="ui-datatable ui-widget ui-datatable-reflow">
+                <div class="ui-datatable-tablewrapper">
+                    <p-column field="placeofsupply" header="Place Of Supply" [sortable]="true" [style]="{'width':'25%'}"></p-column>
+                    <p-column field="supplytype" header="Supply Type" [sortable]="true" [style]="{'width':'25%'}"></p-column>
+                  
+                    <p-column field="gadvreceived" header="Gross Advance Paid" [sortable]="true" [style]="{'width':'25%','text-align':'right'}">
+                        <ng-template let-gadvreceived="rowData" pTemplate="body">
+                            {{gadvreceived.gadvreceived | currency : currency_Symbol :true}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="cess" header="Cess Amount" [sortable]="true" [style]="{'width':'25%','text-align':'right'}">
+                        <ng-template let-cess="rowData" pTemplate="body">
+                            {{cess.cess | currency : currency_Symbol :true}}
+                        </ng-template>
+                    </p-column>
+                </div>
+            </div>
+        </p-dataTable>
+        <p-dataTable [value]="atdata" selectionmode="single" [paginator]="true" [rows]="10" exportFilename="at" *ngIf="isExist == false"
+            #dt>
+            <div class="ui-datatable ui-widget ui-datatable-reflow">
+                <div class="ui-datatable-tablewrapper">
+                    <p-column field="placeofsupply" header="Place Of Supply" [sortable]="true" [style]="{'width':'25%'}"></p-column>
+                  
+                    <p-column field="rate" header="Rate" [sortable]="true" [style]="{'width':'25%','text-align':'right'}">
+                        <ng-template let-rate="rowData" pTemplate="body">
+                            {{rate.rate}}%
+                        </ng-template>
+                    </p-column>
+                    <p-column field="gadvreceived" header="Gross Advance Received" [sortable]="true" [style]="{'width':'25%','text-align':'right'}">
+                        <ng-template let-gadvreceived="rowData" pTemplate="body">
+                            {{gadvreceived.gadvreceived | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="cess" header="Cess Amount" [sortable]="true" [style]="{'width':'25%','text-align':'right'}">
+                        <ng-template let-cess="rowData" pTemplate="body">
+                            {{cess.cess | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                </div>
+            </div>
+        </p-dataTable>
+    </div>
+</div>

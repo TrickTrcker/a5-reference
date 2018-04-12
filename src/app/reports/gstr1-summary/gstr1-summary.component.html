@@ -1,0 +1,90 @@
+<div class="ui-g-12">
+    <div class="ui-g-12 white-bg top-section">
+        <!-- <div class="journal-heading">
+            <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+            <h1 class="">Summary of Outward Supplies (GSTR-1)</h1>
+            <button (click)="redirecttoprev()" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                style="margin-left: 60%;">
+                        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                      </button>
+        </div> -->
+        <div class="ui-g-12 ui-lg-4 ui-md-4 p-r-0">
+            <div class="ui-inputgroup ui-g-12 p-l-0 left">
+                <div class="ui-g-12 ui-lg-3 ui-md-3 p-t-0 p-l-0 p-r-0 p-b-0 m-t-5">
+                    <label>Financial Year</label>
+                </div>
+                <div class="ui-g-12 ui-lg-9 ui-md-9 p-t-0 p-l-0 p-r-0 p-b-0">
+                    <p-dropdown [(ngModel)]="selectedyr" [options]="financialyearlist">
+                        <ng-template let-row pTemplate="item">
+                            <div class="ui-helper-clearfix">
+                                <div>{{row.label}}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-g-12 ui-lg-3 ui-md-3 p-l-0 date-button">
+            <div class="ui-g-12 p-l-0">
+                <div class="ui-g-12 ui-lg-3 ui-md-3 p-t-0 p-l-0 p-r-0 p-b-0 m-t-5 from-date">
+                    <label>From date</label>
+                </div>
+                <div class="ui-g-12 ui-lg-9 ui-md-9 p-t-0 p-r-0 p-b-0">
+                    <p-calendar [(ngModel)]="startDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-12 ui-lg-3 ui-md-3 date-button">
+            <div class="ui-g-12 p-l-0">
+                <div class="ui-g-12 ui-lg-3 ui-md-3 p-t-0 p-l-0 p-r-0 p-b-0 m-t-5">
+                    <label>To date</label>
+                </div>
+                <div class="ui-g-12 ui-lg-9 ui-md-9 p-t-0 p-l-0 p-r-0 p-b-0">
+                    <p-calendar [(ngModel)]="endDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-12 ui-lg-1 ui-md-1 date-button-2">
+            <button class="p-t-20" pButton type="button" (click)="getOutwardList(selectedyr)" icon="fa-search" label="Search" style="top: -17px;"></button>
+        </div>
+        <div class="ui-g-12 ui-lg-1 ui-md-1 date-button-2" style="margin-top: 4px;">
+            <button (click)="redirecttoprev()" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                style="margin-left: 60%;">
+                <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                <span class="ui-button-text ui-clickable">ui-btn</span>
+              </button>
+        </div>
+    </div>
+    <div class="ui-g-12 licence-bg p-l-0 p-t-0 p-r-0">
+        <div class="user-list ui-g-12">
+            <p-dataTable [value]="outwardlist" [responsive]="true" sortMode="multiple" #dt>
+                <p-column field="description" header="Description" [sortable]="true" [style]="{'width': '58%'}"></p-column>
+                <p-column field="taxableamount" header="Taxable Amount" [sortable]="true" [style]="{'text-align': 'right'}">
+                    <ng-template let-taxableamount="rowData" pTemplate="body" style="text-align:right">
+                        {{taxableamount.taxableamount | currency : currency_Symbol :true}}
+                    </ng-template>
+                </p-column>
+                <p-column field="taxamount" header="Tax Amount" [sortable]="true" [style]="{'text-align': 'right'}">
+                    <ng-template let-taxamount="rowData" pTemplate="body" style="text-align:right">
+                        {{taxamount.taxamount | currency : currency_Symbol :true}}
+                    </ng-template>
+                </p-column>
+
+                <p-column styleClass="col-button" [style]="{'text-align': 'center'}">
+                    <ng-template pTemplate="header">
+                        <label>Action
+              </label>
+                    </ng-template>
+                    <ng-template let-outwardlist="rowData" pTemplate="body" style="text-align:center">
+                        <div>
+                            <button type="button" pButton icon="fa-eye" (click)=viewDetails(outwardlist.type)></button>
+                        </div>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+
+        </div>
+    </div>
+</div>

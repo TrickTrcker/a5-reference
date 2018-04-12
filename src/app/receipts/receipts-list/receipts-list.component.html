@@ -1,0 +1,199 @@
+<div class="licence-bg ui-g-12 m-b-15 p-t-0 p-b-0 p-l-0 p-r-0">
+    <div class="bg-1">
+        <div class="ui-g-12 p-l-0 p-r-0 p-t-0">
+            <div class="journal-heading">
+                <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+                <h1>Receipt</h1>
+                <span>
+                    <i class="fa fa-fw fa-question-circle" pTooltip="Tap on receipt to View or Edit"></i>
+                </span>
+
+                <div class="ui-toolbar-group-right">
+                    <!-- <button icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span></button> -->
+                    <!-- <button [routerLink]="['/sales/customeradvance']" icon="fa-plus" label="New" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-plus"></span><span class="ui-button-text ui-clickable">Advance</span></button> -->
+                    <!-- <button [routerLink]="['/receipts/receiptedit']" icon="fa-plus" label="New" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-plus"></span><span class="ui-button-text ui-clickable">Receipt</span></button> -->
+                    <div class="ui-toolbar-group-right multibutton-2">
+                        <p-menu #menu popup="popup" [model]="menuItems"></p-menu>
+                        <button type="button" pButton icon="fa-plus" label="Add" (click)="menu.toggle($event)"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="payment-tabview ui-g-12">
+        <p-tabView>
+            <p-tabPanel header="" leftIcon="fa-pie-chart">
+                <div class="ui-g-12">
+
+                    <div class="ui-g-6 list-graphs">
+                        <div class="shadow-box ui-shadow-1">
+                            <p-blockUI [blocked]="transactionNoRecordDisp.receipt" [target]="summary">
+                                <i class="fa fa-lock fa-5x" style="position:absolute;top:29%;left:46%"></i>
+                            </p-blockUI>
+                            <p-panel #summary>
+                                <p-chart type="bar" *ngIf="receiptSummaryData" [data]="receiptSummaryData" [options]="barChartConfig"></p-chart>
+                            </p-panel>
+                        </div>
+                    </div>
+                    <div class="ui-g-6 list-graphs">
+                        <div class="shadow-box ui-shadow-1">
+                            <p-blockUI [blocked]="transactionNoRecordDisp.receiptCount" [target]="countSummary">
+                                <i class="fa fa-lock fa-5x" style="position:absolute;top:29%;left:46%"></i>
+                            </p-blockUI>
+                            <p-panel #countSummary>
+                                <p-chart type="pie" *ngIf="receiptCountData" [data]="receiptCountData" [options]="chartConfig"></p-chart>
+                            </p-panel>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="" leftIcon="fa-list-ol">
+                <div class="ui-g-12 payment-list">
+                    <p-tabView>
+                        <p-tabPanel header="Matched">
+                            <p-dataTable [value]="matchedlist" selectionMode="single" [paginator]="true" [rows]="10" [responsive]="true" #receiptsearch>
+                                <p-column field="companyname" header="Customer" [filter]="show" filterMatchMode="contains" [sortable]="true"></p-column>
+                                <p-column field="pymtrectno" header="Receipt No" [filter]="show" [style]="{'text-align': 'left'}" filterMatchMode="contains" [sortable]="true"></p-column>
+                                <p-column field="pymtamount" header="Receipt Total" [style]="{'text-align': 'right'}" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                    <ng-template let-selectedrec="rowData" pTemplate="body">
+                                        <span>{{selectedrec.pymtamount | currency : currency_sy : 'symbol' }}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="pymtrectdt" header="Receipt Date" [style]="{'text-align': 'center'}" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                    <ng-template let-date="rowData" pTemplate="body">
+                                        <span>{{date.pymtrectdt | date: date_dformat}}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="pymtrecttype" header="Receipt Type" [filter]="show" [style]="{'text-align': 'left'}" filterMatchMode="contains" [sortable]="true">
+                                    <ng-template let-receipt="rowData" pTemplate="body">
+                                        <span class="advance" *ngIf="receipt.pymtrecttype != 'ADVANCE'"> Regular </span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="createdby" header="Created By" [style]="{'width':'18%'}" styleClass="text-left" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                    <ng-template let-date="rowData" pTemplate="body">
+                                        <span>{{date.createdby }}</span>
+                                        <br>
+                                        <span class="dd_datespan">{{date.createddt | date: dateformat }}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column styleClass="col-button">
+                                    <ng-template pTemplate="header">
+                                        <label>
+                                            <button pButton class="" icon="fa-search" id="receipt_search_icon" (click)="showhidefilter(receiptsearch,'receipt_search_icon')"></button>
+                                        </label>
+                                    </ng-template>
+                                    <ng-template let-selectedrec="rowData" pTemplate="body" styleClass="text-right">
+                                        <a pButton [routerLink]="['../viewreceipt', 'receipt',selectedrec.pymtrectid ]" icon="fa-eye"></a>
+                                        <a pButton [routerLink]="['../editreceipt', selectedrec.pymtrectid ]" icon="fa-pencil"></a>
+                                        <a pButton type="button" (click)="pdfdownload(selectedrec.pymtrectid,selectedrec.pymtrectno,'receipt')" icon="fa-arrow-down"></a>
+                                        <!-- <button type="button" pButton icon="fa-trash" (click)="deleteRecord(selectedrec)"></button> -->
+                                    </ng-template>
+                                </p-column>
+                            </p-dataTable>
+                        </p-tabPanel>
+                        <p-tabPanel header="Unmatched">
+                            <p-dataTable [value]="unmatchedlist" selectionMode="single" [paginator]="true" [rows]="paginator" [responsive]="true" #unmatched>
+                                <p-column field="companyname" header="Customer" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width': '15%'}"></p-column>
+                                <p-column field="pymtrectno" header="Receipt No" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width': '14%','text-align': 'left'}"></p-column>
+                                <p-column field="pymtamount" header="Advance Amount" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'text-align': 'right','width':'16%'}">
+                                    <ng-template let-selectedrec="rowData" pTemplate="body">
+                                        <span>{{selectedrec.pymtamount | currency : currency_sy : 'symbol' }}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="pymtrectdt" header="Receipt Date" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width': '14%','text-align': 'center'}">
+                                    <ng-template let-date="rowData" pTemplate="body">
+                                        <span>{{date.pymtrectdt | date: date_dformat}}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="pymtrecttype" header="Receipt Type" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width': '15%','text-align': 'left'}">
+                                    <ng-template let-receipt="rowData" pTemplate="body">
+                                        <span class="advance" *ngIf="receipt.pymtrecttype == 'ADVANCE'"> Advance </span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="createdby" header="Created By" [style]="{'text-align': 'left','width':'18%'}" styleClass="text-left" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                    <ng-template let-date="rowData" pTemplate="body">
+                                        <span>{{date.createdby }}</span>
+                                        <br>
+                                        <span class="dd_datespan">{{date.createddt | date: dateformat }}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column styleClass="col-button">
+                                    <ng-template pTemplate="header">
+                                        <label>
+                                            <button pButton class="" icon="fa-search" id="unmatched_search_icon" (click)="showhidefilter(unmatched,'unmatched_search_icon')"></button>
+                                        </label>
+                                    </ng-template>
+                                    <ng-template let-selectedrec="rowData" pTemplate="body" styleClass="text-right">
+                                        <a pButton [routerLink]="['../invmatching', selectedrec.pymtrectid ]" icon="fa-pencil"></a>
+                                        <button type="button" pButton icon="fa-trash" (click)="deleteRecord(selectedrec)"></button>
+                                    </ng-template>
+                                </p-column>
+                            </p-dataTable>
+
+                        </p-tabPanel>
+                        <p-tabPanel header="General Receipts">
+                            <p-dataTable [value]="generalReceiptList" selectionMode="single" [paginator]="true" [rows]="10" [responsive]="true" #gnrlreceiptsearch>
+                                <p-column field="journalno" header="Receipt No" [filter]="show" [sortable]="true" filterMatchMode="in" [style]="{'overflow':'visible','width':'15%'}">
+                                    <ng-template pTemplate="filter" let-col>
+                                        <p-multiSelect [options]="filterjournalno" *ngIf="show" defaultLabel="All" [filter]="show" (onChange)="gnrlreceiptsearch.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="type" header="Receipt Type" [filter]="show" [sortable]="true" filterMatchMode="in" [style]="{'overflow':'visible','width':'15%','text-align': 'left'}">
+
+                                </p-column>
+                                <p-column field="journaldt" styleClass="col-button" [filter]="show" [style]="{'text-align':'center','width':'15%'}" [sortable]="true" filterMatchMode="in">
+                                    <ng-template pTemplate="header">
+                                        <label>Receipt Date</label>
+                                    </ng-template>
+                                    <ng-template let-journal="rowData" pTemplate="body">
+                                        <span>{{journal.journaldt | date: date_dformat}}</span>
+                                    </ng-template>
+                                </p-column>
+                                <!--<p-column field="journalno" header="txnrefno" [sortable]="true"></p-column>
+                                   <p-column field="journalid" header="journalid" [sortable]="true"></p-column>-->
+                                <p-column field="journaltotal" header="Credit" [sortable]="true" [filter]="show" [style]="{'text-align': 'right','width':'13%'}" filterMatchMode="contains">
+                                    <ng-template let-credit="rowData" pTemplate="body" style="text-align:right">
+                                        <span>{{credit.journaltotal | currency : currency_sy : 'symbol'}}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="journaltotal" header="Debit" [sortable]="true" [filter]="show" [style]="{'text-align': 'right','width':'14%'}" filterMatchMode="contains">
+                                    <ng-template let-debit="rowData" pTemplate="body" style="text-align:right">
+                                        <span>{{debit.journaltotal | currency : currency_sy : 'symbol'}}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="subtotal" header="Total" [sortable]="true" [filter]="show" [style]="{'text-align': 'right','width':'14%'}" filterMatchMode="equals">
+                                    <!-- <ng-template pTemplate="filter" let-col>
+                                      <i class="fa fa-close" (click)="yearFilter=null;journaltable.filter(null,col.field,col.filterMatchMode)"></i>
+                                      <p-slider *ngIf="show" [style]="{'width':'100%','margin-top':'8px'}" [(ngModel)]="yearFilter" (onChange)="journaltable.filter($event.value,col.field,col.filterMatchMode)"></p-slider>
+                                  </ng-template> -->
+                                    <ng-template let-journal="rowData" pTemplate="body" style="text-align:right">
+                                        <span>{{journal.subtotal | currency : currency_sy : 'symbol'}}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="createdby" header="Created By" [style]="{'text-align': 'left','width':'17%'}" [filter]="show" [sortable]="true" filterMatchMode="contains">
+                                    <ng-template let-journal="rowData" pTemplate="body" style="text-align:right">
+                                        {{journal.createdby}}
+                                        <br>
+                                        <span class="dd_datespan">{{journal.createddt | date:displaydtime}}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column styleClass="col-button" [style]="{'text-align': 'center','width':'18%'}">
+                                    <ng-template pTemplate="header">
+                                        <button pButton class="" id="gnrlreceipt_search_icon" icon="fa-search" (click)="showhidefilter(gnrlreceiptsearch,'gnrlreceipt_search_icon')"></button>
+                                    </ng-template>
+                                    <ng-template let-journal="rowData" pTemplate="body" style="text-align:center">
+                                        <a pButton [routerLink]="['../../accounts/viewtransactions',journal.journalid,journal.journalno,'gnrl_receipt','receipt']" icon="fa-eye"></a>
+                                        <button [routerLink]="['/accounts/generalreceipt/',journal.journalid,journal.journalno]" type="button" pButton icon="fa-pencil"></button>
+                                        <a pButton type="button" (click)="pdfdownload(journal.journalid,journal.journalno,'gnrl_receipt')" icon="fa-arrow-down"></a>
+                                        <button type="button" pButton icon="fa-trash" (click)="deleteGeneralReceipt(journal)"></button>
+                                    </ng-template>
+                                </p-column>
+                            </p-dataTable>
+                        </p-tabPanel>
+                    </p-tabView>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+
+
+    </div>

@@ -1,0 +1,73 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0 p-b-0">
+    <div class="journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1 class="">Credit Note </h1>
+        <div class="ui-toolbar-group-right ui-corner-all addproducts">
+            <button pButton type="button" label="Add" icon="fa-plus" (click)="Addproducts(crdview)"></button>
+        </div>
+    </div>
+    <div class="bank-list credit-note-list ui-g-12">
+        <p-tabView [controlClose]="true" (onClose)="handleClose($event,crdview)" #crdview [activeIndex]="indextabview">
+            <p-tabPanel [selected]="list" header="Credit List" leftIcon="fa-book">
+                <p-dataTable [value]="allcredit" selectionMode="single" [paginator]="true" [rows]="10" [responsive]="true" #creditnotetable>
+                    <p-column field="companyname" header="Customer Name" [style]="{'width':'17%'}" [filter]="show" [sortable]="true"></p-column>
+                    <p-column field="transno" header="Transaction No" [style]="{'width':'15%','text-align':'left'}" [filter]="show" [sortable]="true"></p-column>
+                    <p-column field="crdrdate" styleClass="col-button" [filter]="show" [style]="{'width':'15%'}" [sortable]="true">
+                        <ng-template pTemplate="header">
+                            Transaction Date
+                        </ng-template>
+                        <ng-template let-allcredit="rowData" pTemplate="body">
+                            {{allcredit.crdrdate | date:dataFormat}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="amount" styleClass="col-button" [filter]="show" [style]="{'width':'18%'}" [sortable]="true">
+                        <ng-template pTemplate="header">
+                            Credit Amount
+                        </ng-template>
+                        <ng-template let-allcredit="rowData" pTemplate="body">
+                            {{allcredit.amount |currency : currency_Symbol : 'symbol'}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="createdby" styleClass="col-button" [filter]="show" [style]="{'width':'22%','text-align':'left'}" [sortable]="true">
+                        <ng-template pTemplate="header">
+                            Created By
+                        </ng-template>
+                        <ng-template let-createdby="rowData" pTemplate="body">
+                            {{createdby.createdby }}<br>
+                            <span class="dd_datespan">{{createdby.createddt | date:displaydtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column styleClass="col-button" [style]="{'width':'12%'}">
+                        <ng-template pTemplate="header">
+                            <label> <button pButton class="" [disabled]="!allcredit"  icon="fa-search" id="creditnote_search_icon" (click)="showhidefilter(creditnotetable,'creditnote_search_icon')"></button></label>
+                        </ng-template>
+                        <ng-template let-selectedcredit="rowData" pTemplate="body" style="text-align:right">
+                            <!-- <a pButton [routerLink]="['../../viewcreditnote', allcredit.crdrid ]" icon="fa-eye"></a> -->
+                            <button type="button" pButton icon="fa-eye" (click)="addTabviewcreditnote(selectedcredit,crdview,'flag')"></button>
+                            <!-- <button type="button" pButton icon="fa-pencil" (click)="EditClickcredit(selectedcredit,crdview)"></button> -->
+                            <a pButton type="button" (click)="pdfdownload(selectedcredit.crdrid,selectedcredit.transno)" icon="fa-arrow-down"></a>
+                            <button type="button" pButton icon="fa-trash" (click)="deleteRecord(selectedcredit)"></button>
+
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </p-tabPanel>
+            <p-tabPanel [selected]="activeTab_addCredit" header="Add Credit Note" leftIcon="fa-plus" *ngIf="addproduct" [closable]="true" #fileInput>
+                <div class="my_dynamica_lead_tabPanel ui-g-12">
+                    <app-new-credit-note (notifyNewCreditNote)="notifyNewCreditNote($event)"></app-new-credit-note>
+                    <!-- <app-credit-note (notifyNewCreditNote)="notifyNewCreditNote($event)"></app-credit-note> -->
+                </div>
+
+            </p-tabPanel>
+            <!-- <p-tabPanel [selected]="activeTab_editcredit" header="Edit Credit Note" *ngIf="showEdit" leftIcon="fa-pencil" [closable]="true"
+        #fileInput>
+        <app-credit-note (notifyNewCreditNote)="notifyNewCreditNote($event)" [creditls]="creditls"></app-credit-note>
+      </p-tabPanel> -->
+            <p-tabPanel [selected]="activeTab_viewcredit" header="{{credit.transno}}" *ngFor="let credit of selectedcredit" [closable]="true" leftIcon="fa-eye" #fileInput>
+                <div class="my_dynamica_lead_tabPanel">
+                    <app-view-cnote crdrid={{credit.crdrid}}></app-view-cnote>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

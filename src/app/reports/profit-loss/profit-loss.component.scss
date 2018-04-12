@@ -1,0 +1,99 @@
+.tree_footercols {
+  display: table;
+  float: left !important;
+  padding: 20px 0px 10px 0px;
+  text-align: right;
+  border-bottom: 1px solid #b2b2b2;
+  font-weight: bold;
+  color: #292929;
+}
+
+.ui-treetable .ui-treetable-footer {
+  min-height: 35px !important;
+}
+
+.datatable_container {
+  min-height: calc( 80vh);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.nettotal {
+  width: 100%;
+  background: #f0f9f7;
+  min-height: 85px;
+}
+
+.nettotal .net_lebel {
+  width: 35%;
+  float: left;
+  padding: 15px 0px;
+}
+
+.nettotal .net_value {
+  width: 50%;
+  float: right;
+  padding: 2% 6%;
+  font-size: 17px;
+}
+
+.nettotal .netprofitloss
+{
+    padding: 1% 5%;
+    font-size: 20px;
+    text-align: right;
+    margin: 0px 8px;
+}
+.nettotal .Profit {
+    background: #CCFCD2;
+    float:right;
+    padding: 1% 5%;
+    font-size: 20px;
+    text-align: right;
+    margin: 0px 8px;
+    font-weight: bold;
+   }
+.nettotal .Loss {
+    float:right;
+    background: #FCDBCC;
+    padding: 1% 5%;
+    font-size: 20px;
+    text-align: right;
+    margin: 0px 8px;
+    font-weight: bold;
+}
+
+.left
+{
+  float : left !important;
+}
+
+
+.profit
+{
+  color: #0fb20f;
+  width: 80px;
+  font-weight: 600;
+  border: 1px dashed #0fb20f;
+  text-align: center !important;
+  font-size: 15px;
+}
+
+.loss
+{
+  color: #ec0e0e;
+  width: 80px;
+  font-weight: 600;
+  border: 1px dashed #ec0e0e;
+  text-align: center !important;
+  font-size: 15px;
+}
+
+.amountval
+{
+  width: 50%;
+  text-overflow: clip;
+  word-wrap: break-word;
+  text-align: right;
+  padding:10px
+}

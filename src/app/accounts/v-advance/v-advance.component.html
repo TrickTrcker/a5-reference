@@ -1,0 +1,192 @@
+<div class="ui-g-12 ui-fluid journal-panel p-t-0 p-l-0 p-r-0">
+    <div class="bg-white">
+        <div class="journal-heading ">
+            <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+            <h1>Vendor Advance</h1>
+            <div class="ui-toolbar-group-right">
+                <div>
+                </div>
+                <div class="ui-toolbar-group-right multibutton">
+                    <p-splitButton icon="fa fa-check" (onClick)="buttonupdateorcreate()" [model]="menuItems" label="Save"></p-splitButton>
+                </div>
+            </div>
+
+        </div>
+
+        <form [formGroup]="journalForm" (ngSubmit)="generateJournal(journalForm)">
+            <div class="ui-g-12 form-group p-10 p-b-0">
+                <div class=" p-b-0 ui-g-12 product-add margin-b-journals">
+                    <div class="row width100">
+                        <div class="ui-g-12 ui-lg-4 p-b-0 form-group-default">
+                            <div class="ui-g-12 req required-4">
+                                <label> Advance Date </label>
+                            </div>
+                            <div class="ui-g-12" style="padding:0px">
+                                <p-calendar [tabindex]=1 class="ui-g-12  p-t-0" formControlName="journaldt" showIcon="true" showOnFocus="true" dateFormat="dd-mm-yy"
+                                    required></p-calendar>
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-lg-4 p-b-0 form-group-default">
+                            <div class="ui-g-12 req required-4">
+                                <label> Advance Mode</label>
+                            </div>
+                            <div class="ui-g-12" style="padding:0px">
+                                <p-dropdown [tabindex]=2 (onChange)="selpayterm($event)" [options]="journalfeat" formControlName="type" class="ui-g-12 drop p-t-0"
+                                    [style]="{'width': '100%'}" required>
+                                    <ng-template let-item pTemplate="item">
+                                        <div class="ui-helper-clearfix select-box">
+                                            <div class="elipsis_div">{{item.label}}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-lg-4 p-b-0 form-group-default">
+                            <div class=" ui-g-12 form-group-default ">
+                                <div class="ui-g-12 req required-4 p-t-0">
+                                    <label> Remarks</label>
+                                </div>
+                                <div class="ui-g-12 remark-text p-b-0 p-t-0 p-r-0">
+                                    <textarea [tabindex]=3 formControlName="remarks" [rows]="2" pInputTextarea placeholder="" autoResize="autoResize"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-lg-4 p-t-0 form-group-default" *ngIf="autogenyn=='N'">
+                            <div class=" ui-g-12 form-group-default ">
+                                <div class="ui-g-12 req required-4 p-t-0 p-l-0">
+                                    <label for="journalno">Transaction No</label>
+                                </div>
+                                <div class="ui-g-12 remark-text p-b-0 p-t-0 p-r-0 p-l-0">
+                                    <input id="journalno" formControlName="journalno" pinputtext="" type="text" class=" bank-input ui-inputtext ui-corner-all ui-state-default ui-widget">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-12 ui-md-12 journal-page bg-lightb">
+                        <div class="ui-g-12 ui-md-5 account text-center">
+                            <label>
+                                <b>Account</b>
+                            </label>
+                        </div>
+                        <div class="ui-g-12 ui-md-3 debit-text text-right">
+                            <label>
+                                <b>Debit</b>
+                            </label>
+                        </div>
+                        <div class="ui-g-12 ui-md-3 credits-text text-right">
+                            <label>
+                                <b>Credit</b>
+                            </label>
+                        </div>
+                        <div class="ui-g-12 ui-md-1">
+                            <label></label>
+                        </div>
+                    </div>
+                    <div formArrayName="journalsArray" class="ui-g-12 ui-md-12 invoice-to-table p-t-0 p-b-0 journal-width card">
+                        <div *ngFor="let journal of getJournalArray().controls; let index=index;let last = last" [formGroupName]="index" class="ui-g ui-md-12 p-l-0 p-b-1 journal-selectbox"
+                            style="clear: both;">
+                            <div class="ui-g-12 ui-md-2 p-r-0 p-l-0 p-t-0 p-b-0 receipt-journals gnrl-receipt" style="text-indent: 20px;">
+                                <span *ngIf="index == 0 " class="bold text-left">From Account: </span>
+                                <span *ngIf="index == 1 " class="bold text-left">To Account: </span>
+                                <span *ngIf=" index > 1 " class="bold text-left">GST Account: </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-3 p-r-0 p-l-0 p-t-0 p-b-0 bank-input receipt-journals gnrl-receipt">
+                                <div *ngIf="index == 0">
+
+                                    <p-dropdown [options]="selectedaccountbooks" (onChange)="onSelectAccountTypes($event,index,journal)" formControlName="account"
+                                        class="drop" filter="true" placeholder="Select Vendor" [style]="{'width': '100%'}" appendTo="body">
+                                        <ng-template let-item pTemplate="item">
+                                            <div class="ui-helper-clearfix select-box">
+                                                <div class="elipsis_div">{{item.label}}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+
+                                </div>
+                                <div *ngIf="index == 1">
+                                    <p-dropdown [options]="treestructuredBooks" (onChange)="onSelectAccountTypes($event,index,journal)" formControlName="account"
+                                        class="drop" filter="true" placeholder="Select Account" [style]="{'width': '100%'}" appendTo="body">
+                                        <ng-template let-item pTemplate="item">
+                                            <div class="ui-helper-clearfix select-box">
+                                                <div class="elipsis_div">{{item.label}}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </div>
+
+                                <div *ngIf="index >= 1">
+
+                                    <p-dropdown [options]="gsttaxlist" (onChange)="onSelectAccountTypes($event,index,journal)" formControlName="account" class="drop"
+                                        filter="true" placeholder="Select Tax" [style]="{'width': '100%'}" appendTo="body">
+                                        <ng-template let-item pTemplate="item">
+                                            <div class="ui-helper-clearfix select-box">
+                                                <div class="elipsis_div">{{item.label}}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+
+                                </div>
+                                <!-- <div style="clear: both;padding: 0px 5px;background: #6bb2d3;color: #fff;" *ngIf="index==0">Pay Account</div> -->
+
+
+                            </div>
+                            <div class="ui-g-12 ui-md-3 p-t-0 p-b-0 p-r-0 receipt-journals">
+                                <input type="text" class="border-0" maxlength="{{amtlength}}" pInputText appNumberonly placeholder="0" [id]="'debit'+index"
+                                    formControlName="debit" class="ui-g-12 input-box   text-right " (keyup)="onResetAmountType($event,journal,'credit')">
+                            </div>
+                            <div class="ui-g-12 ui-md-3 p-t-0 p-b-0 receipt-journals p-l-0 p-r-0">
+
+                                <input type="text" maxlength="{{amtlength}}" pInputText placeholder="0" appNumberonly formControlName="credit" [id]="'credit'+index"
+                                    (keyup)="onResetAmountType($event,journal,'debit')" [ngClass]="{
+                                'ui-g-10': (last && index==1 || index >1 && !last) , 
+                                'ui-g-12':index==0,
+                                'ui-g-8': index >1 && last
+                             }" style="text-align:right" class=" text-right input-box">
+                            </div>
+                            <div class="ui-g-12 ui-md-1 p-l-0 p-r-0 p-t-0">
+                                <div *ngIf="index > 2" class="ui-g-1 receipt-trash receipt-trash-2">
+                                    <button type="button" icon="fa-trash" (click)="removeJournalEntry(index)" pButton></button>
+                                </div>
+                                <div *ngIf="last" class="p-b-0 receipt-journals m-t-2">
+                                    <button type="button" class=" pull-right" pButton (click)="addJournalEntry()" icon="fa-plus"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-12 ui-md-12 receipt totalvalue p-t-0 ">
+                <div class="ui-g-12 ui-lg-3 ui-md-12">
+                    <label></label>
+                </div>
+                <div class="ui-g-12 ui-lg-2 ui-md-12 p-t-0 ">
+                    <label></label>
+                </div>
+                <div class="ui-g-12 ui-lg-3 ui-md-12 text-right p-r-0">
+                    <!-- <label ><b>₹-</b></label> -->
+                    <div [hidden]=" !dtotal && !dtotaldiff ">
+                        <label>
+                            <strong>Debit Total </strong>:{{ dtotal | currency : currency_Symbol : 'symbol' }}</label>
+                        <br/>
+                        <label *ngIf="dtotaldiff && dtotaldiff<0"> [ {{dtotaldiff | currency : currency_Symbol : 'symbol'}} ] </label>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-3 ui-md-12 text-right p-r-0">
+                    <!-- <label ><b>₹-</b></label> -->
+                    <div [hidden]=" !ctotal && !dtotaldiff ">
+                        <label>
+                            <strong>Credit Total</strong>: {{ ctotal | currency : currency_Symbol : 'symbol'}}</label>
+                        <br/>
+                        <label *ngIf="ctotaldiff && ctotaldiff<0">[ {{ctotaldiff | currency : currency_Symbol : 'symbol'}} ]</label>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</div>

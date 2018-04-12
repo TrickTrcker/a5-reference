@@ -1,0 +1,136 @@
+<div class="panel ui-g-12 m-b-25 p-t-0 p-b-0 p-l-0 p-r-0">
+  <div class="bg-1">
+    <div class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0 m-b-10">
+      <div class="journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1>INVOICE MATCHING </h1>
+        <div class="ui-toolbar-group-right">
+          <!-- <p-menu #menu popup="popup" [model]="menuItems" [style]="{'width':'250px'}"></p-menu>
+          <button type="button" pButton icon="fa fa-check" label="Save" (click)="menu.toggle($event)"></button> -->
+          <p-splitButton icon="fa fa-check" [model]="menuItems" label="Save" (onClick)="AddPayment('createnew')"></p-splitButton>
+        </div>
+      </div>
+    </div>
+    <div class="ui-g-12 p-t-0 p-b-0 p-l-0 p-r-0">
+      <div class="receipt m-b-0">
+        <div class="ui-g-12 ui-lg-4 ul-md-4 receipt-to">
+          <div class="ui-g form-group">
+            <div class="ui-g-12 p-b-0">
+              <label for="acAdvanced">Receipt To</label>
+            </div>
+            <div class="ui-g-12">
+              <p-autoComplete *ngIf="editmode == false" (onSelect)="selectedCustomer(contact)" field="firstname"  [(ngModel)]="contact" [suggestions]="filteredContacts"
+                (completeMethod)="filterContacts($event)" [size]="30" [minLength]="0" placeholder="Select Customer" [dropdown]="true"
+                (onDropdownClick)="handleDropdownClick($event)" emptyMessage={{autocomplete_emptymessage}}>
+                <ng-template let-contactlist pTemplate="item">
+                  <div class="ui-helper-clearfix">
+                    <div>{{ contactlist.firstname + " " + contactlist.lastname}}</div>
+                  </div>
+                </ng-template>
+              </p-autoComplete>
+              <input type="text" pInputText [(ngModel)]="contact" [readonly]="true" *ngIf="editmode == true" />
+            </div>
+          </div>
+        </div>
+        <div class="ui-g-12 ui-lg-8 ul-md-8">
+          <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0">
+                <label for="acAdvanced">Doc No</label>
+              </div>
+              <div class="ui-g-12 p-l-0 p-r-0">
+                <input type="text" pInputText [(ngModel)]="recno" [readonly]="true" /> </div>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0">
+                <label for="acAdvanced">Doc Date </label>
+              </div>
+              <div class="ui-g-12 p-l-0 receipt-date receipt-date-2">
+                <p-calendar [(ngModel)]="paymentDate" [showIcon]="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+                <!-- <span style="margin-left:35px">{{receiptDate|date}}</span> -->
+
+              </div>
+            </div>
+          </div>
+
+          <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0">
+                <label for="acAdvanced">Payment Mode</label>
+              </div>
+              <div class="ui-g-12 width p-l-0 invoice-type">
+                <p-dropdown (onChange)="selpayterm(Selectedpayterm)" [autoWidth]="false" [options]="payterm" [(ngModel)]="Selectedpayterm" [readonly]="true"></p-dropdown>
+              </div>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0">
+                <label for="acAdvanced">Account</label>
+              </div>
+              <div class="ui-g-12 p-l-0 p-r-0">
+                <p-dropdown (onChange)="selpaymode(Selectedpaymode)" [autoWidth]="false" class="width" [options]="allpaymode" [(ngModel)]="Selectedpaymode" [readonly]="true"></p-dropdown>
+              </div>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0">
+                <label for="acAdvanced">Amount</label>
+              </div>
+              <div class="ui-g-12 p-l-0 p-r-0">
+                <input type="text" pInputText (keyup)="calcualtePayingSuggestion()" placeholder="0.00" [(ngModel)]="payingAmount" class="text-right" [readonly]="true"/>
+                <input type="hidden" [(ngModel)]="tempPayingAmount" value="{{payingAmount}}" pInputText></div>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0">
+                <label for="acAdvanced">Reference</label>
+              </div>
+              <div class="ui-g-12 p-l-0">
+                <input type="text" pInputText [(ngModel)]="paymentReference" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-lg-12 ul-md-12 invoice-to-table card receipt-update m-b-30">
+      <h1>ACCOUNT DETAIL</h1>
+      <p-dataTable [value]="customerinvoices" [editable]="true">
+        <p-column field="companyname" header="payee"></p-column>
+        <p-column field="duedate" header="Due Date">
+          <ng-template let-due="rowData" pTemplate="body">
+            <span>{{due.duedate | date: 'MM-dd-y'}}</span>
+          </ng-template>
+        </p-column>
+        <p-column field="invoicetotal" header="Invoice Total" styleClass="text-right">
+          <ng-template let-selectedinv="rowData" pTemplate="body">
+            <span>{{selectedinv.invoicetotal | currency : currency_sy :  'symbol' | slice : 1 }}</span>
+          </ng-template>
+        </p-column>
+        <p-column field="pymntamount" header="Paid" styleClass="text-right">
+          <ng-template let-selectedinv="rowData" pTemplate="body">
+            <span>{{selectedinv.pymntamount | currency : currency_sy :  'symbol' | slice : 1 }}</span>
+          </ng-template>
+        </p-column>
+        <p-column field="pymntapplied" header="Payment" [editable]="true" styleClass="text-right">
+          <ng-template let-col let-payment="rowData" let-ridx="rowIndex" pTemplate="editor">
+            <input type="text" (keyup)="calcualtepaymentApplied($event,ridx)" [(ngModel)]="payment[col.field]" [ngClass]="{'appliedClass': payment[col.field] > 0}"
+              [value]="0" pInputText id="{{'paymenAmt' + $index}}" [readonly]="payment.balamount==0" class="text-right" />
+          </ng-template>
+        </p-column>
+        <p-column field="balamount" header="Balance Amount">
+          <ng-template let-col let-payment="rowData" let-ridx="rowIndex" pTemplate="body">
+            <p class="text-right">{{ calcBalanceAmount(payment.balamount,payment.pymntapplied) | currency : currency_sy :  'symbol' | slice : 1 }}</p>
+          </ng-template>
+        </p-column>
+      </p-dataTable>
+
+
+    </div>
+  </div>
+</div>

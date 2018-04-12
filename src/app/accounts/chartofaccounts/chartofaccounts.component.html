@@ -1,0 +1,79 @@
+<div class="ui-g panel chart-accounts">
+  <div class="chartaccount-heading journal-heading">
+    <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+    <h1>Chart of account</h1>
+  </div>
+  <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0 chart-of-accounts-tab chart-of-accounts-tab-view ">
+    <div class="ui-g-12 ui-lg-6 ui-md-12 p-b-0 p-t-0 ">
+        <div class="chartoa liability"><i class="fa fa-book"></i> LIABILITIES</div>
+      <div class="scroll ">
+          
+        <p-treeTable #tbTreeTable [value]="Liabilitisvalues" selectionMode="single" [(selection)]="selectedAccount" scrollable="true"
+          scrollHeight="300px" (onNodeSelect)="nodeSelect($event)">
+           <p-column field="accountname">
+            <!-- <ng-template let-col let-account="rowData" pTemplate="header">
+              <div class="chartoa liability"><i class="fa fa-book"></i> LIABILITIES</div>
+            </ng-template> -->
+            <ng-template let-col let-account="rowData" pTemplate="body">
+              <span class="liability-text">{{account.data.accountname}}</span>
+            </ng-template>
+          </p-column>
+          
+        </p-treeTable>
+        <!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+      <div class="molal-overlay">
+        <div class="changepass-overlay">
+          <p-dialog #op1 header="" [(visible)]="display" modal="modal" width="600" [responsive]="true">
+            <app-addledger [ledgerdtls]="ledgerdtls" [addovrlay]="addovrlay" (loadledgerlist)="loadledgerlist()"></app-addledger>
+          </p-dialog>
+        </div>
+      </div>    
+  </div>
+
+    </div>
+    <div class="ui-g-12 ui-lg-6 ui-md-12 p-l-0 p-t-0 ">
+        <div class="chartoa liability"><i class="fa fa-book"></i> ASSETS</div>
+      <div class="scroll">
+          
+        <p-treeTable #tbTreeTable [value]="Assetsvalues" selectionMode="single" [(selection)]="selectedAccount" scrollable="true"
+          scrollHeight="300px">
+          <p-column field="accountname">
+            <ng-template let-col let-account="rowData" pTemplate="body">
+              <span class="liability-text">{{account.data.accountname}}</span>
+            </ng-template>
+          </p-column>
+        </p-treeTable>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-lg-6 ui-md-12 ">
+        <div class="chartoa liability"><i class="fa fa-book"></i> EXPENSES</div>
+      <div class="scroll">
+          
+        <p-treeTable #tbTreeTable [value]="Expensesvalues" selectionMode="single" [(selection)]="selectedAccount" scrollable="true"
+          scrollHeight="300px">
+          <p-column field="accountname">
+           
+            <ng-template let-col let-account="rowData" pTemplate="body">
+              <span class="liability-text">{{account.data.accountname}}</span>
+            </ng-template>
+          </p-column>
+        </p-treeTable>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-lg-6 ui-md-12 p-l-0 ">
+        <div class="chartoa liability"><i class="fa fa-book"></i> INCOME</div>
+      <div class="scroll">
+          
+        <p-treeTable #tbTreeTable [value]="Incomevalues" selectionMode="single" [(selection)]="selectedAccount" scrollable="true"
+          scrollHeight="300px">
+          <p-column field="accountname">
+           
+            <ng-template let-col let-account="rowData" pTemplate="body">
+              <span class="liability-text">{{account.data.accountname}}</span>
+            </ng-template>
+          </p-column>
+        </p-treeTable>
+      </div>
+    </div>
+  </div>
+</div>

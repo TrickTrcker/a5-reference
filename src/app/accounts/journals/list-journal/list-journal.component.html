@@ -1,0 +1,82 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0">
+    <div class="ui-g bg-1">
+        <div class="ui-g-12 p-l-0 p-r-0 p-t-0">
+            <div class="journal-heading">
+                <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+                <h1>Journals</h1>
+                <div class="ui-toolbar-group-right ">
+                    <!-- <button icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span></button> -->
+                    <button routerLink="/accounts/journals/" icon="fa-plus" label="New" pbutton="" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left">
+            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-plus"></span>
+            <span class="ui-button-text ui-clickable">Add</span>
+          </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="common-list ui-g-12 product-list p-t-0 p-l-0">
+        <div class="ui-g-12 p-t-0">
+            <p-dataTable [value]="alljournals" selectionMode="single" [paginator]="true" [rows]="10" [responsive]="true" #journaltable>
+                <p-column field="journalno" header="Journal No" [filter]="show" [sortable]="true" filterMatchMode="in" [style]="{'overflow':'visible','width':'13%','text-align':'left'}">
+                    <ng-template pTemplate="filter" let-col>
+                        <p-multiSelect [options]="filterjournalno" *ngIf="show" defaultLabel="All" [filter]="show" (onChange)="journaltable.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+                    </ng-template>
+                </p-column>
+                <p-column field="type" header="Journal Type" [filter]="show" [sortable]="true" filterMatchMode="in" [style]="{'overflow':'visible','width':'13%'}">
+                    <ng-template pTemplate="filter" let-col>
+                        <p-multiSelect [options]="journalfeat" *ngIf="show" defaultLabel="All" [filter]="show" (onChange)="journaltable.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+                    </ng-template>
+                </p-column>
+                <p-column field="journaldt" styleClass="col-button" [filter]="show" [style]="{'text-align':'center','width':'13%'}" [sortable]="true" filterMatchMode="in">
+                    <ng-template pTemplate="header">
+                        <label>Journal Date</label>
+                    </ng-template>
+                    <ng-template let-journal="rowData" pTemplate="body">
+                        <span>{{journal.journaldt | date :dispDateFormat}}</span>
+                    </ng-template>
+                </p-column>
+                <!--<p-column field="journalno" header="txnrefno" [sortable]="true"></p-column>
+         <p-column field="journalid" header="journalid" [sortable]="true"></p-column>-->
+                <p-column field="journaltotal" header="Credit" [sortable]="true" [filter]="show" [style]="{'text-align': 'right','width':'11%'}" filterMatchMode="contains">
+                    <ng-template let-credit="rowData" pTemplate="body" style="text-align:right">
+                        <span>{{credit.journaltotal | currency : currency_sy :  'symbol'}}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="journaltotal" header="Debit" [sortable]="true" [filter]="show" [style]="{'text-align': 'right','width':'11%'}" filterMatchMode="contains">
+                    <ng-template let-debit="rowData" pTemplate="body" style="text-align:right">
+                        <span>{{debit.journaltotal | currency : currency_sy :  'symbol'}}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="subtotal" header="Total" [sortable]="true" [filter]="show" [style]="{'text-align': 'right','width':'11%'}" filterMatchMode="equals">
+                    <!-- <ng-template pTemplate="filter" let-col>
+            <i class="fa fa-close" (click)="yearFilter=null;journaltable.filter(null,col.field,col.filterMatchMode)"></i>
+            <p-slider *ngIf="show" [style]="{'width':'100%','margin-top':'8px'}" [(ngModel)]="yearFilter" (onChange)="journaltable.filter($event.value,col.field,col.filterMatchMode)"></p-slider>
+        </ng-template> -->
+                    <ng-template let-journal="rowData" pTemplate="body" style="text-align:right">
+                        <span>{{journal.subtotal | currency : currency_sy :  'symbol'}}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="createdby" header="Created By" [style]="{'text-align': 'left','width': '17%'}" [filter]="show" [sortable]="true" filterMatchMode="contains">
+                    <ng-template let-journal="rowData" pTemplate="body" style="text-align:right">
+                        {{journal.createdby}}<br>
+                        <span class="dd_datespan">{{journal.createddt | date:displaydtime}}</span>
+                    </ng-template>
+                </p-column>
+                <p-column styleClass="col-button" [style]="{'text-align': 'center','width': '14%'}">
+                    <ng-template pTemplate="header">
+                        <button pButton class="" id="journal_search_icon" icon="fa-search" (click)="showhidefilter(journaltable,'journal_search_icon')"></button>
+                    </ng-template>
+                    <ng-template let-journal="rowData" pTemplate="body" style="text-align:center">
+                        <a pButton [routerLink]="['../../viewjournal', 'journal',journal.journalid,journal.journalno]" icon="fa-eye"></a>
+                        <button [routerLink]="['/accounts/journals/',journal.journalid,journal.journalno]" type="button" pButton icon="fa-pencil"></button>
+                        <a pButton type="button" (click)="pdfdownload(journal.journalid,journal.journalno)" icon="fa-arrow-down"></a>
+                        <button type="button" pButton icon="fa-trash" (click)="deleteRecord(journal)"></button>
+                        
+
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,130 @@
+<div class="licence-bg">
+  <div class="ui-g-12 p-t-0 p-b-0 p-l-0 p-r-0">
+      <div class="bg-1">
+          <div class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0 m-b-10">
+              <div class="journal-heading">
+                  <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+                  <h1>Day Book </h1>
+                  <div class="ui-toolbar-group-right inlineflex">
+                      <button [routerLink]="['/reports/list']" icon="fa-window-close " pbutton="" type="button" class="ui-button ui-widget ui-state-default center-icon ui-corner-all ui-button-icon-only">
+                        <span class="ui-button-icon-left center-icon ui-clickable fa fa-times"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                    </button>
+                      <button (click)="pdfdownload(ledgerFilterForm.value)" icon="fa-arrow-down " pbutton="" type="button" class="ui-button ui-widget ui-state-default center-icon ui-corner-all ui-button-icon-only">
+                        <span class="ui-button-icon-left center-icon ui-clickable fa fa-arrow-down"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                    </button>
+                      <!-- <button icon="fa-print" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+          <span class="ui-button-icon-left ui-clickable fa fa-fw fa-print"></span>
+          <span class="ui-button-text ui-clickable">ui-btn</span></button> -->
+
+                  </div>
+              </div>
+          </div>
+          <form novalidate [formGroup]="ledgerFilterForm" (ngSubmit)="search(ledgerFilterForm.value)">
+              <div id="pdfSection" class="ui-g-12 p-t-0 p-b-0 p-l-0 p-r-0">
+                  <div class="ledger invoice-table">
+                      <div class="ui-g-12 ui-lg-12 ul-md-12">
+
+                          <div class="ui-g-12 ui-lg-3 ul-md-3 p-b-0">
+                              <div class="ui-g form-group">
+                                  <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+                                      <label for="acAdvanced">Date </label>
+                                  </div>
+                                  <div class="ui-g-12 p-l-0">
+                                      <p-calendar formControlName="ledgerdate" [showIcon]="true" dateFormat="dd-mm-yy"></p-calendar>
+                                  </div>
+                              </div>
+                          </div>
+
+                          <div class="ui-g-12 ui-lg-3 ul-md-3 p-b-0">
+                              <div class="ui-g form-group">
+                                  <div class="ui-g-12 p-l-0" style="padding-top: 23px;">
+                                      <button type="submit" pButton icon="fa fa-search" label="Search"></button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </form>
+
+      </div>
+  </div>
+
+  <div class=" bank-list bank-list-3 ui-g-12 product-list">
+
+      <div class="panel ui-g-12 ui-fluid invoice-to-table">
+          <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-r-0  pt-15">
+              <div class="clearfix"></div>
+              <!-- Left Assets  -->
+              <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-r-0 p-t-0 datatable_container">
+
+                  <p-dataTable [value]="FiltereddaybookList" selectionMode="single" #dt [(selection)]="selectedLedger" scrollable="true" scrollHeight="300px"
+                      [responsive]="true">
+                      <p-column [style]="{'width':'15%'}" field="feature">
+                          <ng-template pTemplate="header">
+                              <span>REF NO</span>
+                          </ng-template>
+                          <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                              <div>{{rowdata.txnrefno}} </div>
+                          </ng-template>
+                      </p-column>
+                      <p-column [style]="{'width':'15%'}" field="txnrefno">
+                          <ng-template pTemplate="header">
+                              <span>Account Name</span>
+                          </ng-template>
+                          <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                              <div>{{rowdata.accheadname}}</div>
+                          </ng-template>
+                      </p-column>
+                      <p-column [style]="{'width':'15%'}" field="ledgerdate" styleClass="text-right">
+                          <ng-template pTemplate="header">
+                              <span>Credit Amount</span>
+                          </ng-template>
+                          <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                              <div>{{rowdata.cramount |currency : currency_sy : 'symbol'}}</div>
+                          </ng-template>
+                      </p-column>
+                      <p-column [style]="{'width':'20%'}" field="debit" styleClass="text-right">
+                          <ng-template pTemplate="header">
+                              <span>Debit Amount</span>
+                          </ng-template>
+                          <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                              <div>{{rowdata.dramount | currency : currency_sy : 'symbol'}}</div>
+                          </ng-template>
+                      </p-column>
+                      <p-column [style]="{'width':'20%'}" field="credit">
+                          <ng-template pTemplate="header">
+                              <span>Created By</span>
+                          </ng-template>
+                          <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                              <div>{{rowdata.createdby}}</div>
+                          </ng-template>
+                      </p-column>
+
+                  </p-dataTable>`
+              </div>
+              <div class="nettotal">
+                  <table>
+                      <tr>
+                          <td width="20%">
+                              <div class="ledgertotal text-right">Total</div>
+                          </td>
+                          <td width="15%">
+                              <div class="ledgertotal text-right"> {{ creditTotal | currency:currency_sy:true }}</div>
+                          </td>
+                          <td width="15%">
+                              <div class="ledgertotal text-right">{{ debitTotal | currency:currency_sy:true }}</div>
+                          </td>
+                          <td width="15%">
+                          </td>
+                      </tr>
+                  </table>
+              </div>
+
+
+          </div>
+      </div>
+  </div>
+</div>

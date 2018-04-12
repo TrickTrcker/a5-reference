@@ -1,0 +1,102 @@
+<div class="ui-g ui-fluid white-bg margin-b">
+  <div class="ui-g-12 ui-lg-12 ul-md-12">
+    <div id="pdfcontainer " class="ember-view">
+        <div class="ui-g-12 ui-lg-8 ui-md-8 p-t-0 p-b-0 pull-right print-text">
+            <div class="ui-toolbar-group-right">
+              <button (click)="pdfdownload()" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+              
+            </div>
+          </div>
+      <!--The below style_start tag has to be present as it is used to substring the style content from the body html-->
+      <!-- <div class="invoice-logos" style="display:inline-flex;vertical-align: top; text-align:left;">
+        <img class="infobook-logo" src="assets/images/infobook-logo.png">
+        <span class="title-text">Bank Transfer</span><br>
+      </div> -->
+      <div class="pcs-template" id="printSectionId">
+        <div print-section class="pcs-template-body ">
+          <table class="pull-right align-text view-invoice-content invoice-prints p-l-0 p-r-0" style="clear:both;width:30%;margin-top:1px;table-layout:fixed;" *ngIf="transferheader">
+            <tbody>
+              <tr>
+                <!-- bank header start -->
+                <td class="p-l-0 p-r-0" style="vertical-align:bottom;width: 30%;" align="right">
+                  <table class="invoice-prints-1 pull-right" style="float:left;width: 100%;table-layout: fixed;word-wrap: break-word;" cellspacing="0"
+                    cellpadding="0" border="0">
+                    <tbody>
+                      <tr>
+                          <td style="text-align:right;padding:5px 10px 5px 0px;font-size: 12pt;">
+                          <span class="pcs-label inv-view-label">Document No:</span>
+                        </td>
+                        <td style="text-align:right;">
+                          <span class="pcs-label" id="tmp_entity_number">{{transferheader.journalno}}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="text-align:right;padding:5px 10px 5px 0px;font-size: 12pt;">
+                          <span class="pcs-label inv-view-label">Document Date:</span>
+                        </td>
+                        <td style="text-align:right;">
+                          <span id="tmp_entity_date" class="inv-view-value">{{transferheader.journaldt| date:datafromat }}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <!-- invoice heade end  -->
+
+              </tr>
+            </tbody>
+          </table>
+          <table class="pcs-itemtable bank-withdraw" style="width:100%;margin-top:20px;table-layout:fixed;" cellspacing="0" cellpadding="0" border="0">
+            <thead>
+              <tr style="height:32px;">
+                <td class="pcs-itemtable-header" style="padding:5px 5px 5px 5px;text-align: center;word-wrap: break-word;width: 5%;">
+                  S.No
+                </td>
+                <td class="pcs-itemtable-header" style="padding:5px 5px 5px 5px;word-wrap: break-word;width: 5%;">
+                </td>
+                <td class="pcs-itemtable-header" style="padding:5px 10px 5px 5px;text-align:left;word-wrap: break-word;width: 11%;" >
+                  Particulars
+                </td>
+                <td class="pcs-itemtable-header" style="padding:5px 10px 5px 5px;text-align:center;word-wrap: break-word;width: 11%;" align="right">
+                  Debit
+                  <!--({{currency}})-->
+                </td>
+                <td class="pcs-itemtable-header" style="padding:5px 10px 5px 5px;word-wrap: break-word;width: 11%;text-align:right;" align="right">
+                  Credit
+                  <!--({{currency}})-->
+                </td>
+              </tr>
+            </thead>
+            <tbody class="itemBody">
+              <tr *ngFor="let journal of transferdetails;let index=index">
+                <td class="pcs-item-row p-t-20 p-top-20" style="padding: 15px 0 13px 5px;text-align: center;word-wrap: break-word;" valign="top">
+                  {{ index + 1}}
+                </td>
+                <td class="pcs-item-row p-top-20" style="padding: 10px 10px 5px 10px;word-wrap: break-word;" valign="top">
+                  <span class="bold">{{journal.type}}</span>
+                </td>
+                <td class="pcs-item-row p-top-20" style="padding:15px 0 13px 5px;text-align:left;word-wrap: break-word;" valign="top">
+                  <div class="pcs-item-desc">
+                    {{ journal.accheadname}}<br>
+                    <span *ngIf="index==0" class="dd_datespan">{{transferheader.fromaccno}}</span>
+                    <span *ngIf="index==1" class="dd_datespan">{{transferheader.toaccno}}</span>
+                  </div>
+                </td>
+                <td class="pcs-item-row p-top-20" style="padding: 15px 0 13px 5px;text-align:center;word-wrap: break-word;" valign="top">
+                  <div *ngIf="journal.crdr == 'D'">{{journal.dramount | currency : currency_Symbol : 'symbol'}}</div>
+                </td>
+                <td class="pcs-item-row p-top-20" style="padding: 15px 0 13px 5px;text-align:right;word-wrap: break-word;" valign="top">
+                  <div *ngIf="journal.crdr == 'C'">{{journal.cramount | currency : currency_Symbol : 'symbol'}}</div>
+                </td>
+              </tr>
+              <tr *ngIf="transferheader">
+                <td colspan="1" class="pcs-item-row p-t-31 border-top" style="padding: 20px 10px 5px 10px;word-wrap: break-word;" valign="top">Narration :</td>
+                <td colspan="4" class="pcs-item-row p-t-18 border-top" style="padding: 19px 10px 5px 10px;word-wrap: break-word;text-align:left" valign="top"><p>{{transferheader.remarks|| "-"}}</p></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

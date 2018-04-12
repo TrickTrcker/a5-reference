@@ -1,0 +1,641 @@
+<p-growl [value]="msgs" sticky="sticky">
+</p-growl>
+<div class="ui-g ui-fluid panel">
+    <div class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0 m-b-10">
+        <div class="journal-heading ui-g-12">
+            <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+            <div class="ui-g-12 ui-lg-4 ul-md-4 address-icon p-b-0 p-l-0 p-r-0 p-t-0">
+                <h1>B2C Invoice</h1>
+            </div>
+
+            <!-- SEDT start  -->
+            <div class="ui-toolbar-group-right multibutton">
+                <!--<p-menu #menu popup="popup" [model]="menuItems" [style]="{'width':'250px'}"></p-menu>
+              <button type="button" pButton icon="fa fa-list" label="Invoice" (click)="menu.toggle($event)"></button>-->
+                <p-splitButton icon="fa fa-check" [model]="menuItems" label="Save" (onClick)="GenarateInvoice('createnew')"></p-splitButton>
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-r-0 p-t-0">
+        <div class="clearfix"></div>
+        <!-- Left Side -->
+        <div class="receipt">
+            <div class="ui-g-12 ui-lg-4 ul-md-4 p-r-0">
+                <div class="ui-g-12 ui-lg-12 ul-md-12 invoice-to p-l-0 p-r-0">
+                    <div class="ui-g form-group form-group-default form-group-default-2">
+                        <div class="ui-g-12 address-icon invoice-category p-b-0 p-r-0 p-t-0">
+                            <div class="ui-g form-group form-group-default form-group-default-2">
+                                <div class="ui-g-12 ui-lg-12 ui-md-12 supply-text p-l-0 p-t-0 p-r-0">
+                                    <label for="acAdvanced">Invoice Category </label>
+                                    <!-- <i class="fa fa-map-marker" aria-hidden="true"></i> -->
+                                </div>
+                                <div *ngIf="!invoiceid" class="ui-g-12 ui-lg-12 ui-md-12 radio-button">
+                                    <p-radioButton name="Invoicecategory" value="goodsInvoice" label="Goods Based" [(ngModel)]="Invoicecategory" (onClick)="changeInvoiceCategory($event)"></p-radioButton>
+                                    <p-radioButton name="Invoicecategory" value="ServiceInvoice" label="Service Based" [(ngModel)]="Invoicecategory" (onClick)="changeInvoiceCategory($event)"></p-radioButton>
+                                </div>
+                                <div *ngIf="invoiceid" class="ui-g-12 ui-lg-12 ui-md-12 p-l-0 radio-button">
+                                    <span class="bold" *ngIf="Invoicecategory != 'ServiceInvoice'">Goods Based</span>
+                                    <span class="bold" *ngIf="Invoicecategory == 'ServiceInvoice'">Service Based</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12 ui-lg-12 ul-md-12 address-icon p-l-0 p-t-0 p-r-0">
+                            <div class="ui-g form-group">
+                                <div class="ui-g-12 p-b-0 m-t-3 p-r-0">
+                                    <label for="acAdvanced">Address</label>
+                                    <!-- <i class="fa fa-map-marker" aria-hidden="true"></i> -->
+                                </div>
+                                <div class="ui-g-12 address-input p-r-0">
+                                    <textarea [tabindex]=5 class="ui-g-12 m-l-0" [(ngModel)]="editableBillingaddress" [rows]="3" [cols]="30" pInputTextarea style="height:102px !important"
+                                        placeholder="" autoResize="autoResize"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="ui-g-12 ui-lg-4 ul-md-4 address-icon p-l-0 p-r-0 p-t-0 address-icon-2">
+                      <div class="ui-g form-group">
+                       
+                        <div class="ui-g-8 address-input">
+                          <textarea class="ui-g-12 m-l-0" [(ngModel)]="editableBillingaddress" [rows]="3" [cols]="30" pInputTextarea placeholder=""
+                          autoResize="autoResize"></textarea>
+                        </div>
+                      </div>
+                    </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-8 ul-md-8">
+                <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-0">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 req required-4">
+                        <label for="acAdvanced">Customer</label>
+                    </div>
+                    <div class="ui-g-12 ui-lg-11 ul-md-11 p-r-0 p-l-0 proforma-dropdown">
+                        <p-dropdown [tabindex]=1 [filter]="true" [(ngModel)]="selectedContactDetails" filter="filter" (onChange)="getselectedCustomer($event.value)"
+                            [options]="contactlistDropdown" [autoWidth]="false" [style]="{'width':'96%'}" required="true" appendTo="body">
+                            <ng-template let-item pTemplate="item">
+                                <div class="ui-helper-clearfix select-box">
+                                    <div class="elipsis_div">{{item.label}}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                    <!-- add parties start -->
+                    <div class="ui-g-12 ui-lg-1 ul-md-1 p-r-0 p-l-0 b2b-button">
+                        <button pButton type="button" icon="fa-plus" pTooltip="Add New Customer" tooltipPosition="top" iconPos="right" (click)="displayaddparies()"></button>
+                    </div>
+                    <!-- add parties end -->
+                </div>
+                <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-0">
+                    <div class="ui-g form-group">
+                        <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0">
+                            <label for="acAdvanced">Invoice To</label>
+                        </div>
+                        <div class="ui-g-12 p-l-0 p-r-0">
+                            <!-- <input type="text" [(ngModel)]="invoiceNumber" pInputText /> -->
+                            <input [tabindex]=2 class="ui-g-12 m-l-0 pull-left" type="text" [(ngModel)]="contactname" pInputText />
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-0">
+                    <div class="ui-g form-group">
+                        <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0">
+                            <label for="acAdvanced">Reference No</label>
+                        </div>
+                        <div class="ui-g-12 p-l-0 p-r-0">
+                            <input [tabindex]=3 ib-number-only min="1" max="100" decimals="2" type="text" [(ngModel)]="referecefnumber" pInputText />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-lg-4 ul-md-4 p-t-0 p-b-0">
+                    <div class="ui-g form-group">
+                        <div class="ui-g-12 p-l-0 p-r-0 p-b-0">
+                            <label for="acAdvanced">Invoice Date</label>
+                        </div>
+                        <div class="ui-g-12 p-l-0 p-r-0">
+                            <p-calendar [tabindex]=4 [(ngModel)]="invoiceDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-4 ul-md-4 p-t-0 p-b-0">
+                    <div class="ui-g form-group">
+                        <div class="ui-g-12 p-l-0 p-r-0 p-b-0">
+                            <label for="acAdvanced">Due Date</label>
+                        </div>
+                        <div class="ui-g-12 p-l-0 p-r-0">
+                            <p-calendar [tabindex]=6 [(ngModel)]="DueDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-lg-4 ul-md-4 p-t-0 p-b-0 p-l-0 p-r-0">
+                    <div class="ui-g form-group">
+                        <div class="ui-g-12 p-b-0">
+                            <label for="acAdvanced">Invoice Type</label>
+                        </div>
+                        <div class="ui-g-12">
+                            <div class="ui-g-12 ui-g-12 p-l-0 p-r-0 p-t-0 invoice-type">
+                                <p-dropdown [tabindex]=7 [autoWidth]="false" class="pdropdown" (onChange)="onSelectInvoicetype($event);" [options]="Invoicetype"
+                                    [(ngModel)]="selectedInvoiceType">
+                                    <ng-template let-item pTemplate="item">
+                                        <div class="ui-helper-clearfix select-box">
+                                            <div class="elipsis_div">{{item.label}}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                            <!-- <input type="text" pInputText /> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="ui-g-12 ui-lg-4 ul-md-4 p-t-0 p-l-0">
+              <div class="ui-g form-group">
+                <div class="ui-g-12">
+                  <label for="acAdvanced">Reverse Charge</label>
+                </div>
+                <div class="ui-g-12 p-r-0 invoice-type">
+                  <p-radioButton name="groupname" value="Y" label="Yes" [(ngModel)]="selectedreversecharge"></p-radioButton>
+                  <p-radioButton name="groupname" value="N" label="No" [(ngModel)]="selectedreversecharge"></p-radioButton>
+              
+                </div>
+              </div>
+            </div> -->
+                <!-- Left Side -->
+                <div class="clearfix"></div>
+                <div class="ui-g-12 ui-lg-4 ul-md-4 address-icon p-l-0 p-r-0 p-t-0 address-icon-2">
+                    <div class="ui-g form-group form-group-default form-group-default-2">
+                        <div class="ui-g-12 supply-text p-b-0 req required-4">
+                            <label for="acAdvanced">Place of supply</label>
+                            <!-- <i class="fa fa-map-marker" aria-hidden="true"></i> -->
+                        </div>
+                        <div class="ui-g-12 p-r-0 invoice-type">
+                            <p-dropdown [tabindex]=8 [(ngModel)]="selectedplaceofsupply" [filter]="true" (onChange)="selectedpos($event)" [autoWidth]="false"
+                                class="pdropdown" [options]="placeofsupplies">
+                                <ng-template let-item pTemplate="item">
+                                    <div class="ui-helper-clearfix select-box">
+                                        <div class="elipsis_div">{{item.label}}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-4 ul-md-4 address-icon p-l-0 p-r-0 p-t-0 address-icon-2" *ngIf="autogenyn=='N'">
+                    <div class="ui-g-12 supply-text p-b-0 req required-4">
+                        <label for="acAdvanced">Invoice Number</label>
+                    </div>
+                    <div class="ui-g-12 p-r-0 invoice-type">
+                        <input id="journalno" [(ngModel)]="invoiceno" pinputtext="" type="text" class=" bank-input ui-inputtext ui-corner-all ui-state-default ui-widget">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- product add selection started -->
+    <div *ngIf="invoiceid" class="ui-g-12 ui-lg-12 ul-md-12 b2c-edit invoice-to-table card">
+        <!-- <p-dataTable #productTable expandableRows="true" [value]="selectedproductsList" [editable]="true" [(selection)]="selectedProductItems" (onEdit)="onEdit($event)"
+            (onEditComplete)="onEditProduct($event)"> -->
+        <p-dataTable *ngIf="visible" #productTable expandableRows="true" [value]="selectedproductsList" [editable]="true" [(selection)]="selectedProductItems"
+            (onEdit)="onEdit($event)" (onEditComplete)="onEditProduct($event)">
+            <p-column [style]="{'width':'3%'}" expander="true" styleClass="col-icon">
+
+            </p-column>
+
+            <p-column field="prodname" header="Particulars" [editable]="true" [style]="{'width':'20%'}">
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                    <div class="productname-text">{{selectedproduct[col.field]}}</div>
+                    <span *ngIf=" selectedproduct['prodid'] != 0 " class="productuom-text">{{'UOM: '+selectedproduct["uomdesc"]}}</span>
+                </ng-template>
+                <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <!-- <span>{{selectedproduct.prodname}}</span> -->
+                    <div *ngIf="Invoicecategory=='goodsInvoice'">
+
+                        <p-dropdown [filter]="true" (onChange)="onProductSelect($event,selectedproduct,ridx,productTable);productTable.closeCell();"
+                            [options]="productList" [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
+                        </p-dropdown>
+
+                    </div>
+                    <div *ngIf="Invoicecategory=='ServiceInvoice'">
+                        <div class="ui-g-12 ui-lg-10 ul-md-10 p-r-0 p-l-0 proforma-dropdown">
+                            <input class="quantity-text text-left" type="text" [(ngModel)]="selectedproduct.prodname"  placeholder="Enter Product Name" pInputText />
+                        </div>
+                        <!-- add product start -->
+                        <div class="ui-g-12 ui-lg-2 ul-md-2 p-r-0 p-l-0  proforma-button">
+                            <button pButton type="button" icon="fa-plus" pTooltip="Add New Product" tooltipPosition="top" iconPos="right" (click)="displayaddproduct(selectedproduct,ridx,productTable)"></button>
+                        </div>
+                        <!-- add product end -->
+                    </div>
+                </ng-template>
+            </p-column>
+            <p-column field="quantity" [hidden]="isServicebased()" header="Quantity" [editable]="true" styleClass="text-right" [style]="{'width':'7%'}">
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <input class="text-right" (keypress)="numberOnly($event)" type="text" (keyup)="producteditingObserve($event,selectedproduct,ridx)"
+                        [(ngModel)]="selectedproduct[col.field]" pInputText />
+                </ng-template>
+            </p-column>
+            <p-column field="mrp" header="Unit Cost" [editable]="true" styleClass="text-right" [style]="{'width':'12%'}">
+                <ng-template let-col let-selectedproduct="rowData" pTemplate="body">
+                    <span class="quantity-text">{{selectedproduct[col.field] }}</span>
+                </ng-template>
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <input class="text-right" (keypress)="numberOnly($event)" type="text" (keyup)="productmrpObserve($event,selectedproduct,ridx)"
+                        [(ngModel)]="selectedproduct[col.field]" pInputText />
+                </ng-template>
+            </p-column>
+            <p-column field="discntprcnt" header="Discount (%)" [editable]="true" styleClass="text-right" [style]="{'width':'10%'}">
+                <ng-template let-col let-selectedproduct="rowData" pTemplate="body">
+                    <span>{{selectedproduct[col.field]}}</span>
+                </ng-template>
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <input class="text-right" type="text" (keypress)="numberOnly($event)" (keyup)="discountKeyup($event,selectedproduct,ridx)"
+                        [(ngModel)]="selectedproduct[col.field]" pInputText />
+                </ng-template>
+            </p-column>
+            <p-column field="discntvalue" header="Discount (₹) " styleClass="text-right" [style]="{'width':'10%'}">
+                <ng-template let-col let-selectedproduct="rowData">
+                    {{selectedproduct[col.field] | currency : currency_sy : 'symbol' }}
+                </ng-template>
+            </p-column>
+            <!-- <p-column field="taxname" header="Tax" >
+                    <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                        <span>{{selectedproduct.taxname}}</span>
+    
+                    </ng-template>
+                </p-column> -->
+            <!-- <p-column field="taxname" header="Tax" styleClass="text-right" [style]="{'width':'15%'}" [editable]=Taxeditable>
+                    <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                        <span>{{selectedproduct.taxname}}</span>
+    
+                    </ng-template>
+                    <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                        <div class="hsncode_dropdown_container">
+                            <p-dropdown [filter]="true" (onChange)="setSelectedTax($event,selectedproduct,ridx)" [options]="hsncodelist" [autoWidth]="false"
+                                [style]="{'width':'100%'}" required="true" appendTo="body">
+                                <ng-template let-tax pTemplate="item" style="width:400px;">
+                                    <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                                        <div *ngIf="tax.label == 'Select Tax' ">{{tax.label}}</div>
+                                        <div *ngIf="tax.label != 'Select Tax' ">
+                                        <div style="font-size:14px;float:right;margin-top:4px;width:300px;
+                                      overflow: hidden;
+                                      text-overflow: ellipsis;">{{tax.label}}</div>
+    
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+    
+                    </ng-template>
+                </p-column> -->
+            <p-column field="taxname" header="Tax" [editable]="true" [style]="{'width':'12%','text-align':'right'}">
+                <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                    <!-- <span class="tax-amount"> {{selectedproduct.taxvalue != 0 ? selectedproduct.taxvalue : '' }}</span> -->
+                    <span>{{selectedproduct.taxname}}</span>
+
+                </ng-template>
+                <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <p-dropdown [filter]="true" (onChange)="setCustomSelectedTax($event,selectedproduct,ridx)" [options]="gsttaxlist" [autoWidth]="false"
+                        [style]="{'width':'100%'}" required="true" appendTo="body">
+                    </p-dropdown>
+                </ng-template>
+            </p-column>
+            <p-column field="hsncode" header="HSN Code" [editable]="true" [style]="{'width':'10%'}">
+                <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                    <!-- <span class="tax-amount"> {{selectedproduct.taxvalue != 0 ? selectedproduct.taxvalue : '' }}</span> -->
+                    <span>{{selectedproduct.hsncode}}</span>
+
+                </ng-template>
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <input class="text-right" type="text" [(ngModel)]="selectedproduct[col.field]" pInputText placeholder="HSN Code" />
+                </ng-template>
+            </p-column>
+            <p-column field="btotal" header="Total" styleClass="text-right" [style]="{'width':'13%','text-align' : 'right'}">
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                    {{ ( selectedproduct.quantity * selectedproduct.mrp ) | currency : currency_sy : 'symbol' }}
+
+                </ng-template>
+            </p-column>
+            <p-column styleClass="col-button" [style]="{'width':'75px'}">
+                <ng-template pTemplate="header">
+
+                </ng-template>
+                <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                    <button type="button" pButton (click)="removeproduct(selectedproduct)" icon="fa-trash-o"></button>
+                </ng-template>
+            </p-column>
+            <!-- expanded rows start-->
+            <ng-template let-selectedproduct pTemplate="rowexpansion">
+                <div class="ui-grid ui-grid-responsive ui-fluid show-table">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2" style="text-align:center">
+                            <img src="assets/layout/images/nopro.png" class="m-t-15" />
+                        </div>
+                        <div class="ui-grid-col-5">
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-5 names label">Product Name: </div>
+                                    <div class="ui-grid-col-10">{{selectedproduct.prodname}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-5 names label">UOM: </div>
+                                    <div class="ui-grid-col-10">{{selectedproduct.uomdesc}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-5 names label">MRP: </div>
+                                    <div class="ui-grid-col-10">{{selectedproduct.mrp}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-5 names label">Tax: </div>
+                                    <div class="ui-grid-col-10">{{selectedproduct.selltaxname}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui-grid-col-5 invoice-prints m-t-5">
+                            <span class="ui-grid-col-12">
+                                HSN Description :
+                            </span>
+                            <span class="ui-grid-col-12">
+                                {{selectedproduct.hsndesc || 'Select product'}}
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </ng-template>
+            <!-- expanded row end -->
+        </p-dataTable>
+        <button type="button" class="pull-right m-5 plus-icon faplus" pButton (click)="addnewproduct()" icon="fa-plus"></button>
+    </div>
+    <!-- product edit and selection start  -->
+    <!-- product selection started -->
+    <div *ngIf="!invoiceid" class="ui-g-12 ui-lg-12 ul-md-12 invoice-to-table">
+        <!-- <p-dataTable #productTable expandableRows="true" [value]="selectedproductsList" [editable]="true" [(selection)]="selectedProductItems" (onEdit)="onEdit($event)"
+              (onEditComplete)="onEditProduct($event)"> -->
+        <p-dataTable *ngIf="visible" #productTable expandableRows="true" [value]="selectedproductsList" [editable]="true" [(selection)]="selectedProductItems"
+            (onEdit)="onEdit($event)" (onEditComplete)="onEditProduct($event)">
+
+            <p-column [style]="{'width':'3%'}" expander="true" styleClass="col-icon">
+
+            </p-column>
+
+            <p-column field="prodname" header="Particulars" [editable]="true" [style]="{'width':'20%'}">
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                    <div class="productname-text">{{selectedproduct[col.field]}}</div>
+                    <span *ngIf=" selectedproduct['prodid'] != 0 " class="productuom-text">{{'UOM: '+selectedproduct["uomdesc"]}}</span>
+                </ng-template>
+                <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <!-- <span>{{selectedproduct.prodname}}</span> -->
+                    <div *ngIf="Invoicecategory=='goodsInvoice'">
+                        <div class="ui-g-12 ui-lg-10 ul-md-10 p-r-0 p-l-0 proforma-dropdown">
+                            <p-dropdown [filter]="true" (onChange)="onProductSelect($event,selectedproduct,ridx,productTable);productTable.closeCell();"
+                                [options]="productList" [autoWidth]="false" required="true" appendTo="body">
+                            </p-dropdown>
+                        </div>
+                        <!-- add product start -->
+                        <div class="ui-g-12 ui-lg-2 ul-md-2 p-r-0 p-l-0  proforma-button">
+                            <button pButton type="button" pTooltip="Add New Product" tooltipPosition="top" icon="fa-plus" iconPos="right" (click)="displayaddproduct(selectedproduct,ridx,productTable)"></button>
+                        </div>
+                        <!-- add product end -->
+                    </div>
+                    <div *ngIf="Invoicecategory=='ServiceInvoice'">
+                        <div class="ui-g-12 ui-lg-10 ul-md-10 p-r-0 p-l-0 proforma-dropdown">
+                            <input class="quantity-text text-left" type="text" [(ngModel)]="selectedproduct.prodname" placeholder="Enter Product Name"
+                                pInputText />
+                        </div>
+                        <!-- add product start -->
+                        <div class="ui-g-12 ui-lg-2 ul-md-2 p-r-0 p-l-0  proforma-button">
+                            <button pButton type="button" pTooltip="Add New Product" tooltipPosition="top" icon="fa-plus" iconPos="right" (click)="displayaddproduct(selectedproduct,ridx,productTable)"></button>
+                        </div>
+                        <!-- add product end -->
+                    </div>
+
+                </ng-template>
+            </p-column>
+            <p-column field="quantity" [hidden]="isServicebased()" header="Quantity" [editable]="true" styleClass="text-right" [style]="{'width':'7%'}">
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <input class="quantity-text text-right" (keypress)="numberOnly($event)" type="text" (keyup)="producteditingObserve($event,selectedproduct,ridx)"
+                        [(ngModel)]="selectedproduct[col.field]" pInputText />
+                </ng-template>
+            </p-column>
+            <p-column field="mrp" header="Unit Cost" [editable]="true" styleClass="text-right" [style]="{'width':'12%'}">
+                <ng-template let-col let-selectedproduct="rowData" pTemplate="body">
+                    <span class="quantity-text">{{selectedproduct[col.field] }}</span>
+                </ng-template>
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <input class="text-right" (keypress)="numberOnly($event)" type="text" (keyup)="productmrpObserve($event,selectedproduct,ridx)"
+                        [(ngModel)]="selectedproduct[col.field]" pInputText />
+                </ng-template>
+            </p-column>
+            <p-column field="discntprcnt" header="Discount (%)" [editable]="true" styleClass="text-right" [style]="{'width':'10%'}">
+                <ng-template let-col let-selectedproduct="rowData" pTemplate="body">
+                    <span class="quantity-text">{{selectedproduct[col.field]}}</span>
+                </ng-template>
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <input class="text-right" (keypress)="numberOnly($event)" type="text" (keyup)="discountKeyup($event,selectedproduct,ridx)"
+                        [(ngModel)]="selectedproduct[col.field]" pInputText />
+                </ng-template>
+            </p-column>
+            <p-column field="discntvalue" header="Discount (₹) " styleClass="text-right" [style]="{'width':'10%'}">
+                <ng-template let-col let-selectedproduct="rowData">
+                    <span class="quantity-text" (keypress)="numberOnly($event)">{{selectedproduct[col.field]}}</span>
+                </ng-template>
+            </p-column>
+            <!-- <p-column field="taxname" header="Tax" [style]="{'width':'15%'}" styleClass="text-right" [editable]=Taxeditable>
+                    <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                        <span>{{selectedproduct.taxname}}</span>
+    
+                    </ng-template>
+                    <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                        <div class="hsncode_dropdown_container">
+                            <p-dropdown [filter]="true" (onChange)="setSelectedTax($event,selectedproduct,ridx)" [options]="hsncodelist" [autoWidth]="false"
+                                [style]="{'width':'100%'}" required="true" appendTo="body">
+                                <ng-template let-tax pTemplate="item" style="width:400px;">
+                                    <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                                        <div *ngIf="tax.label == 'Select Tax' ">{{tax.label}}</div>
+                                        <div *ngIf="tax.label != 'Select Tax' ">
+                                            <div style="font-size:14px;float:right;margin-top:4px;width:300px;
+                                      overflow: hidden;
+                                      text-overflow: ellipsis;">{{tax.label}}</div>
+    
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+    
+                    </ng-template>
+                </p-column> -->
+            <p-column field="taxname" header="Tax" [editable]="true" [style]="{'width':'12%','text-align':'right'}">
+                <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                    <!-- <span class="tax-amount"> {{selectedproduct.taxvalue != 0 ? selectedproduct.taxvalue : '' }}</span> -->
+                    <span>{{selectedproduct.taxname}}</span>
+
+                </ng-template>
+                <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <p-dropdown [filter]="true" (onChange)="setCustomSelectedTax($event,selectedproduct,ridx)" [options]="gsttaxlist" [autoWidth]="false"
+                        [style]="{'width':'100%'}" required="true" appendTo="body">
+                    </p-dropdown>
+                </ng-template>
+            </p-column>
+            <p-column field="hsncode" header="HSN Code" [editable]="true" [style]="{'width':'10%'}">
+                <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                    <!-- <span class="tax-amount"> {{selectedproduct.taxvalue != 0 ? selectedproduct.taxvalue : '' }}</span> -->
+                    <span>{{selectedproduct.hsncode}}</span>
+
+                </ng-template>
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="editor">
+                    <input class="text-right" type="text" [(ngModel)]="selectedproduct[col.field]" pInputText placeholder="HSN Code" />
+                </ng-template>
+            </p-column>
+            <p-column field="btotal" header="Total" [style]="{'width':'13%','text-align' : 'right'}">
+                <ng-template let-col let-selectedproduct="rowData" let-ridx="rowIndex">
+                    <div class="total ">{{btotal | currency : currency_sy : 'symbol' }}</div>
+
+                </ng-template>
+            </p-column>
+            <p-column styleClass="col-button" [style]="{'width':'8%'}">
+                <ng-template pTemplate="header">
+
+                </ng-template>
+                <ng-template let-selectedproduct="rowData" let-ridx="rowIndex" pTemplate="body">
+                    <button type="button" *ngIf="ridx!=0" pButton (click)="removeproduct(selectedproduct)" icon="fa-trash-o"></button>
+                </ng-template>
+            </p-column>
+            <!-- expanded rows start-->
+            <ng-template let-selectedproduct pTemplate="rowexpansion">
+                <div class="ui-grid ui-grid-responsive ui-fluid show-table">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2" style="text-align:center">
+                            <img src="assets/layout/images/nopro.png" class="m-t-15" />
+                        </div>
+                        <div class="ui-grid-col-5">
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4 m-t-5 names label">Product Name: </div>
+                                    <div class="ui-grid-col-10 m-t-5">{{selectedproduct.prodname}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4 names label">UOM: </div>
+                                    <div class="ui-grid-col-10">{{selectedproduct.uomdesc}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4 names label">MRP: </div>
+                                    <div class="ui-grid-col-10">{{selectedproduct.mrp | currency : currency_sy : 'symbol'}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-4 tax-name label">Tax: </div>
+                                    <div class="ui-grid-col-10">{{selectedproduct.taxname}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-grid-col-5 invoice-prints m-t-5">
+                            <span class="ui-grid-col-12">
+                                HSN Description :
+                            </span>
+                            <span class="ui-grid-col-12">
+                                {{selectedproduct.hsndesc || 'Select product'}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <!-- expanded row end -->
+        </p-dataTable>
+        <button type="button" class="pull-right m-5 plus-icon" pButton (click)="addnewproduct()" icon="fa-plus"></button>
+    </div>
+    <div class="ui-g-12 ui-lg-7 ui-md-7 invoice-to-table invoice-tax-2">
+
+        <p-panel header="Tax Values" [toggleable]="true" [collapsed]="true">
+            <p-dataTable [value]="Temp_GST_TaxTotal" scrollable="true" scrollHeight="200px">
+                <p-column field="taxname" header="Tax" [style]="{'width':'20%'}">
+                    <ng-template let-col let-tax="rowData" let-ridx="rowIndex">
+                        <span>{{tax.taxname }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="amt" header="Amount" [style]="{'width':'20%'}">
+                    <ng-template let-col let-tax="rowData" let-ridx="rowIndex">
+                        <span>{{tax.amt | currency : currency_sy : 'symbol'}}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="cgst" header="CGST" [style]="{'width':'20%'}">
+                    <ng-template let-col let-tax="rowData" let-ridx="rowIndex">
+                        <span>{{tax.cgst | currency : currency_sy : 'symbol'}}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="sgst" header="SGST" [style]="{'width':'20%'}">
+                    <ng-template let-col let-tax="rowData" let-ridx="rowIndex">
+                        <span>{{tax.sgst | currency : currency_sy : 'symbol'}}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="igst" header="IGST" [style]="{'width':'20%'}">
+                    <ng-template let-col let-tax="rowData" let-ridx="rowIndex">
+                        <span>{{tax.igst | currency : currency_sy : 'symbol'}}</span>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </p-panel>
+    </div>
+    <div class="ui-g-12 ui-lg-5 ui-md-5 p-t-0">
+        <div class="ui-g-12 ui-lg-12 ui-md-12" id="totaldetail" class="sub-total-row">
+            <div class="ui-g-12 ui-lg-12 ul-md-12 ui-toolbar-group-right discount-value discount-value-3 no-padding clearfix">
+                <div class="ui-g-12 ui-lg-5 ui-md-4 p-r-0 p-l-0 text-right pull-left m-t-0 m-l-15">Other Expenses </div>
+                <div class="ui-g-12 ui-lg-4 ui-md-5  pull-left text-right bold no-padding m-t-5 m-b-5">
+                    <input ib-number-only min="1" max="100" decimals="2" class="border-0 bold no-padding p-t-2 text-right p-r-0" type="text"
+                        (keypress)="numberOnly($event)" (keyup)="CalcInvoicegrandTotal()" pInputText [(ngModel)]="morecharges"
+                    />
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0 p-b-0 ui-toolbar-group-right discount-value discount-value-3 clearfix">
+                <span class="tax-val-ue ui-g-12 ui-lg-5 ui-md-4 p-r-0 p-l-0 text-right m-l-10">Discount Value</span>
+                <span class="tax-val-ue ui-g-12 ui-lg-4 ui-md-4 p-r-0 p-l-0 text-right m-l-10">{{ discounttotal | currency : currency_sy : 'symbol' }}</span>
+            </div>
+            <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0 p-b-0 ui-toolbar-group-right discount-value discount-value-3 clearfix">
+                <span class="tax-val-ue ui-g-12 ui-lg-5 ui-md-4 p-r-0 p-l-0 text-right m-l-10">Total Amount Before Tax </span>
+                <span class="tax-val-ue ui-g-12 ui-lg-4 ui-md-4 p-r-0 p-l-0 text-right m-l-10">{{ProductTotal | currency : currency_sy : 'symbol'}}</span>
+            </div>
+
+            <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0 p-b-0 ui-toolbar-group-right discount-value discount-value-3 clearfix">
+                <span class="tax-val-ue ui-g-12 ui-lg-5 ui-md-4 p-r-0 p-l-0 text-right m-l-10">Tax Value </span>
+                <span class="tax-val-ue ui-g-12 ui-lg-4 ui-md-4 p-r-0 p-l-0 text-right m-l-10">{{ invoiceAllTaxTotal | currency : currency_sy : 'symbol' }}</span>
+            </div>
+            <!-- <div class="ui-g-12 ui-lg-12 ul-md-12 ui-toolbar-group-right discount-value discount-value-3 no-padding clearfix">
+            <div class="ui-g-12 ui-lg-4 ui-md-4 p-r-0 p-l-0 text-right pull-left m-t-0 m-l-15">Other Expenses </div>
+            <div class="ui-g-12 ui-lg-5 ui-md-5 other-input pull-left text-right bold no-padding m-t-5 m-b-5">
+              <input ib-number-only min="1" max="100" decimals="2" class="no-padding p-t-2 text-right" type="text" (keyup)="CalcInvoicegrandTotal()"
+                pInputText [(ngModel)]="morecharges" />
+            </div>
+          </div> -->
+        </div>
+        <div class="currency-table ui-g-12 ui-lg-12 ui-md-12 p-t-0 p-b-0 p-l-0 p-r-0">
+            <div class="ui-g-12 ui-lg-12 ui-md-12 text-left ui-toolbar-group-right total-column-value bold clearfix">
+                <div class="ng-binding">
+                    <div class="net ui-g-12 ui-lg-5 ui-md-4 p-r-0 p-l-0 text-right m-l-10">Total Amount After Tax</div>
+                    <div class="net net-pay ui-g-12 ui-lg-4 ui-md-5 p-r-0 p-l-0 text-right">{{ invoiceGrandTotal | currency : currency_sy : 'symbol' }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- add parties start -->
+    <div class="molal-overlay">
+        <div class="invoice-overlay">
+            <p-dialog header="Add New Party" (onHide)="onhideContactpopup($event)" [(visible)]="addparties_display" modal="modal" width="700"
+                [responsive]="true">
+                <app-addparties [ext_customerCategory]="'B2C'" [CustomerorVendor]="CustomerorVendor" [ext_sundryGrop]=sundrygroup [openedfromothers]=true (notifyNewProduct)="addcustomerDetection($event)"></app-addparties>
+            </p-dialog>
+        </div>
+    </div>
+    <!-- add parties end -->
+    <!-- add product start -->
+    <div class="molal-overlay">
+        <div class="invoice-overlay">
+            <p-dialog header="Add New Product" (onHide)="onhideProductpopup($event)" [(visible)]="addproduct_display" modal="modal" width="700"
+                [responsive]="true">
+                <app-products [openedfromothers]=addproduct_display (notifyNewProduct)="addProductDetection($event)"></app-products>
+            </p-dialog>
+        </div>
+    </div>
+    <!-- add product end -->
+</div>

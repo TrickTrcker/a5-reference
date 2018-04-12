@@ -1,0 +1,84 @@
+<p-growl [value]="msgs" sticky="sticky">
+</p-growl>
+<div class="licence-bg">
+  <div class="journal-heading">
+    <img  class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+    <h1 class="">Category</h1>
+    <div class="ui-toolbar-group-right ui-corner-all inlineflex">
+      <button pButton type="button" label="Add" icon="fa-plus" (click)="addcategory($event,op3)"></button>
+       <button [routerLink]="['/getstarted']"  icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+        <span class="ui-button-text ui-clickable">ui-btn</span></button>
+      <!--<p-splitButton class="multibutton"  icon="fa fa-check" [model]="menuItems" label="Save"></p-splitButton>-->
+    </div>
+  </div>
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <!--<div class="ui-g-0">
+        <p-overlayPanel #op1>
+          <app-addcategory [catgdetails]="catgdetails" [addovrlay]="addovrlay" (loadcategorylist)="loadcategorylist($event)"></app-addcategory>
+        </p-o3verlayPanel>
+      </div>-->
+       <div class="molal-overlay">
+          <div class="changepass-overlay">
+              <p-dialog #op3 header="" [(visible)]="adddialog_display" modal="modal" width="350" [responsive]="true">
+              <app-addcategory [catgdetails]="catgdetails" [addovrlay]="addovrlay" (loadcategorylist)="loadcategorylist()"></app-addcategory>
+              </p-dialog>
+          </div>
+      </div>
+      <div class="brand-list brand-list-2 nodata-page" *ngIf="isLoadData">
+        <!--<p-tabView [controlClose]="true">
+          <p-tabPanel header="Category" leftIcon="fa-book">-->
+            <p-dataTable [value]="catglist" [rows]="10" [paginator]="true" #dt *ngIf="catglist.length !=0">
+              <p-column field=categoryname header="Category Name"  [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'left','width': '23%'}"></p-column>
+              <p-column field="createddby" header="Created By" [filter]="show" [sortable]="true" [style]="{'text-align': 'left','width': '26%'}">
+                  <ng-template let-updatedby="rowData" pTemplate="body">
+                      <span>{{ updatedby.createdby }}</span>
+                      <br>
+                      <span class="dd_datespan">{{ updatedby.createddt | date: display_dtime }}</span>
+                    </ng-template>
+              </p-column>
+              <p-column field="lastupdatedby" header="Updated By" [filter]="show" [sortable]="true" [style]="{'text-align': 'left','width': '25%'}">
+                  <ng-template let-updatedby="rowData" pTemplate="body" style="text-align:center !important">
+                      <span>{{ updatedby.lastupdatedby }}</span>
+                      <br>
+                      <span class="dd_datespan">{{ updatedby.lastupdateddt | date: display_dtime }}</span>
+                    </ng-template>
+              </p-column>
+              <p-column field="status" header="Status" [sortable]="true" [filter]="show" filterMatchMode="equals" [style]="{'text-align': 'center','overflow':'visible', 'width':'13%'}" filterMatchMode="equals">
+                  <ng-template pTemplate="filter" let-col>
+                      <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                  </ng-template>
+              </p-column>
+              <p-column [style]="{'text-align': 'center','width': '5%'}">
+                <ng-template pTemplate="header">
+                  <p> <button pButton icon="fa-search" [disabled]="!catglist" id="category_icon_search" (click)="showhidefilter(dt,'category_icon_search')"></button></p>
+                </ng-template>
+                <ng-template pTemplate="body" let-selectedcategory="rowData">
+                 <a pButton (click)="update($event,selectedcategory,op4)" icon="fa-pencil"></a>
+                </ng-template>
+              </p-column>
+            </p-dataTable>
+            <div *ngIf="catglist.length ==0" class="text-center">
+              <h3>Create Product Categories to organize products.</h3>
+              <button pButton type="button" label="Create Product Category" icon="fa-plus" (click)="addcategory($event,op3)"></button>
+              </div>
+          <!--</p-tabPanel>
+        </p-tabView>-->
+      
+      <!--<div class="ui-g-6">
+        <p-overlayPanel #op2>
+          <app-addcategory [catgdetails]="catgdetails" [editovrlay]="editovrlay" (loadcategorylist)="loadcategorylist($event)"></app-addcategory>
+        </p-overlayPanel>
+      </div>-->
+      <div class="molal-overlay">
+    <div class="changepass-overlay">
+        <p-dialog #op4 header="" [(visible)]="display" modal="modal" width="350" [responsive]="true">
+        <app-addcategory [catgdetails]="catgdetails" [editovrlay]="editovrlay" (loadcategorylist)="loadcategorylist()"></app-addcategory>
+        </p-dialog>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+  </div>

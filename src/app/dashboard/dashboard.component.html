@@ -1,0 +1,284 @@
+<div class="ui-g dashboard">
+  <!-- <div *ngxPermissionsOnly="['TEST']">
+    <div>You can see this text congrats</div>
+  </div> -->
+  <div class="ui-g-12 ui-md-6 ui-lg-3">
+    <a routerLink="sales/list" class="ui-g overview-box overview-box-1 no-gutter info-invoice">
+      <div class="top-comment-grid">
+        <div class="invoice-info">
+          <div class="comments-icon">
+            <i class="fa fa-money overview-box-details-icon"></i>
+          </div>
+          <div class="comments-info likes-info">
+            <a href="#" class="overview-box-title">Invoices</a>
+            <h3 class="overview-box-details-count">{{transactionCount.invoice}}</h3>
+          </div>
+        </div>
+        <div class="overview-box-stats">
+          <a class="info-invoicevalue">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class="pull-right">
+                <i class="fa fa-arrow-circle-right"></i>
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="ui-g-12 ui-md-6 ui-lg-3">
+    <a routerLink="receipts/list" class="ui-g overview-box overview-box-1 no-gutter info-bill">
+      <div class="top-comment-grid">
+        <div class="bill-info">
+          <div class="comments-icon">
+            <i class="fa fa-file-text-o overview-box-details-icon"></i>
+          </div>
+          <div class="comments-info likes-info">
+            <a href="#" class="overview-box-title">Receipts</a>
+            <h3 class="overview-box-details-count">{{transactionCount.receipt}}</h3>
+          </div>
+        </div>
+        <div class="overview-box-stats">
+          <a class="info-invoicevalue">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class="pull-right">
+                <i class="fa fa-arrow-circle-right"></i>
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="ui-g-12 ui-md-6 ui-lg-3">
+    <a routerLink="purchase/list" class="ui-g overview-box overview-box-1 no-gutter info-payment">
+      <div class="top-comment-grid">
+        <div class="payment-info">
+          <div class="comments-icon">
+            <i class="fa fa-file-text overview-box-details-icon"></i>
+          </div>
+          <div class="comments-info likes-info">
+            <a href="#" class="overview-box-title">Bills</a>
+            <h3 class="overview-box-details-count">{{transactionCount.bill}}</h3>
+          </div>
+        </div>
+        <div class="overview-box-stats">
+          <a class="info-invoicevalue">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class="pull-right">
+                <i class="fa fa-arrow-circle-right"></i>
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="ui-g-12 ui-md-6 ui-lg-3">
+    <a routerLink="payment/list" class="ui-g overview-box overview-box-1 no-gutter info-receipt">
+      <div class="top-comment-grid">
+        <div class="receipt-info">
+          <div class="comments-icon">
+            <i class="fa fa-credit-card overview-box-details-icon"></i>
+          </div>
+          <div class="comments-info likes-info">
+            <a href="#" class="overview-box-title">Payments</a>
+            <h3 class="overview-box-details-count">{{transactionCount.payment}}</h3>
+          </div>
+        </div>
+        <div class="overview-box-stats">
+          <a class="info-invoicevalue">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class="pull-right">
+                <i class="fa fa-arrow-circle-right"></i>
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="ui-g-12">
+    <div class="ui-g-6 card shadow-box ui-shadow-1 invoice-due p-l-0 p-r-0 p-t-0 p-b-0">
+      <p-blockUI [blocked]="transactionNoRecordDisp.invoice" [target]="invoiceSummary">
+        <i class="" style="position:absolute;top:25%;left:50%">
+          <h3>No Invoice and Dues created.</h3>
+        </i>
+      </p-blockUI>
+      <p-panel #invoiceSummary header="Invoices vs Dues">
+        <p-chart *ngIf="invoiceSummaryData" type="bar" [data]="invoiceSummaryData" [options]="barChartConfig"></p-chart>
+      </p-panel>
+    </div>
+    <div class="ui-g-6 card shadow-box ui-shadow-1 invoice-due-2 p-l-0 p-r-0 p-t-0 p-b-0">
+      <p-blockUI [blocked]="transactionNoRecordDisp.bill" [target]="billSummary">
+        <!-- <img [src]="no_data" style="width: 100%"> -->
+        <i class="" style="position:absolute;top:25%;left:50%">
+          <h3>No Bill and Dues created.</h3>
+        </i>
+      </p-blockUI>
+      <p-panel #billSummary header="Bills vs Dues">
+        <p-chart *ngIf="billSummaryData" type="bar" [data]="billSummaryData" [options]="barChartConfig"></p-chart>
+      </p-panel>
+    </div>
+  </div>
+  <div class="ui-g-12">
+    <div class="ui-g-12 ui-g-6 card shadow-box ui-shadow-1 invoice-due p-l-0 p-r-0 p-t-0 p-b-0 global-sales customer-sales">
+      <p-blockUI [blocked]="transactionNoRecordDisp.SaleRegion" [target]="SaleRegion">
+        <i class="" style="position:absolute;top:25%;left:50%">
+          <h3>No Invoice and Dues created.</h3>
+        </i>
+      </p-blockUI>
+      <p-panel #SaleRegion>
+        <p-header>
+          <div class="ui-helper-clearfix">
+            <span class="ui-panel-title">Top Selling Region</span>
+            <a href="javascript:void(0)"  class="raised-btn pull-right m-t-5">
+              <i  (click)="refreshload()" class="fa fa-refresh"></i>
+            </a>
+          </div>
+        </p-header>
+        
+
+        <div class="globe">
+          <img src="assets/layout/images/globe.png" alt="Top Selling Region" width="70">
+        </div>
+
+        <span class="sale-interval"></span>
+        <!-- <table>
+                    <tbody *ngIf="regionlist.length !=0">
+                        <tr *ngFor="let obj of regionlist">
+                            <td><i class="fa fa-map-marker"></i></td>
+                            <td>{{obj.label}}</td>
+                            <td>{{obj.amount| currency : currency_sy  : 'symbol' }}</td>
+                            <td><i class="fa fa-arrow-up"></i></td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="regionlist.length ==0" class="overlay-box">
+                        <tr class="text-center">
+                            <td>No data Found</td>
+                        </tr>
+                    </tbody>
+                </table> -->
+
+        <p-dataList [value]="regionlist" [paginator]="false" emptyMessage="" scrollable="true" scrollHeight="245px">
+          <ng-template let-obj pTemplate="item">
+            <div class="ui-g-12 p-t-0 p-b-0 sales-list-view">
+              <div class="ui-g-12 ui-md-1">
+                <i  class="fa fa-map-marker"></i>
+              </div>
+              <div class="ui-g-12 ui-md-6">
+                <h1>{{obj.label}}</h1>
+              </div>
+              <div class="ui-g-12 ui-md-5 text-right">
+                <h2>{{obj.value1| currency : currency_sy  : 'symbol' }}</h2>
+              </div>
+              <!-- <div class="ui-g-12 ui-md-2 text-right">
+                <i class="fa fa-arrow-up"></i>
+              </div> -->
+            </div>
+          </ng-template>
+        </p-dataList>
+
+      </p-panel>
+    </div>
+
+    <div class="ui-g-12 card shadow-box ui-shadow-1 invoice-due-2 p-l-0 p-r-0 p-t-0 p-b-0 global-sales customer-sales">
+        <p-blockUI [blocked]="transactionNoRecordDisp.CustomerSales" [target]="CustomerSales">
+            <i class="" style="position:absolute;top:25%;left:50%">
+              <h3>No Invoice and Dues created.</h3>
+            </i>
+          </p-blockUI>
+      <p-panel #CustomerSales>
+        <p-header>
+          <div class="ui-helper-clearfix">
+            <span class="ui-panel-title">Top Customers by Sales</span>
+            <a href="javascript:void(0)" class="raised-btn pull-right m-t-5">
+              <i (click)="refreshload()" class="fa fa-refresh"></i>
+            </a>
+          </div>
+        </p-header>
+        
+        <div class="globe">
+          <img src="assets/layout/images/customer.png" alt="Top Customers by Sales" width="70">
+        </div>
+        <span class="sale-interval"></span>
+
+        <!-- <table>
+                    <tbody *ngIf="customerslist.length !=0">
+                        <tr *ngFor="let obj of customerslist">
+                            <td><i class="fa fa-user"></i></td>
+                            <td>{{obj.label}}</td>
+                            <td class="text-right">{{obj.amount| currency : currency_sy  : 'symbol' }}</td>
+                            <td><i class="fa fa-arrow-up"></i></td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="customerslist.length ==0">
+                        <tr class="text-center">
+                            <td>No data Found</td>
+                        </tr>
+                    </tbody>
+                </table> -->
+        <p-dataList [value]="customerslist" [paginator]="false" emptyMessage="" scrollable="true" scrollHeight="245px">
+          <ng-template let-obj pTemplate="item">
+            <div class="ui-g-12 p-t-0 p-b-0 sales-list-view">
+              <div class="ui-g-12 ui-md-1">
+                <i class="fa fa-user"></i>
+              </div>
+              <div class="ui-g-12 ui-md-6">
+                <h1>{{obj.label}}</h1>
+              </div>
+              <div class="ui-g-12 ui-md-5 text-right">
+                <h2>{{obj.value1| currency : currency_sy  : 'symbol' }}</h2>
+              </div>
+              <!-- <div class="ui-g-12 ui-md-2 text-right">
+                <i class="fa fa-arrow-up"></i>
+              </div> -->
+            </div>
+          </ng-template>
+        </p-dataList>
+
+      </p-panel>
+    </div>
+  </div>
+  <div class="ui-g-12">
+    <!-- <div class="ui-g-6 card shadow-box ui-shadow-1 invoice-due-3 p-l-0 p-r-0 p-t-0 p-b-0">
+      <p-blockUI [blocked]="transactionNoRecordDisp.topsales" [target]="salesSummary">
+        <i class="" style="position:absolute;top:25%;left:50%"><h3>No Customer transactions recorded.</h3></i>
+      </p-blockUI>
+      <p-panel #salesSummary header="Top Customers by Sales">
+        <p-chart *ngIf="topSalesData" type="pie" [data]="topSalesData" [options]="chartConfig"></p-chart>
+      </p-panel>
+    </div> -->
+
+    <!--<div class="ui-g-4">
+          <p-panel header="Tax">
+            <p-chart *ngIf="taxSummaryData" type="doughnut" [data]="taxSummaryData" [options]="chartConfig" ></p-chart>
+          </p-panel> 
+        </div>-->
+    <div class="ui-g-6 card shadow-box ui-shadow-1 invoice-due p-l-0 p-r-0 p-t-0 p-b-0">
+      <p-blockUI [blocked]="transactionNoRecordDisp.profitLoss" [target]="profiltLoss">
+        <i class="" style="position:absolute;top:25%;left:50%">
+          <h3>No Invoice and Dues created.</h3>
+        </i>
+      </p-blockUI>
+      <p-panel #profiltLoss header="Incomes & Expenses">
+        <p-chart *ngIf="profitLossSummaryData" type="doughnut" [data]="profitLossSummaryData" [options]="chartConfig"></p-chart>
+      </p-panel>
+    </div>
+
+    <div class="ui-g-6 card shadow-box ui-shadow-1 invoice-due-2 p-l-0 p-r-0 p-t-0 p-b-0">
+      <p-blockUI [blocked]="transactionNoRecordDisp.salegrowth" [target]="salesGrowth">
+        <i class="" style="position:absolute;top:25%;left:50%">
+          <h3>No Invoice and Dues created.</h3>
+        </i>
+      </p-blockUI>
+      <p-panel #salesGrowth header="Sales Growth">
+        <p-chart *ngIf="salesGrowthData" type="line" [data]="salesGrowthData" [options]="barChartConfig"></p-chart>
+      </p-panel>
+    </div>
+  </div>
+</div>

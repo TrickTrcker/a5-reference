@@ -1,0 +1,198 @@
+<div class="licence-bg ui-g-12 m-b-25 p-t-0 p-b-0 p-l-0 p-r-0">
+    <div class="shadow-box ui-shadow-1 bg-white prolist height-auto">
+        <div class="ui-g-12 p-l-0 p-r-0 p-t-0">
+            <div class="journal-heading">
+                <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+                <h1>Invoices</h1>
+                <div class="ui-toolbar-group-right multibutton-2">
+                    <p-menu #menu popup="popup" [model]="invoicelistmainmenu"></p-menu>
+                    <button type="button" pButton icon="fa-plus" label="Add" (click)="menu.toggle($event)"></button>
+                </div>
+                <!-- <div class="ui-toolbar-group-right">
+          <button icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+          <button [routerLink]="['/sales/addedit']" icon="fa-plus" label="New" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-plus"></span><span class="ui-button-text ui-clickable">Invoice</span></button>
+        </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="payment-tabview ui-g-12 p-t-0">
+        <p-tabView>
+            <p-tabPanel header="" leftIcon="fa-pie-chart">
+                <div class="ui-g-12 p-l-0 p-r-0">
+                    <div class="ui-g-6 list-graphs">
+                        <div class="shadow-box ui-shadow-1">
+                            <p-blockUI [blocked]="transactionNoRecordDisp.invoice" [target]="invoiceSummary">
+                                <i class="fa fa-lock fa-5x" style="position:absolute;top:29%;left:46%"></i>
+                            </p-blockUI>
+                            <p-panel #invoiceSummary>
+                                <p-chart *ngIf="invoiceSummaryData" type="bar" [data]="invoiceSummaryData" [options]="barChartConfig"></p-chart>
+                            </p-panel>
+                        </div>
+                    </div>
+                    <div class="ui-g-6 list-graphs">
+                        <div class="shadow-box ui-shadow-1">
+                            <p-blockUI [blocked]="transactionNoRecordDisp.invoiceCount" [target]="invoiceCount">
+                                <i class="fa fa-lock fa-5x" style="position:absolute;top:29%;left:46%"></i>
+                            </p-blockUI>
+                            <p-panel #invoiceCount>
+                                <p-chart *ngIf="invoiceCountData" type="line" [data]="invoiceCountData" [options]="lineChartConfig"></p-chart>
+                            </p-panel>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="" leftIcon="fa-list-ol">
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-lg-12 invoice-list-tab">
+
+                        <p-tabView [controlClose]="true" (onClose)="handletabClose($event)">
+                            <p-tabPanel header="B2B Invoice List">
+                                <p-dataTable #invoicelisttable [value]="invoicelist" selectionMode="single" [paginator]="true" [rows]="paginator" [responsive]="true">
+                                    <p-column field="companyname" header="Customer" [style]="{'width':'15%'}" [filter]="show" filterMatchMode="contains" [sortable]="true"></p-column>
+                                    <p-column field="invoiceno" header="Invoice No" [style]="{'width':'13%','text-align':'left'}" [filter]="show" filterMatchMode="contains" [sortable]="true"></p-column>
+                                    <p-column field="invoicedt" header="Invoice Date" [style]="{'width':'13%','text-align':'center'}" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <span>{{selectedinvoice.invoicedt | date: date_dformat }}</span>
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column field="invoicetotal" header="Total" [style]="{'width':'13%'}" styleClass="text-right" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <span>{{selectedinvoice.invoicetotal | currency : currency_sy : 'symbol' }}</span>
+                                        </ng-template>
+                                    </p-column>
+
+                                    <p-column field="createdby" header="Created By" [style]="{'width':'18%'}" styleClass="text-left" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <span>{{ selectedinvoice.createdby }}</span>
+                                            <br>
+                                            <span class="dd_datespan">{{ selectedinvoice.createddt | date: display_dtime }}</span>
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column class="p-b-0" field=status header="Status" [style]="{'text-align':'center','width':'13%'}" [filter]="show" [sortable]="true" filterMatchMode="equals">
+                                        <ng-template pTemplate="filter" let-col>
+                                            <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="invoicelisttable.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column styleClass="col-button" [style]="{'width':'13%','text-align':'center'}">
+                                        <ng-template pTemplate="header">
+                                            <label>
+                                                <button pButton icon="fa-search" id="invoice_search_icons" (click)="showhidefilter(invoicelisttable,'invoice_search_icons')"></button>
+                                            </label>
+                                            <!-- <button type="button" pButton icon="fa-refresh"></button> -->
+                                        </ng-template>
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <a pButton [routerLink]="['../viewinvoice', 'invoice',selectedinvoice.invoiceid ]" icon="fa-eye"></a>
+                                            <!-- <a pButton [routerLink]="['../editinvoice', selectedinvoice.invoiceid ]" icon="fa-pencil"></a> -->
+                                            <!-- <button type="button" pButton (click)="addTabViewinvoice(selectedinvoice)" icon="fa-eye"></button> -->
+                                            <a pButton (click)="edit(selectedinvoice,'b2b')" icon="fa-pencil"></a>
+
+                                            <a pButton (click)="pdfdownload(selectedinvoice.invoiceid,selectedinvoice.invoiceno)" icon="fa-arrow-down"></a>
+                                            <a pButton (click)="deleteRecord(selectedinvoice,'b2b')" icon="fa-trash"></a>
+                                        </ng-template>
+                                    </p-column>
+                                </p-dataTable>
+                            </p-tabPanel>
+                            <p-tabPanel header="B2C Invoice List">
+                                <p-dataTable #miscellaneouslisttable [value]="miscellaneousinvoicelist" selectionMode="single" [paginator]="true" [rows]="paginator" [responsive]="true">
+                                    <p-column field="companyname" header="Customer" [filter]="show" [style]="{'width':'13%'}" filterMatchMode="contains" [sortable]="true"></p-column>
+                                    <p-column field="invoiceno" header="Invoice No" [filter]="show" [style]="{'width':'13%','text-align':'left'}" filterMatchMode="contains" [sortable]="true"></p-column>
+                                    <p-column field="invoicedt" header="Invoice Date" [filter]="show" [style]="{'width':'13%','text-align':'center'}" filterMatchMode="contains" [sortable]="true">
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <span>{{selectedinvoice.invoicedt | date: date_dformat }}</span>
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column field="invoicetotal" header="Total" styleClass="text-right" [style]="{'width':'13%'}" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <span>{{selectedinvoice.invoicetotal | currency : currency_sy : 'symbol' }}</span>
+                                        </ng-template>
+                                    </p-column>
+
+
+                                    <p-column field="createdby" header="Created By" styleClass="text-left" [style]="{'width':'18%'}" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <span>{{ selectedinvoice.createdby }}</span>
+                                            <br>
+                                            <span class="dd_datespan">{{ selectedinvoice.createddt | date: display_dtime }}</span>
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column class="p-b-0" field=status header="Status" styleClass="text-center" [style]="{'width':'13%','text-align':'center'}" [filter]="show" [sortable]="true" filterMatchMode="equals">
+                                        <ng-template pTemplate="filter" let-col>
+                                            <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="invoicelisttable.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                                        </ng-template>
+                                    </p-column>
+
+                                    <p-column styleClass="col-button" [style]="{'width':'13%','text-align':'center'}">
+                                        <ng-template pTemplate="header">
+                                            <label>
+                                                <button pButton icon="fa-search" id="invoice_search_icon" (click)="showhidefilter(miscellaneouslisttable,'invoice_search_icon')"></button>
+                                            </label>
+                                        </ng-template>
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <a pButton [routerLink]="['../viewmiscellaneousinvoice', 'cai_invoice',selectedinvoice.invoiceid ]" icon="fa-eye"></a>
+                                            <!-- <a pButton [routerLink]="['../editmiscellaneousinvoice', selectedinvoice.invoiceid ]" icon="fa-pencil"></a> -->
+                                            <a pButton (click)="edit(selectedinvoice,'b2c')" icon="fa-pencil"></a>
+                                            <a pButton (click)="pdfdownload(selectedinvoice.invoiceid,selectedinvoice.invoiceno)" icon="fa-arrow-down"></a>
+                                            <a pButton (click)="deleteRecord(selectedinvoice,'b2c')" icon="fa-trash"></a>
+                                        </ng-template>
+                                    </p-column>
+                                </p-dataTable>
+                            </p-tabPanel>
+                            <p-tabPanel header="Pro forma List">
+
+                                <p-dataTable #proformainvoicelisttable [(selection)]="selectedProforma" [value]="proformainvoicelist" selectionMode="single" [paginator]="true" [rows]="5" [responsive]="true" [contextMenu]="proformacontextMenu">
+                                    <p-column field="companyname" header="Customer" [style]="{'width':'15%'}" [filter]="show" filterMatchMode="contains" [sortable]="true"></p-column>
+                                    <p-column field="invoiceno" header="Invoice No" [style]="{'width':'13%','text-align':'left'}" [filter]="show" filterMatchMode="contains" [sortable]="true"></p-column>
+                                    <p-column field="invoicedt" header="Invoice Date" [style]="{'width':'13%','text-align':'center'}" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <span>{{selectedinvoice.invoicedt | date: date_dformat }}</span>
+                                        </ng-template>
+                                    </p-column>
+
+                                    <p-column field="invoicetotal" header="Total" styleClass="text-right" [style]="{'width':'13%'}" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <span>{{selectedinvoice.invoicetotal | currency : currency_sy : 'symbol'}}</span>
+                                        </ng-template>
+                                    </p-column>
+
+                                    <p-column field="createdby" header="Created By" [style]="{'width':'18%'}" styleClass="text-left" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <span>{{selectedinvoice.createdby }}</span>
+                                            <br>
+                                            <span class="dd_datespan">{{ selectedinvoice.createddt | date: display_dtime }}</span>
+                                        </ng-template>
+                                    </p-column>
+
+                                    <p-column class="p-b-0" field=status header="Status" styleClass="text-center" [style]="{'width':'13%','text-align':'center'}" [filter]="show" [sortable]="true" [style]="{'text-align':'center'}" filterMatchMode="equals">
+                                        <ng-template pTemplate="filter" let-col>
+                                            <p-dropdown [options]="prochangestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="proformainvoicelisttable.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                                        </ng-template>
+                                    </p-column>
+
+                                    <p-column styleClass="col-button" [style]="{'width':'13%','text-align':'center'}">
+                                        <ng-template pTemplate="header">
+                                            <label>
+                                                <button pButton icon="fa-search" id="proforma_search_icon" (click)="showhidefilter(proformainvoicelisttable,'proforma_search_icon')"></button>
+                                            </label>
+                                            <!-- <button type="button" pButton icon="fa-refresh"></button> -->
+                                        </ng-template>
+                                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                            <a pButton [routerLink]="['../viewinvoice', 'proforma',selectedinvoice.invoiceid]" icon="fa-eye"></a>
+                                            <!-- <a pButton [routerLink]="['../editproformainvoice', selectedinvoice.invoiceid ]" icon="fa-pencil"></a> -->
+                                            <a *ngIf="selectedinvoice.detailid != null " pButton [routerLink]="['../convertproforma', selectedinvoice.invoiceid ]" icon="fa-pencil"></a>
+                                            <!-- <a *ngIf="selectedinvoice.detailid == null " pTooltip="Convert Proforma to Invoice" (click)="convertProSelection(selectedinvoice)" pButton  icon="fa-exchange"></a> -->
+                                            <!-- <button type="button" pButton (click)="addTabViewinvoice(selectedinvoice)" icon="fa-eye"></button> -->
+                                            <a pButton (click)="edit(selectedinvoice,'proforma')" icon="fa-pencil"></a>
+
+                                            <a pButton (click)="pdfdownload(selectedinvoice.invoiceid,selectedinvoice.invoiceno)" icon="fa-arrow-down"></a>
+                                            <a pButton (click)="deleteRecord(selectedinvoice,'proforma')" icon="fa-trash"></a>
+                                        </ng-template>
+                                    </p-column>
+                                </p-dataTable>
+                                <p-contextMenu #proformacontextMenu [model]="proformainvoiceCnxtmenu"></p-contextMenu>
+                            </p-tabPanel>
+                        </p-tabView>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>

@@ -1,0 +1,14 @@
+<div class="layout-menu-wrapper" [class.layout-menu-dark]="app.darkMenu" (click)=app.onMenuClick($event)>
+    <div class="nano">
+        <div class="nano-content sidebar-scroll-content">
+          <!-- <img src="assets/images/infobook-logo.png" alt="Logo"> -->
+            <div class="layout-menu-container">
+                <div class="mobile-search">
+                    <i class="fa fa-fw fa-search topbar-search-icon"></i>
+                    <input type="text" class="topbar-search" placeholder="Type your search here" />
+                </div>
+                <ul app-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset"></ul>
+            </div>
+        </div>
+    </div>
+</div>

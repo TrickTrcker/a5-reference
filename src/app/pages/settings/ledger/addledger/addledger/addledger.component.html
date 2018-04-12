@@ -1,0 +1,74 @@
+<!-- <p-growl [value]="msgs" sticky="sticky">
+</p-growl> -->
+<div class="molal-overlay p-t-0 p-r-0 p-l-0">
+    <div class="molal-overlay p-t-0 p-r-0 p-l-0">
+        <div class="changepass-overlay ui-content p-t-0 p-r-0 p-l-0">
+            <div class="ui-g-12 ui-fluid changepass-overlay-1 brand-overlay p-t-0 p-r-0 p-l-0 p-b-0">
+
+                <div class="card-w-title brand-overlay brand-overlay-2 p-t-0 p-r-0  p-b-0 m-b-0">
+                    <h2 class=" m-b-5">
+                        <b>{{title}}</b>
+                    </h2>
+                    <form [formGroup]="ledgerform" (ngSubmit)="save(ledgerform.value)">
+                        <div class="ui-g-12 form-group p-l-0 p-r-0 p-b-0 p-t-0">
+                            <div class="ui-g-12 ui-lg-12 ui-md-12 p-l-0 p-r-0 p-t-0 form-group-default">
+                                <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input required">
+                                    <label class="ui-g-12">Name</label>
+                                    <input type="text" maxlength="{{max50}}" class="text-left" pInputText placeholder="Ledger Name" formControlName="firstname"
+                                        style="height: 20px; min-height: 35px; width:250px;">
+                                    <!-- <span *ngIf="ledgerform.controls['firstname'].errors['minlength']">Must be longer than 3 characters</span> -->
+                                </div>
+
+                            </div>
+                            <div class="ui-g-12 ui-lg-12 ui-md-12 p-l-0 p-t-0 p-r-0 form-group-default">
+                                <div class="ui-g-12 p-r-0 p-l-0 p-t-0 p-b-0 bank-input required">
+                                    <label class="ui-g-12"> Groups </label>
+                                    <p-dropdown [options]="groups" [filter]="true" [style]="{'width': '100%'}" formControlName="accheadname"></p-dropdown>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-lg-12 ui-md-12 p-l-0 p-t-0 p-r-0 form-group-default">
+                                <div class="ui-g-12 p-r-0 p-l-0 p-t-0 p-b-0 bank-input required">
+                                    <label class="ui-g-12"> Opening Balance </label>
+                                    <div class="ui-g-12 ui-lg-10 ul-md-9 p-t-0 p-b-0 p-r-0 p-l-0">
+                                        <input type="text" maxlength="{{amtlength}}" pInputText placeholder="Opening Balance" (keypress)="numberOnly($event)" class="text-right"
+                                            name="openingbalance" formControlName="openingbalance" style="width:100% !important;">
+                                    </div>
+                                    <div class="ui-g-12 ui-lg-2 ul-md-3 p-t-0 p-b-0 p-r-0 p-l-0 ledger-box">
+                                        <p-dropdown [options]="crdr_opt" formControlName="crdr" [style]="{'width': '75px'}">
+                                            <ng-template let-item pTemplate="selectedItem">
+                                                <span style="vertical-align:middle">{{ getcrdrLabel(item) }}</span>
+                                            </ng-template>
+                                            <ng-template let-item pTemplate="item">
+                                                <div style="max-width:75px;">{{ getcrdrLabel(item) }}</div>
+                                            </ng-template>
+                                        </p-dropdown>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-lg-12 ui-md-12 p-l-0 p-r-0 form-group-default" *ngIf="ledgerdtls?.subaccheadid">
+                                <div class="ui-g-12  p-r-0 p-t-0 bank-input required">
+                                    <label class="ui-g-12 p-l-0"> Status</label>
+                                    <p-radioButton name="status" value="Active" label="Active" formControlName="status"></p-radioButton>
+                                    <p-radioButton name="status" value="Inactive" label="Inactive" formControlName="status" [style]="{'margin-left': '15px'}"></p-radioButton>
+                                </div>
+                            </div>
+                            <!-- <div class="row ui-md-12 p-b-0 p-l-0 p-r-0">
+                                <div class="ui-g-4 pull-right p-t-0  p-b-0 p-l-0 p-r-0">
+                                    <button pButton type="submit" label="Save" icon="fa-check" class="pull-right"></button>
+                                </div>
+                            </div> -->
+                            <div class="row ui-md-11 row ui-md-12 p-r-0 p-l-0 p-b-0">
+                                <div class="ui-toolbar-group-right ui-corner-all pull-right m-b-5">
+                                    <button pButton type="submit" label="{{buttonText}}" icon="fa-check" class="pull-right"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

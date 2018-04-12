@@ -1,0 +1,40 @@
+
+.tree_footercols
+{
+    display: block;
+    float: left !important;
+    padding: 15px 0px 0 0px;
+    text-align: right;
+    font-weight: bold;
+    color: #292929;
+    width: 160px;
+    white-space: initial;
+    word-wrap: break-word;
+    padding-right: 0;
+}
+.ui-treetable .ui-treetable-footer {
+   min-height: 35px !important;
+}
+.ui-tabview .ui-tabview-panel {
+    min-height : calc( 75vh ) !important;
+}
+.chartoa .ui-treetable thead th {
+    background-color: #f8f8f8;
+    padding: 1.0em 1em;
+    // border-color: #c7cdd1;
+    color: #585858;
+}
+
+.scroll{
+    min-height: 240px;
+    max-height: 240px;
+    overflow-y: auto;
+    border:1px solid #e3e3e3;
+}
+.chartoa 
+{
+    padding: 5px 20px;
+    border-top: solid 1px #e3e3e3;
+    border-left: solid 1px #e3e3e3;
+    border-right: solid 1px #e3e3e3;
+}

@@ -1,0 +1,27 @@
+.sales-list-view {
+  background: #f6f8f9;
+    h1 {
+        margin-bottom: 0;
+        font-size: 14px;
+        color: #757575;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    h2 {
+        margin: 0;
+        font-size: 14px;
+        color: #757575;
+    }
+    .fa-arrow-up {
+        color: #3ba32a;
+        font-size: 14px
+    }
+    .fa-map-marker {
+        color: #757575;
+    }
+    .fa-user {
+        color: #757575;
+    }
+}
+

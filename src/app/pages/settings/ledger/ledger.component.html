@@ -1,0 +1,98 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0">
+    <div class=" journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1 class="">Ledger</h1>
+        <div class="ui-toolbar-group-right ui-corner-all inlineflex">
+
+            <button pButton type="button" label="Add" icon="fa-plus" (click)="addledger($event,op1)"></button>
+            <button [routerLink]="['/getstarted']" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                <span class="ui-button-text ui-clickable">ui-btn</span>
+            </button>
+            <!--<p-splitButton class="multibutton"  icon="fa fa-check" [model]="menuItems" label="Save"></p-splitButton>-->
+        </div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <!--<div class="ui-g-0">
+        <p-overlayPanel #op1>
+          <app-addledger [ledgerdtls]="ledgerdtls" [addovrlay]="addovrlay" (loadledgerlist)="loadledgerlist($event)"></app-addledger>
+        </p-overlayPanel>
+      </div>-->
+            <div class="molal-overlay ledgers-overlay">
+                <div class="changepass-overlay ledger-overlay">
+                    <p-dialog #op1 header="" [(visible)]="display" modal="modal" width="600" [responsive]="true">
+                        <app-addledger [ledgerdtls]="ledgerdtls" [addovrlay]="addovrlay" (loadledgerlist)="loadledgerlist()"></app-addledger>
+                    </p-dialog>
+                </div>
+            </div>
+            <div class="brand-list nodata-page ui-g-12 ledger-list" *ngIf="dataload">
+                <!--<p-tabView [controlClose]="true">
+          <p-tabPanel [selected]="list" header="Ledger" leftIcon="fa-book">-->
+                <p-dataTable #ledgerlisttable [value]="ledgerlist" [rows]="10" [paginator]="true" #dt *ngIf="ledgerlist.length != 0">
+                    <p-column field=subaccheadname header="Ledger Name" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'left','width': '23%'}"></p-column>
+                    <p-column field="openingbalance" header="Opening Balance" [sortable]="true" [filter]="show" [style]="{'text-align': 'right','width':'20%'}"
+                        filterMatchMode="contains">
+                        <ng-template let-data="rowData" pTemplate="body">
+                            <span style="text-align:left">{{data.openingbalance | currency : currency_sy : 'symbol' }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="createddby" header="Created By" [filter]="show" [sortable]="true" [style]="{'text-align': 'left','width': '29%'}">
+                        <ng-template let-updatedby="rowData" pTemplate="body" style="text-align:center">
+                            <span>{{ updatedby.createdby }}</span>
+                            <br>
+                            <span class="dd_datespan">{{ updatedby.createddt | date: display_dtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="lastupdatedby" header="Updated By" [filter]="show" [sortable]="true" [style]="{'text-align': 'left','width': '29%'}">
+                        <ng-template let-updatedby="rowData" pTemplate="body">
+                            <span>{{ updatedby.lastupdatedby }}</span>
+                            <br>
+                            <span class="dd_datespan">{{ updatedby.lastupdateddt | date: display_dtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="status" header="Status" [sortable]="true" [filter]="show" filterMatchMode="equals" [style]="{'text-align': 'center','overflow':'visible', 'width':'13%'}">
+                        <ng-template pTemplate="filter" let-col>
+                            <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)"
+                                styleClass="ui-column-filter"></p-dropdown>
+                        </ng-template>
+                        <ng-template let-data="rowData" pTemplate="body">
+                            <span>{{ data.status }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'text-align': 'center','width': '5%'}">
+                        <ng-template pTemplate="header">
+                            <button pButton class="" icon="fa-search" [disabled]="!ledgerlist" id="ledger_dt_search_icon" (click)="showhidefilter(dt,'ledger_dt_search_icon')"></button>
+                            <!-- <button style="margin-right: 20px;" id="ledger_dt_search_icon" pButton 
+                    icon="fa-search" (click)="showhidefilter(ledgerlisttable,'ledger_dt_search_icon')"></button> -->
+                        </ng-template>
+                        <ng-template pTemplate="body" let-selectedledger="rowData">
+                            <a pButton (click)="update($event,selectedledger,op2)" icon="fa fa-pencil"></a>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+
+                <div *ngIf="ledgerlist.length == 0" class="text-center">
+                    <h3>Add company specific ledgers within the main account groups.</h3>
+                    <button pButton type="button" label="Create Account Group" icon="fa-plus" (click)="addledger($event,op1)"></button>
+                </div>
+
+                <!--</p-tabPanel>
+        </p-tabView>-->
+
+                <!--<div class="ui-g-6">
+        <p-overlayPanel #op2>
+          <app-addledger [ledgerdtls]="ledgerdtls" [editovrlay]="editovrlay" (loadledgerlist)="loadledgerlist($event)"></app-addledger>
+        </p-overlayPanel>
+      </div>-->
+                <div class="molal-overlay ledgers-overlay">
+                    <div class="changepass-overlay ledger-overlay">
+                        <p-dialog #op2 header="" [(visible)]="ledgerdisplay" modal="modal" width="600" [responsive]="true">
+                            <app-addledger [ledgerdtls]="ledgerdtls" [editovrlay]="editovrlay" (loadledgerlist)="loadledgerlist()"></app-addledger>
+                        </p-dialog>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

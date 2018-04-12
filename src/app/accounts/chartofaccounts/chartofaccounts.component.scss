@@ -1,0 +1,43 @@
+.chartoa .ui-treetable thead th {
+    background-color: #f8f8f8;
+    padding: 1.0em 1em;
+    // border-color: #c7cdd1;
+    color: #585858;
+}
+
+.scroll{
+    min-height: 240px;
+    max-height: 240px;
+    overflow-y: auto;
+    border:1px solid #e3e3e3;
+}
+.chartoa 
+{
+    padding: 5px 20px;
+    border-top: solid 1px #e3e3e3;
+    border-left: solid 1px #e3e3e3;
+    border-right: solid 1px #e3e3e3;
+}
+
+.pa-r-5
+{
+    padding-right: 5px;
+}
+.p-l-21
+{
+    padding-left: 21px;
+}
+.p-r-21
+{
+    padding-right: 21px;
+}
+.chart-tab
+{
+    width: 38% !important;
+    overflow: visible;
+    height: 40px !important;
+}
+.chart-of-accounts-border
+{
+    border:1px solid #d5d5d5;
+}

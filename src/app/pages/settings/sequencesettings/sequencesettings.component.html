@@ -1,0 +1,100 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0">
+    <div class="journal-heading roles">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1 class="">Sequence Settings </h1>
+        <div class="ui-toolbar-group-right ui-corner-all  brand-overlay inlineflex">
+
+            <button [routerLink]="['/getstarted']" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+        <span class="ui-button-text ui-clickable">ui-btn</span>
+      </button>
+            <!--<p-splitButton class="multibutton"  icon="fa fa-check" [model]="menuItems" label="Save"></p-splitButton>-->
+        </div>
+    </div>
+    <!-- <div class="molal-overlay">
+    <div class="changepass-overlay">
+      <p-dialog #op1 header="" [(visible)]="display" modal="modal" width="350" [responsive]="true">
+        <app-sequencesettings [branddtls]="branddtls" class="brand-overlay" [addovrlay]="addovrlay" (loadbrandlist)="loadbrandlist()"></app-sequencesettings>
+      </p-dialog>
+    </div>
+  </div> -->
+    <div class="brand-list brand-list-2 nodata-page ui-g-12 ui-g-12 padding-seq-tab">
+        <!-- <p-tabView [controlClose]="true"  [activeIndex]="indextabview"> -->
+        <!-- <p-tabPanel [selected]="list" header="Credit List" leftIcon="fa-book"> -->
+        <p-dataTable [value]="settingslist" selectionMode="single" [paginator]="true" [rows]="10" [responsive]="true" #dt>
+
+            <p-column field="prefixkey" header="Prefix Key" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width':'13%'}">
+                <ng-template let-data="rowData" pTemplate="body">
+                    <span>{{ data.prefixkey }}</span>
+                </ng-template>
+            </p-column>
+            <p-column field="suffixkey" header="Suffix key" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width':'13%'}">
+                <ng-template let-data="rowData" pTemplate="body">
+                    <span>{{ data.suffixkey }}</span>
+                </ng-template>
+            </p-column>
+            <p-column field="keydesc" header="Description" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width':'25%'}">
+                <ng-template let-data="rowData" pTemplate="body">
+                    <span>{{ data.keydesc }}</span>
+                </ng-template>
+            </p-column>
+            <p-column field="prefixcncat" header="Prefix" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width':'10%'}">
+                <ng-template let-data="rowData" pTemplate="body">
+                    <span>{{ data.prefixcncat }}</span>
+                </ng-template>
+            </p-column>
+
+            <p-column field="suffixcncat" header="Suffix" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width':'10%'}">
+                <ng-template let-data="rowData" pTemplate="body">
+                    <span>{{ data.suffixcncat }}</span>
+                </ng-template>
+            </p-column>
+
+            <p-column field="currseqno" header="Current Sequence" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width':'20%','text-align':'right'}">
+                <ng-template let-data="rowData" pTemplate="body">
+                    <span>{{ data.currseqno }}</span>
+                </ng-template>
+            </p-column>
+
+            <!-- <p-column field="createdby" header="Created By" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width':'18%','text-align':'left'}">
+          <ng-template let-data="rowData" pTemplate="body">
+              <span>{{ data.createdby }}</span>
+              <br>
+              <span class="dd_datespan">{{ data.createddt | date:display_dtime }}</span>
+          
+          </ng-template>
+        </p-column> -->
+            <p-column field="lastupdatedby" header="Updated By" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width':'18%','text-align':'left'}">
+                <ng-template let-data="rowData" pTemplate="body">
+                    <span>{{ data.lastupdatedby }}</span>
+                    <br>
+                    <span class="dd_datespan">{{ data.lastupdateddt | date: display_dtime }}</span>
+
+                </ng-template>
+            </p-column>
+            <p-column field="status" [sortable]="true" [filter]="show" filterMatchMode="equals" header="Status" [style]="{'text-align': 'center','overflow':'visible','width': '13%'}" filterMatchMode="equals">
+                <ng-template pTemplate="filter" let-col>
+                    <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                </ng-template>
+            </p-column>
+            <p-column styleClass="col-button" [style]="{'width':'7%'}">
+                <ng-template pTemplate="header">
+                    <label> <button pButton class=""  icon="fa-search" id="bank_dt_search_icon" (click)="showhidefilter(dt,'bank_dt_search_icon')" ></button></label>
+                </ng-template>
+                <ng-template pTemplate="body" let-selectedbrand="rowData">
+                    <a pButton (click)="update($event,selectedbrand,op2)" icon="fa-pencil"></a>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+        <div class="molal-overlay">
+            <div class="changepass-overlay" *ngIf="dialogvisable">
+                <p-dialog #op2 header="" [(visible)]="display" modal="modal" width="350" [responsive]="true" #fileInput>
+                    <app-addsequencesettings [(seqdtls)]="seqdtls" [editovrlay]="editovrlay" (loadbrandlist)="loadbrandlist()"></app-addsequencesettings>
+                </p-dialog>
+            </div>
+        </div>
+        <!-- </p-tabPanel> -->
+
+        <!-- </p-tabView> -->
+    </div>
+</div>

@@ -1,0 +1,137 @@
+<div class="panel">
+    <div class="ui-g-12 m-b-15 p-t-0 p-b-0 p-l-0 p-r-0">
+        <div class="bg-1">
+            <div class="ui-g-12 p-l-0 p-r-0 p-t-0">
+                <div class="journal-heading">
+                    <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+                    <h1>Purchase Bills</h1>
+                    <span>
+                        <i class="fa fa-fw fa-question-circle" pTooltip="Tap on purchase bills to View or Edit"></i>
+                    </span>
+
+                    <div class="ui-toolbar-group-right">
+                        <!--<button icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>-->
+                        <button [routerLink]="['/purchase/billedit']" icon="fa-plus" label="New" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left">
+                            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-plus"></span>
+                            <span class="ui-button-text ui-clickable">Add</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="payment-tabview ui-g-12">
+            <p-tabView>
+                <p-tabPanel header="" leftIcon="fa-pie-chart">
+                    <div class="ui-g-12">
+                        <div class="ui-g-6 list-graphs">
+                            <div class="shadow-box ui-shadow-1">
+                                <p-blockUI [blocked]="transactionNoRecordDisp.bill" [target]="billSummary">
+                                    <i class="fa fa-lock fa-5x" style="position:absolute;top:29%;left:46%"></i>
+                                </p-blockUI>
+                                <p-panel #billSummary>
+                                    <p-chart type="bar" *ngIf="billSummaryData" [data]="billSummaryData" [options]="barChartConfig"></p-chart>
+                                </p-panel>
+                            </div>
+                        </div>
+                        <div class="ui-g-6 list-graphs">
+                            <div class="shadow-box ui-shadow-1">
+                                <p-blockUI [blocked]="transactionNoRecordDisp.billCount" [target]="billCount">
+                                    <i class="fa fa-lock fa-5x" style="position:absolute;top:29%;left:46%"></i>
+                                </p-blockUI>
+                                <p-panel #billCount>
+                                    <p-chart *ngIf="billCountData" type="line" [data]="billCountData" [options]="lineChartConfig"></p-chart>
+                                </p-panel>
+                            </div>
+                        </div>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="" leftIcon="fa-list-ol">
+                    <div class="panel billlist">
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12 ui-lg-12 invoice-list-tab">
+                                <p-tabView [controlClose]="true" (onClose)="handletabClose($event)">
+                                    <p-tabPanel header="Purchase Bills List">
+                                        <p-dataTable [value]="billlist" selectionMode="single" [paginator]="true" [rows]="5" [responsive]="true" #billtable>
+                                            <p-column field="companyname" header="Vendor" [style]="{'width':'15%'}" [filter]="show" filterMatchMode="contains" [sortable]="true"></p-column>
+                                            <p-column field="billno" header="Bill No" [style]="{'width':'15%','text-align':'left'}" [filter]="show" filterMatchMode="contains" [sortable]="true"></p-column>
+                                            <p-column field="billdt" header="Bill Date" [style]="{'width':'15%','text-align':'center'}" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                                <ng-template let-selectedbill="rowData" pTemplate="body">
+                                                    <span>{{selectedbill.billdt | date: date_dformat }}</span>
+                                                </ng-template>
+                                            </p-column>
+                                            <!-- <p-column field="duedate" header="Due Date" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                        <ng-template let-selectedbill="rowData" pTemplate="body">
+                            <span>{{selectedbill.duedate | date: date_dformat }}</span>
+                        </ng-template>
+                        </p-column> -->
+                                            <!-- <p-column field="subtotal" header="Sub Total" styleClass="text-right" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                            <span>{{selectedinvoice.subtotal | currency : currency_sy :  'symbol'}}</span>
+                        </ng-template>
+                        </p-column> -->
+                                            <p-column field="billtotal" header="Total" [style]="{'width':'15%'}" styleClass="text-right" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                                                <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                                    <span>{{selectedinvoice.billtotal | currency : currency_sy : 'symbol'}}</span>
+                                                </ng-template>
+                                            </p-column>
+                                            <!-- <p-column field="pymntamount" header="Amount" styleClass="text-right" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'text-align': 'right'}">
+                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                            <span>{{selectedinvoice.pymntamount | currency : currency_sy :  'symbol'}}</span>
+                        </ng-template>
+                        </p-column> -->
+
+                                            <p-column field="createdby" class="p-b-0" [filter]="show" [sortable]="true" [style]="{'width':'15%','text-align':'left'}" filterMatchMode="contains" [style]="{'text-align': 'left','width': '18%'}">
+                                                <ng-template class="center" pTemplate="header">
+                                                    <label>Created By</label>
+                                                </ng-template>
+                                                <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                                                    {{selectedinvoice.createdby}}
+                                                    <br>
+                                                    <span class="dd_datespan">{{selectedinvoice.createddt | date:display_dtime }}</span>
+                                                </ng-template>
+                                            </p-column>
+                                            <p-column class="p-b-0" field=status header="Status" [filter]="show" [sortable]="true" [style]="{'text-align':'center'}" [sortable]="true" filterMatchMode="equals" [style]="{'text-align': 'left'}">
+                                                <ng-template pTemplate="filter" let-col>
+                                                    <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="billtable.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                                                </ng-template>
+                                            </p-column>
+                                            <p-column styleClass="col-button" [style]="{'width':'14%','text-align':'center'}">
+                                                <ng-template pTemplate="header">
+                                                    <label>
+                                                        <button pButton icon="fa-search" id="bill_search_icon" (click)="showhidefilter(billtable,'bill_search_icon')"></button>
+                                                    </label>
+                                                    <!-- <button type="button" pButton icon="fa-refresh"></button> -->
+                                                </ng-template>
+                                                <ng-template let-selectedbill="rowData" pTemplate="body">
+
+                                                    <!--<button type="button" pButton (click)="addTabViewbill(selectedbill)" icon="fa-eye"></button>-->
+                                                    <a pButton [routerLink]="['../viewbill', 'bill',selectedbill.billid ]" icon="fa-eye"></a>
+                                                    <a pButton (click)="edit(selectedbill)" icon="fa-pencil"></a>
+                                                    <a pButton (click)="pdfdownload(selectedbill.billid,selectedbill.billno)" icon="fa-arrow-down"></a>
+                                                    <button type="button" pButton icon="fa-trash" (click)="deleteRecord(selectedbill)"></button>
+
+                                                </ng-template>
+                                            </p-column>
+                                        </p-dataTable>
+                                    </p-tabPanel>
+                                    <!-- <p-tabPanel header="Add Product" leftIcon="fa-user" *ngIf="addproduct">
+                    <app-products></app-products>
+                    </p-tabPanel> -->
+                                    <p-tabPanel [closable]="true" *ngFor="let bill of selectedbills; let i = index" header="{{bill.billno}}">
+                                        <div class="my_dynamica_lead_tabPanel">
+                                            <!-- I can add content to this div with tabView.onChange() api -->
+                                            {{bill.billno}}
+                                            <app-view-bill billid="{{bill.billid}}"></app-view-bill>
+                                        </div>
+
+
+                                    </p-tabPanel>
+                                </p-tabView>
+                            </div>
+                        </div>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+    </div>
+</div>

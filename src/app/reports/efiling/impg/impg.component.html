@@ -1,0 +1,90 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0 p-b-0">
+
+    <div class="journal-heading m-b-10">
+        <div class="ui-helper-clearfix">
+            <div class="ui-g-12 ui-lg-4 ui-md-4 p-t-0 p-b-0">
+                <img class="infobook-logo ui-toolbar-group-left">
+                <h1 class="pull-left">IMPG </h1>
+            </div>
+            <div class="ui-toolbar-group-left ui-g-12 ui-lg-7 ui-md-7 p-t-0 p-b-0 text-right">
+                <span class="">{{selectedyear}}</span><br>
+                <span style="font-size:12px" class="pcs-label inv-view-label">{{startDate}}  -  {{endDate}}</span>
+
+            </div>
+            <div class="ui-toolbar-group-right ui-corner-all brand-overlay ui-g-12 ui-lg-1 ui-md-1 p-t-0 p-b-0 text-right inlineflex" style="padding-left: 4%;">
+                <button (click)="ExporttoCSV()" icon="fa-file-excel-o" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                                        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-file-excel-o"></span>
+                                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                                      </button>
+                <button (click)="redirecttoprev()" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                      </button>
+            </div>
+        </div>
+    </div>
+    <div class="user-list ui-g-12 product-list">
+        <p-dataTable [value]="impgdata" selectionmode="single" [paginator]="true" [rows]="10" exportFilename="impg" exportFilename="impg"
+            #dt>
+            <div class="ui-datatable ui-widget ui-datatable-reflow">
+                <div class="ui-datatable-tablewrapper">
+                    <p-column field="portcode" header="Port Code" [sortable]="true"></p-column>
+                    <p-column field="billno" header="Bill Of Entry Number " [sortable]="true" [style]="{'text-align':'right', 'width': '15%'}">
+                        <ng-template let-billno="rowData" pTemplate="body" style="text-align: left">
+                            <span>{{billno.billno}}</span>
+                            <br> 
+                            <span class="dd_datespan">{{billno.invoicevalue  | currency : currency_Symbol : 'symbol' }}</span>
+                            <br>
+                            <span class="dd_datespan">{{ billno.billdt | date: date_dformat}}</span>
+
+                        </ng-template>
+                    </p-column>
+                    <p-column field="invoicevalue" header="Bill Of Entry Value" [sortable]="true" hidden="true"></p-column>                    
+                    <p-column field="billdt" header="Bill Of Entry Date" [sortable]="true" hidden="true"></p-column>
+                    <p-column field="doctype" header="Document type" [sortable]="true" hidden="true"></p-column>
+                    <p-column field="placeofsupply" header="Place of Supply" [sortable]="true" hidden="true"></p-column>                    
+                    <p-column field="rate" header="Rate" [sortable]="true" [style]="{'text-align':'right'}" >
+                        <ng-template let-rate="rowData" pTemplate="body" style="text-align:right">
+                            {{rate.rate}}%
+                        </ng-template>
+                    </p-column>
+                    <!-- <p-column field="taxvalue" header="Tax" [sortable]="true" [style]="{'text-align':'right'}">
+                            <ng-template let-taxvalue="rowData" pTemplate="body" style="text-align: left">
+                                <span>{{taxvalue.taxvalue  | currency : currency_Symbol : 'symbol'  }}</span>
+                                <br>
+                                <span class="dd_datespan">{{ taxvalue.igst | currency : currency_Symbol : 'symbol' }}</span>
+                                <br>
+                                <span class="dd_datespan">{{ taxvalue.cgst | currency : currency_Symbol : 'symbol' }}</span>
+                            </ng-template>
+                        </p-column> -->
+                    <p-column field="taxablevalue" header="Taxable Value" [sortable]="true" [style]="{'text-align':'right'}">
+                        <ng-template let-taxablevalue="rowData" pTemplate="body" style="text-align:right">
+                            {{taxablevalue.taxablevalue | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="igst" header="Integ Tax Paid" [sortable]="true" [style]="{'text-align':'right'}">
+                        <ng-template let-igst="rowData" pTemplate="body" style="text-align:right">
+                            {{igst.igst | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="cessamount" header="Cess Paid" [sortable]="true" [style]="{'text-align':'right'}">
+                        <ng-template let-cessamount="rowData" pTemplate="body" style="text-align:right">
+                            {{cessamount.cessamount | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="eitc" header="Eligibility For ITC" [sortable]="true" hidden="true"></p-column>
+                    <p-column field="aigst" header="Availed ITC Integ Tax" [sortable]="true" [style]="{'text-align':'right', 'width': '15%'}">
+                        <ng-template let-aigst="rowData" pTemplate="body" style="text-align:right">
+                            {{aigst.aigst | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="acessamount" header="Availed ITC Cess" [sortable]="true" [style]="{'text-align':'right'}">
+                        <ng-template let-acessamount="rowData" pTemplate="body" style="text-align:right">
+                            {{acessamount.acessamount | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                </div>
+            </div>
+        </p-dataTable>
+    </div>
+</div>

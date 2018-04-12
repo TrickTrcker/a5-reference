@@ -1,0 +1,122 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0 p-b-0" *ngIf="isLoadData">
+    <div class=" journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1 class="">Banks</h1>
+        <div class="ui-toolbar-group-right ui-corner-all">
+
+            <!--<button _ngcontent-c4="" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" icon="fa-arrow-down"
+        pbutton="" type="button"><span _ngcontent-c4="" class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span>
+        <span _ngcontent-c4="" class="ui-button-text ui-clickable">ui-btn</span></button> -->
+            <!-- <button pButton type="button" label="Add" icon="fa-plus" (click)="addBank(bankviewtab)"></button> -->
+            <!-- <button [routerLink]="['/getstarted']" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+        <span class="ui-button-text ui-clickable">ui-btn</span>
+      </button> -->
+            <p-splitButton class="multibutton" icon="fa fa-check" (onClick)="addBank(bankviewtab)" [model]="menuItems" label="Add"></p-splitButton>
+        </div>
+    </div>
+    <div class="ui-g-12 nodata-page parties-list">
+        <p-tabView [controlClose]="true" (onClose)="handleClose($event)" #bankviewtab [activeIndex]="activetabindex">
+            <p-tabPanel [selected]="list" header="Bank" leftIcon="fa-book" class="selectable_table">
+                <p-dataTable [value]="allbanks" [rows]="10" [paginator]="true" #bankdatalist *ngIf="allbanks.length != 0" dataKey="bankname"
+                    (onRowSelect)="onRowSelectBank($event)" selectionMode="single" [(selection)]="selectedbank">
+                    <p-column field="bankname" header="Bank Name" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'left','width': '18%'}"></p-column>
+                    <p-column field="accountno" header="Account Number" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'right','width': '19%'}"></p-column>
+                    <p-column field="ifsccode" header="IFSC code" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'left','width': '18%'}"></p-column>
+                    <p-column field="bankbalances" header="Current Balance" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'right','width': '19%'}">
+                        <ng-template let-data="rowData" pTemplate="body">
+                            <span>{{data.bankbalances | currency : currency_sy : 'symbol' }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="openbalance" header="Opening Balance" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'right','width': '19%'}">
+                        <ng-template let-data="rowData" pTemplate="body">
+                            <span>{{data.openbalance | currency : currency_sy : 'symbol' }}</span>
+                        </ng-template>
+                    </p-column>
+                    <!-- <p-column header="Created By" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'left','width': '20%'}">
+                        <ng-template let-allbanks="rowData" pTemplate="body">
+                            {{allbanks.createdby}}
+                            <br>
+                            <span class="dd_datespan">{{allbanks.createddt | date:display_dtime }}</span>
+                        </ng-template>
+                    </p-column> -->
+                    <p-column header="Updated By" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'left','width': '20%'}">
+                        <ng-template let-updatedby="rowData" pTemplate="body" style="text-align:center !important">
+                            <span>{{ updatedby.lastupdatedby }}</span>
+                            <br>
+                            <span class="dd_datespan">{{ updatedby.lastupdateddt | date: display_dtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="status" header="Status" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'center','width': '13%'}">
+                        <ng-template pTemplate="filter" let-col>
+                            <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="bankdatalist.filter($event.value,col.field,col.filterMatchMode)"
+                                styleClass="ui-column-filter"></p-dropdown>
+                        </ng-template>
+                    </p-column>
+
+                    <p-column [style]="{'text-align': 'center','width': '5%'}">
+                        <ng-template class="center" pTemplate="header">
+                            <p>
+                                <button pButton [disabled]="!allbanks" class="center" icon="fa-search" id="bank_dt_search_icon" (click)="showhidefilter(bankdatalist,'bank_dt_search_icon')"></button>
+                            </p>
+                        </ng-template>
+                        <ng-template let-selectedbank="rowData" pTemplate="body">
+                            <!-- <button type="button" pButton style="width: 35px;" icon="fa fa-pencil" (click)="update(selectedbank,bankviewtab)"></button> -->
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+                <div *ngIf="allbanks.length == 0" class="text-center">
+                    <h3>Add your Bank Accounts with detailed Information</h3>
+                    <button pButton type="button" label="Create New Bank Accounts" icon="fa-plus" (click)="addBank(bankviewtab)"></button>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel [selected]="addnew" header="Add Bank Details" leftIcon="fa-plus" *ngIf="addbankDetails" [closable]="true">
+                <app-addbank [banklist]="banklist" (notifyNewBank)="notifyNewBank($event)"></app-addbank>
+                <!--<app-addbank></app-addbank>-->
+            </p-tabPanel>
+            <p-tabPanel [selected]="editbank" header="Edit Bank Details" leftIcon="fa-pencil" *ngIf="editbankDetails" [closable]="true">
+                <app-addbank [banklist]="banklist" (notifyNewBank)="notifyNewBank($event)"></app-addbank>
+            </p-tabPanel>
+
+            <!-- <p-tabPanel [selected]="selectedbankwithdraw" header="Bank Withdraw" *ngIf="activebankwithdraw" leftIcon="fa-pencil" [closable]="true">
+                <app-bankwithdraw [openedfromothers]="bankwithdrawfrom" [withdrawbank]="selectedbank" (notifyNewBankTransaction)="notifyNewBankWithDraw($event)"></app-bankwithdraw>
+            </p-tabPanel>
+            <p-tabPanel [selected]="selectedbankdeposit" header="Bank Deposit" *ngIf="activebankdeposit" leftIcon="fa-pencil" [closable]="true">
+                <app-bankdeposite [openedfromothers]="bankdepositfrom" [withdrawbank]="selectedbank" (notifyNewBankTransaction)="notifyNewBankDeposit($event)"></app-bankdeposite>
+            </p-tabPanel>
+            <p-tabPanel [selected]="selectedbanktransfer" header="Bank Deposit" *ngIf="activebanktransfer" leftIcon="fa-pencil" [closable]="true">
+                <app-banktransfer [openedfromothers]="banktransferfrom" [withdrawbank]="selectedbank" (notifyNewBankTransaction)="notifyNewBankTransfer($event)"></app-banktransfer>
+            </p-tabPanel> -->
+        </p-tabView>
+        <div class="molal-overlay">
+            <div class="invoice-overlay">
+                <p-dialog header="Band Withdraw" (onHide)="hidebankwithdraw($event)" [(visible)]="selectedbankwithdraw" modal="modal" width="1024">
+                    <div *ngIf="activebankwithdraw">
+                        <app-bankwithdraw [openedfromothers]="bankwithdrawfrom" [withdrawbank]="selectedbank" (notifyNewBankTransaction)="notifyNewBankWithDraw($event)"></app-bankwithdraw>
+                    </div>
+                </p-dialog>
+
+            </div>
+        </div>
+        <div class="molal-overlay">
+            <div class="invoice-overlay">
+                <p-dialog header="Bank Deposit" (onHide)="hidebankdeposit($event)" [(visible)]="selectedbankdeposit" modal="modal" width="1024">
+                    <div *ngIf="activebankdeposit">
+                        <app-bankdeposite [openedfromothers]="bankdepositfrom" [withdrawbank]="selectedbank" (notifyNewBankTransaction)="notifyNewBankDeposit($event)"></app-bankdeposite>
+                    </div>
+                </p-dialog>
+
+            </div>
+        </div>
+        <div class="molal-overlay">
+            <div class="invoice-overlay">
+                <p-dialog header="Bank Transfer" (onHide)="hidebanktransfer($event)" [(visible)]="selectedbanktransfer" modal="modal" width="1024">
+                    <div *ngIf="activebanktransfer">
+                        <app-banktransfer [openedfromothers]="banktransferfrom" [withdrawbank]="selectedbank" (notifyNewBankTransaction)="notifyNewBankTransfer($event)"></app-banktransfer>
+                    </div>
+                </p-dialog>
+            </div>
+        </div>
+
+    </div>
+</div>

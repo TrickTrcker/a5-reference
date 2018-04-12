@@ -1,0 +1,78 @@
+.text-right
+{
+    text-align: right
+}
+.appliedClass
+{
+    border: 1px solid #27bd14 !important;
+}
+.clearfix {
+    clear: both;
+  }
+  
+  .white-bg {
+    background: #fff;
+  }
+  
+  .pdropdown .ui-dropdown {
+    width: 100% !important;
+  }
+//   .receipt {
+//     background: #F6F9FB;
+//     padding: 5px 0px;
+//     width: 99%;
+//      margin: 0 5px !important;
+//    border: 0px solid #d9d9d9;
+// }
+  .tax-amount {
+    font-weight: bold;
+    overflow: hidden;
+    color: #4873b8;
+    max-width: 65px;
+    white-space: nowrap;
+  }
+  .width100
+  {
+      width:100%;
+  }
+  .width90
+  {
+      width:90%;
+  }
+  .address-info {
+    float: left;
+    /*width:100%;*/
+  }
+    
+  .total-column-value {
+    background: #f5f5f5;
+    font-size: 24px;
+    padding: 5px;
+  }
+  
+  .total-column-label {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
+  
+  .form-layout .table tbody tr td {
+    padding: 0px 8px;
+  }
+  
+  .form-layout .table .form-control {
+    font-size: 12px;
+    color: #464646;
+  }
+  
+  .total-value-2 {
+    background: #f5f5f5;
+    margin: 10px 0px;
+    width: 100%;
+    padding: 5px 0px;
+    text-align: right;
+  }
+  .pull-right
+  {
+  float: right;
+  }
+  

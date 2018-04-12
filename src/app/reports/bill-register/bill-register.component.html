@@ -1,0 +1,131 @@
+<div class="ui-fluid ui-g-12 licence-bg p-r-0 p-l-0 p-t-0">
+
+  <div class="bg-1">
+    <div class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0">
+      <div class="journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1>Bill Register</h1>
+        <span>
+          <i class="fa fa-fw fa-question-circle" pTooltip="Tap on bill to View"></i>
+        </span>
+
+        <div class="ui-toolbar-group-right inlineflex">
+          <button [routerLink]="['/reports/list']" icon="fa-window-close" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+            <span class="ui-button-icon-left center-icon ui-clickable fa fa-times"></span>
+            <span class="ui-button-text ui-clickable">ui-btn</span>
+          </button>
+          <!-- <button icon="fa-print" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-print"></span><span class="ui-button-text ui-clickable">ui-btn</span></button> -->
+          <button (click)="pdfdownload(selectedContact,invoiceDate,DueDate)" icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span>
+            <span class="ui-button-text ui-clickable">ui-btn</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-g-12 ui-lg-12 ui-md-12 p-b-0">
+    <div class="receipt-register">
+      <div class="ui-g-12 ui-lg-3 ui-md-3">
+        <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 ">
+          <label for="acAdvanced">Bill Number </label>
+        </div>
+        <div class="ui-inputgroup ui-g-12 p-l-0 left bill-input">
+          <input type="text" pInputText placeholder="Bill Number" [(ngModel)]="billno">
+        </div>
+      </div>
+      <div class="ui-g-12 ui-lg-3 ui-md-3 p-l-0 drop-button">
+        <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+          <label for="acAdvanced">Vendor</label>
+        </div>
+        <div class="ui-g-12 width p-l-0">
+          <p-dropdown [options]="contactlist" [(ngModel)]="selectedContact" [filter]="true">
+            <ng-template let-con pTemplate="item">
+              <div class="ui-helper-clearfix">
+                <div>{{con.label}}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="ui-g-12 ui-lg-2 ui-md-2 p-l-0 date-button">
+        <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+          <label for="acAdvanced">From date</label>
+        </div>
+        <div class="ui-g-12  p-l-0">
+          <p-calendar [(ngModel)]="invoiceDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+        </div>
+      </div>
+      <div class="ui-g-12 ui-lg-2 ui-md-2 date-button">
+        <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+          <label for="acAdvanced">To date</label>
+        </div>
+        <div class="ui-g-12 p-l-0 p-r-0">
+          <p-calendar [(ngModel)]="DueDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+        </div>
+      </div>
+      <div class="ui-g-12 ui-lg-2 ui-md-2 date-button-2" style="padding-top: 30px">
+        <button pButton type="button" class="brs-width" (click)="getBillList(invoiceDate,DueDate)" icon="fa-search" label="Search"></button>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="ui-g-12 ui-lg-8 ui-md-8 p-t-0 p-b-0 download-btn">
+        <div class="ui-toolbar-group-right">
+          <button (click)="pdfdownload(selectedContact,invoiceDate,DueDate)" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span>
+            <span class="ui-button-text ui-clickable">ui-btn</span>
+          </button>
+        </div>
+      </div> -->
+  <div class="ui-g-12 ui-lg-12 invoice-list-tab invoice-list-tab-report p-t-0">
+    <p-tabView [controlClose]="true" (onClose)="handletabClose($event,billviewtab)" #billviewtab [activeIndex]="activetabindex">
+      <p-tabPanel header="Bill List" leftIcon="fa-book">
+        <p-dataTable [value]="billlist" selectionMode="single" [(selection)]="selectedCar" [paginator]="true" [rows]="paginator"
+          [responsive]="true" #billregister>
+          <p-column field="contactname" header="Name" [filter]="show" [sortable]="true"></p-column>
+          <p-column field="billno" header="Bill No" [filter]="show" [sortable]="true" styleClass="text-left"></p-column>
+          <p-column field="billdt" header="Bill Date" [filter]="show" [sortable]="true">
+            <ng-template let-selectedbill="rowData" pTemplate="body">
+              <span>{{selectedbill.billdt | date: date_dformat }}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="duedate" header="Due Date" [filter]="show" [sortable]="true">
+            <ng-template let-selectedbill="rowData" pTemplate="body">
+              <span>{{selectedbill.duedate | date: date_dformat }}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="subtotal" header="Sub Total" [filter]="show" styleClass="text-right" [sortable]="true">
+            <ng-template let-selectedbills="rowData" pTemplate="body">
+              <span>{{selectedbills.subtotal | currency : currency_sy : 'symbol'}}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="billtotal" header="Total" [filter]="show" styleClass="text-right" [sortable]="true">
+            <ng-template let-selectedbills="rowData" pTemplate="body">
+              <span>{{selectedbills.billtotal | currency : currency_sy : 'symbol'}}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="pymntamount" header="Amount" [filter]="show" [sortable]="true" [style]="{'text-align': 'right !important'}">
+            <ng-template let-selectedbills="rowData" pTemplate="body">
+              <span>{{selectedbills.pymntamount | currency : currency_sy : 'symbol'}}</span>
+            </ng-template>
+          </p-column>
+          <p-column styleClass="col-button">
+            <ng-template pTemplate="header">
+              <label>
+                <button pButton icon="fa-search" id="addproduct_search_icon" (click)="showhidefilter(billregister,'addproduct_search_icon')"></button>
+              </label>
+            </ng-template>
+            <ng-template let-selectedbills="rowData" pTemplate="body">
+              <a pButton (click)="addTabViewinvoice(selectedbills,billviewtab)" icon="fa-eye"></a>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+      </p-tabPanel>
+      <p-tabPanel [closable]="true" *ngFor="let bill of selectedbills; let i = index" header="{{bill.billno}}">
+        <div class="my_dynamica_lead_tabPanel">
+          <app-view-bill billid="{{bill.billid}}"></app-view-bill>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+</div>

@@ -1,0 +1,290 @@
+<p-growl [value]="msgs" sticky="sticky">
+</p-growl>
+<div class="card card-w-title p-l-0 p-t-0 p-r-0 p-b-0 clearfix">
+    <div class="ui-g-12 ui-md-12 credit-add receipt p-r-1 p-l-0 p-b-0 m-b-15">
+        <div class="row width100">
+            <div class="ui-g-4 form-group-default form-group-default-2">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 required-4 req">
+                    <label for="input">Vendor</label>
+                </div>
+                <div class="ui-g-12 ui-lg-12 bank-add ul-md-12 p-r-0" *ngIf="!debitidlist">
+                    <p-autoComplete (onSelect)="getselectedCustomer($event)" field="companyname" [(ngModel)]="selectedcontact" [suggestions]="filteredContacts" (completeMethod)="searchContacts($event)" [size]="30" [minLength]="0" placeholder="Select Vendor" [dropdown]="true"
+                        (onDropdownClick)="handleDropdownClick($event,'contactlist')" emptyMessage={{autocomplete_emptymessage}}>
+                        <ng-template let-contactlist pTemplate="item">
+                            <div class="ui-helper-clearfix select-box">
+                                <div class="elipsis_div">{{ contactlist.companyname }}</div>
+                            </div>
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="ui-g-12 ui-lg-12 p-r-0" *ngIf="debitidlist">
+                    <!-- <input id="input" [(ngModel)]="amount"  [disabled]="!selectedinvoice" (keyup)="onChangeAmount()" type="text" class="ui-inputtext ui-corner-all ui-state-default ui-widget"> -->
+                    <input id="input" [(ngModel)]="selectedcontact" [disabled]="true" type="text" class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+                </div>
+            </div>
+            <div class="ui-g-4 form-group-default form-group-default-2">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 req required-4">
+                    <label for="input">Bill No</label>
+                </div>
+                <div class="ui-g-12 ui-lg-12 bank-add ul-md-12 p-r-0" *ngIf="!debitidlist">
+                    <p-autoComplete (onSelect)="getselectedinvoice($event)" field="billno" [(ngModel)]="selectedinvoice" [suggestions]="filterinvoicelist" (completeMethod)="Searchinvoice($event)" [size]="30" [minLength]="0" placeholder="Select Bill" [dropdown]="true" (onDropdownClick)="handleDropdownClick($event,'invoicelist')"
+                        emptyMessage={{autocomplete_emptymessage}}>
+                        <ng-template let-invoicelist pTemplate="item">
+                            <div class="ui-helper-clearfix select-box">
+                                <div class="elipsis_div">{{invoicelist.billno}}</div>
+                            </div>
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="ui-g-12 ui-lg-12 p-r-0" *ngIf="debitidlist">
+                    <input id="input" [(ngModel)]="selectedinvoice" [disabled]="true" type="text" class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+                </div>
+            </div>
+            <div class="ui-g-4 form-group-default form-group-default-2">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 req required-4">
+                    <label for="input">Date</label>
+                </div>
+                <div class="ui-g-12 ui-lg-12 receipt-date receipt-date-2">
+                    <p-calendar [(ngModel)]="date" dateFormat="dd-mm-yy" readonlyInput="readonlyInput" [showIcon]="true"></p-calendar>
+                    <!-- <span style="margin-left:35px">{{date|date}}</span> -->
+                </div>
+            </div>
+
+        </div>
+        <div class="row width100 clearfix">
+            <!-- <div class="ui-g-4 form-group-default form-group-default-2">
+        <div class="ui-g-12 p-t-0 p-b-0 p-r-0 required  required-6">
+          <label for="input">Amount </label>
+        </div>
+        <div class="ui-g-12 ui-lg-12 p-r-0">
+          <input id="input" placeholder="Enter Amount" [(ngModel)]="amount" (keypress)="numberOnly($event)" [disabled]="!selectedinvoice"
+            (keyup)="onChangeAmount()" type="text" maxlength="{{amtlength}}" class="ui-inputtext ui-corner-all ui-state-default ui-widget text-right">
+        </div>
+      </div> -->
+            <div class="ui-g-12 ui-lg-4 ui-md-4  form-group-default form-group-default-2">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 req required-4">
+                    <label for="input">Reason</label>
+                </div>
+                <div class="ui-g-12 ui-lg-12 p-r-0">
+                    <p-dropdown [(ngModel)]="reason" [options]="reasonlist" [style]="{'width': '100%'}" filter="true" placeholder="Select Reason" optionLabel="name"></p-dropdown>
+                </div>
+            </div>
+            <div class="ui-g-4">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0">
+                    <label for="input">Reference</label>
+                </div>
+                <div class="ui-g-12 ui-lg-12 p-r-0">
+                    <input id="input" [(ngModel)]="Refernce" pinputtext="" type="text" class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+                </div>
+            </div>
+            <div class="ui-g-4" *ngIf="autogenyn=='N'">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 req required-4">
+                    <label for="input">Transaction No</label>
+                </div>
+                <div class="ui-g-12 ui-lg-12 p-r-0">
+                    <input id="journalno" [(ngModel)]="transno" pinputtext="" type="text" class=" bank-input ui-inputtext ui-corner-all ui-state-default ui-widget">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-w-title  credit-note-list-2 p-l-0 p-r-0 p-b-0 m-b-10 clearfix border-debit-1 border-debit">
+        <h1 class="first m-b-0">Bill Details</h1>
+
+        <p-dataTable expandableRows="true" [value]="selectedinvoicedetils">
+            <p-column [style]="{'width':'12%','text-align':'left!important'}" header=" Product Details" expander="true" styleClass="col-icon">
+
+            </p-column>
+            <p-column styleClass="col-button" [style]="{'text-align':'center!important'}">
+                <ng-template pTemplate="header">
+                    Due Date
+                </ng-template>
+                <ng-template let-selectedinvoicedetil="rowData" pTemplate="body">
+                    {{selectedinvoicedetil.duedate| date :dispDateFormat}}
+                </ng-template>
+            </p-column>
+            <p-column styleClass="col-button">
+                <ng-template pTemplate="header">
+                    Bill Total
+                </ng-template>
+                <ng-template let-selectedinvoicedetil="rowData" pTemplate="body">
+                    {{selectedinvoicedetil.billtotal |currency : currency_Symbol : 'symbol'}}
+                </ng-template>
+            </p-column>
+            <p-column styleClass="col-button">
+                <ng-template pTemplate="header">
+                    Paid
+                </ng-template>
+                <ng-template let-selectedinvoicedetil="rowData" pTemplate="body">
+                    {{selectedinvoicedetil.pymntamount | currency : currency_Symbol : 'symbol'}}
+                </ng-template>
+            </p-column>
+            <p-column styleClass="col-button" [style]="{'text-align':'right'}">
+                <ng-template pTemplate="header">
+                    Debit Amount
+                </ng-template>
+                <ng-template let-car="rowData" pTemplate="body">
+                    {{creditamount_applyied | currency : currency_Symbol : 'symbol'}}
+                    <!-- <input id="input"  [(ngModel)]="creditamount_applyied" (keypress)="numberOnly($event)" placeholder="0.00"
+            (keyup)="onChangeAmount()" type="text" maxlength="{{amtlength}}" class="ui-inputtext ui-corner-all ui-state-default ui-widget text-right"> -->
+                </ng-template>
+            </p-column>
+            <p-column styleClass="col-button" [style]="{'text-align':'right'}">
+                <ng-template pTemplate="header">
+                    Balance Amount
+                </ng-template>
+                <ng-template let-car="rowData" pTemplate="body">
+                    {{balanceAmount() |currency : currency_Symbol : 'symbol'}}
+                </ng-template>
+            </p-column>
+            <ng-template pTemplate="rowexpansion">
+                <p-dataGrid [value]="billproduct" [paginator]="true" [rows]="10">
+                    <!-- <p-header>
+                        Product Details
+                    </p-header> -->
+                    <ng-template let-productheader pTemplate="item" let-ridx="Index">
+                        <div class="ui-g-12 ui-lg-4 ui-md-4 creditnote-list" *ngIf="billproduct">
+                            <p-panel [header]="productheader.prodname" [style]="{'text-align':'center'}">
+                                <!-- <img src="assets/layout/images/nopro.png" width="60"> -->
+                                <div *ngIf=" Invoicecategory != 'ServiceInvoice' " class="ui-grid-row  credit_lable">
+                                    <div class="ui-grid-col-4 credit_lable">Quantity </div>
+                                    <div class="ui-grid-col-8">{{productheader.quantity}}</div>
+                                </div>
+                                <div *ngIf=" Invoicecategory != 'ServiceInvoice' " class="ui-grid-row  credit_lable">
+                                    <div class="ui-grid-col-4 credit_lable">Return Quantity </div>
+                                    <div class="ui-grid-col-8">{{productheader.returnqty}}</div>
+                                </div>
+                                <div class="ui-grid-row  credit_lable">
+                                    <div class="ui-grid-col-4 credit_lable">Tax </div>
+                                    <div class="ui-grid-col-8 ">{{productheader.selltaxname}}</div>
+                                </div>
+                                <div class="ui-grid-row  credit_lable">
+                                    <div class="ui-grid-col-4 credit_lable">Tax value </div>
+                                    <div class="ui-grid-col-8 ">{{productheader.taxvalue |currency : currency_Symbol : 'symbol'}}</div>
+                                </div>
+                                <div class="ui-grid-row  credit_lable">
+                                    <div class="ui-grid-col-4 credit_lable">Discount </div>
+                                    <div class="ui-grid-col-8">{{productheader.discntvalue |currency : currency_Symbol : 'symbol'}}</div>
+                                </div>
+                                <div class="ui-grid-row  credit_lable">
+                                    <div class="ui-grid-col-4 credit_lable">Unit Cost </div>
+                                    <div class="ui-grid-col-8">{{productheader.mrp |currency : currency_Symbol : 'symbol'}}</div>
+                                </div>
+                                <div class="ui-grid-row  credit_lable">
+                                    <div class="ui-grid-col-4 credit_lable">Total </div>
+                                    <div class="ui-grid-col-8">{{productheader.basicamount |currency : currency_Symbol : 'symbol'}}</div>
+                                </div>
+                                <hr class="ui-widget-content" style="border-top:0">
+                                <p-footer>
+                                    <!-- <i class="fa fa-check" (click)="active(productheader)" style="cursor:pointer"></i> -->
+                                    <p-checkbox name="groupname" [(ngModel)]="productheader.detailid" binary="true" (onChange)="toggleVisibility($event,productheader)"></p-checkbox>
+                                    <a *ngIf=" Invoicecategory != 'ServiceInvoice' " href="javascript:void(0)"><i class="fa fa-pencil" (click)="selectprod(productheader)"></i></a>
+                                </p-footer>
+                            </p-panel>
+                        </div>
+                    </ng-template>
+                </p-dataGrid>
+
+            </ng-template>
+        </p-dataTable>
+        <p-dialog header="Product Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" width="325" (onAfterHide)="onDialogHide()">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad" *ngIf="selectedProduct">
+                <!-- <div class="ui-grid-row">
+        <div class="ui-grid-col-12" style="text-align:center"><img src="assets/layout/images/nopro.png"></div>
+    </div> -->
+                <div class="ui-grid-row credit_lable">
+                    <div class="ui-g-12 ui-lg-6">Product Name </div>
+                    <div class="ui-g-12 ui-lg-6">{{selectedProduct.prodname}}</div>
+                </div>
+                <div class="ui-grid-row credit_lable">
+                    <div class="ui-g-12 ui-lg-6">Return Quantity </div>
+                    <div class="ui-g-12 ui-lg-6">
+                        <input id="input" [(ngModel)]="returnQuntity" (keypress)="numberOnly($event)" pinputtext="" type="text" class="ui-inputtext ui-corner-all ui-state-default ui-widget credit_lable" placeholder="Enter Quantity">
+                    </div>
+                </div>
+                <div class="ui-grid-row credit_lable">
+                    <div class="ui-g-12 ui-lg-6">Quantity </div>
+                    <div class="ui-g-12 ui-lg-6">
+                        {{selectedProduct.quantity}}
+                        <!-- <input id="input" [(ngModel)]="selectedProduct.quantity" pinputtext="" type="text" class="ui-inputtext ui-corner-all ui-state-default ui-widget credit_lable"
+                    placeholder="Enter Quantity"> -->
+                    </div>
+                </div>
+                <div class="ui-grid-row credit_lable">
+                    <div class="ui-g-12 ui-lg-6">Tax </div>
+                    <div class="ui-g-12 ui-lg-6">{{selectedProduct.selltaxname}}</div>
+                </div>
+                <div class="ui-grid-row credit_lable">
+                    <div class="ui-g-12 ui-lg-6">Tax value</div>
+                    <div class="ui-g-12 ui-lg-6">{{selectedProduct.taxvalue | currency : currency_Symbol : 'symbol'}}</div>
+                </div>
+                <div class="ui-grid-row credit_lable">
+                    <div class="ui-g-12 ui-lg-6">Discount </div>
+                    <div class="ui-g-12 ui-lg-6">{{selectedProduct.discntvalue | currency : currency_Symbol : 'symbol'}}</div>
+                </div>
+                <div class="ui-grid-row credit_lable">
+                    <div class="ui-g-12 ui-lg-6">Unit Cost </div>
+                    <div class="ui-g-12 ui-lg-6">{{selectedProduct.mrp |currency : currency_Symbol : 'symbol'}}</div>
+                </div>
+                <div class="ui-grid-row credit_lable">
+                    <div class="ui-g-12 ui-lg-6">Total </div>
+                    <div class="ui-g-12 ui-lg-6">{{selectedProduct.basicamount |currency : currency_Symbol : 'symbol'}}</div>
+                </div>
+                <div>
+                    <button type="submit" pButton label="{{buttonText}}" icon="fa-check" class="blue-btn" (click)=applycredits(selectedProduct)></button>
+                </div>
+            </div>
+        </p-dialog>
+        <div class="ui-g-12 ui-lg-7 ui-md-7 invoice-tax-2 p-l-0 p-r-0 m-t-5">
+
+            <p-panel header="Tax Values" [toggleable]="true" [collapsed]="true">
+                <p-dataTable [value]="Temp_GST_TaxTotal" scrollable="true" scrollHeight="200px">
+                    <p-column field="taxname" header="Tax" [style]="{'width':'20%'}">
+                        <ng-template let-col let-tax="rowData" let-ridx="rowIndex">
+                            <span>{{tax.taxname }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="amt" header="Amount" [style]="{'width':'20%'}">
+                        <ng-template let-col let-tax="rowData" let-ridx="rowIndex">
+                            <span>{{tax.amt |currency : currency_Symbol : 'symbol'}}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="cgst" header="CGST" [style]="{'width':'20%'}">
+                        <ng-template let-col let-tax="rowData" let-ridx="rowIndex">
+                            <span>{{tax.cgst |currency : currency_Symbol : 'symbol'}}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="sgst" header="SGST" [style]="{'width':'20%'}">
+                        <ng-template let-col let-tax="rowData" let-ridx="rowIndex">
+                            <span>{{tax.sgst |currency : currency_Symbol : 'symbol'}}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="igst" header="IGST" [style]="{'width':'20%'}">
+                        <ng-template let-col let-tax="rowData" let-ridx="rowIndex">
+                            <span>{{tax.igst |currency : currency_Symbol : 'symbol'}}</span>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </p-panel>
+        </div>
+        <div class="card-w-title credit_product clearfix m-t-10 border-debit  ">
+            <!-- <div class="receipt pull-right totalvalue ui-g-12 ui-lg-4 ui-md-4">
+        <div class="ui-g-12 ui-md-6 text-right">
+          <span class="tax-value bold">Total</span>
+          <span class="value-table total-value-amount bill-receipt-total ">-</span>
+        </div>
+        <div class="ui-g-10 ui-md-6 text-right p-r-0 p-l-0 text-right">
+          {{amount}}
+        </div>
+      </div> -->
+            <div class="row ui-md-12 p-r-0 clearfix">
+                <div class="ui-g-12 ui-lg-4 ui-md-4 pull-right text-right p-l-0 p-r-0">
+                    <button type="submit" pButton label="{{buttonText}}" icon="fa-check" [disabled]="submitted" class="blue-btn" (click)=createCDN()></button>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-10">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

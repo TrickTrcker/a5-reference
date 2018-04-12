@@ -1,0 +1,192 @@
+<div class="topbar">
+        <!-- id="logo_image" -->
+        <a routerLink="/" class="topbar-logo">
+            <img  [attr.src]="app.layout === 'default' ? 'assets/layout/images/accounts-logo.png' : 'assets/layout/images/logo-white.png'"
+                style="border: 0 none">
+        </a>
+
+
+    <a href="#" id="menu-button" (click)="app.onMenuButtonClick($event)">
+        <i class="fa fa-bars"></i>
+
+    </a>
+
+    <a href="#" id="user-display" (click)="app.onTopbarMenuButtonClick($event)">
+        <span class="username">{{tenantfullname}}</span>
+        <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(avatar)" style="border: 0px;">
+        <i class="fa fa-angle-down"></i>
+    </a>
+
+    <!-- <label for="topbar-search">
+            <i class="fa fa-search topbar-search-icon"></i>
+        </label>
+  <input type="text" class="topbar-search" placeholder="Type your search here" id="topbar-search" /> -->
+
+    <div *ngIf="consultantClientExist" class="consultantdropdown_area pullright">
+        <p-dropdown [(ngModel)]="selectedclient" (onChange)="onSelectConsultantsClient($event)" [options]="consultantTenantsList"></p-dropdown>
+    </div>
+
+    <div class="menu-list-view pull-right">
+        <a href="#" id="user-display" (click)="app.onAppsMenuButtonClick($event)">
+            <i class="fa fa-th"></i>
+        </a>
+    </div>
+
+    <div class="layout-menus">
+        <div id="topbar-menu" class="fadeInDown product-list-view" [ngClass]="{'topbar-menu-visible': app.AppsMenuActive}" (click)="app.onAppsMenuClick($event)"
+            scrollable="true" scrollHeight="300px">
+            <div *ngFor="let app of AppcenterList" class="ui-g-12 ui-lg-4 ui-md-4 p-b-0 p-l-0 p-r-0 text-center">
+                <a (click)="navigateToApp(app)" href="javascript:void(0)">
+                    <img class="img-responsive" title="{{app.title}}" src="{{app.iconpath}}">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="layout-menus">
+        <ul id="topbar-menu" class="fadeInDown product-list-view-2" [ngClass]="{'topbar-menu-visible': app.topbarMenuActive}" (click)="app.onTopbarMenuClick($event)">
+            <li #profile [ngClass]="{'menuitem-active':app.activeTopbarItem === profile}" (click)="app.onTopbarItemClick($event, profile)">
+                <!--<a href="#">
+                    <i class="topbar-icon fa fa-fw fa-user"></i>
+                    <span class="topbar-item-name">Profile</span>
+                </a>-->
+                <a href="" (click)="app.logout()">
+                    <i class="fa fa-fw fa-sign-out"></i>
+                    <span>Logout</span>
+                </a>
+                <!--<ul>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-user-secret"></i>
+                            <span>Privacy</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="" (click)="app.logout($event)">
+                            <i class="fa fa-fw fa-sign-out"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>-->
+            </li>
+            <!--<li #settings [ngClass]="{'menuitem-active':app.activeTopbarItem === settings}" (click)="app.onTopbarItemClick($event, settings)">
+                <a href="#">
+                    <i class="topbar-icon fa fa-fw fa-cog"></i>
+                    <span class="topbar-item-name">Settings</span>
+                </a>
+                <ul>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-paint-brush"></i>
+                            <span>Change Theme</span>
+                            <span class="topbar-badge">1</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-star-o"></i>
+                            <span>Favorites</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-lock"></i>
+                            <span>Lock Screen</span>
+                            <span class="topbar-badge">3</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-picture-o"></i>
+                            <span>Wallpaper</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li #messages [ngClass]="{'menuitem-active':app.activeTopbarItem === messages}" (click)="app.onTopbarItemClick($event, messages)">
+                <a href="#">
+                    <i class="topbar-icon material-icons animated swing fa fa-fw fa-envelope-o"></i>
+                    <span class="topbar-item-name">Messages</span>
+                    <span class="topbar-badge animated rubberBand">4</span>
+                </a>
+                <ul>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <span>Reports attached</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <span>About your invoice</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <span>Meeting today</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <span>Out of office</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li #notifications [ngClass]="{'menuitem-active':app.activeTopbarItem === notifications}" (click)="app.onTopbarItemClick($event, notifications)">
+                <a href="#">
+                    <i class="topbar-icon fa fa-fw fa-bell-o"></i>
+                    <span class="topbar-item-name">Notifications</span>
+                    <span class="topbar-badge animated rubberBand">2</span>
+                </a>
+                <ul>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-tasks"></i>
+                            <span>Pending tasks</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-calendar-check-o"></i>
+                            <span>Meeting today</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-download"></i>
+                            <span>Download</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-plane"></i>
+                            <span>Book flight</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+           <li>
+               
+                    
+                    <li>
+                        <a href="" (click)="app.logout($event)">
+                            <i class="fa fa-fw fa-sign-out"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+            </li>-->
+        </ul>
+    </div>
+</div>

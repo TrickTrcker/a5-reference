@@ -1,0 +1,135 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0" *ngIf="isLoadData">
+    <div class="journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1 class="">Contacts</h1>
+        <div class="ui-toolbar-group-right ui-corner-all inlineflex">
+
+            <button pButton type="button" label="Add" icon="fa-plus" (click)="Addproducts(partiesView)"></button>
+            <button [routerLink]="['/getstarted']" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                <span class="ui-button-text ui-clickable">ui-btn</span>
+            </button>
+            <!--<p-splitButton class="multibutton"  icon="fa fa-check" [model]="menuItems" label="Save"></p-splitButton>-->
+        </div>
+    </div>
+
+    <!--<div class="ui-g">
+  <div class="ui-g-12">-->
+    <!--<div class="ui-g-6 top-fixeds">
+      <p-overlayPanel #op1>
+        <app-addparties></app-addparties>
+       </p-overlayPanel>
+    </div>-->
+    <div class="parties-list nodata-page ui-g-12 p-b-0">
+        <p-tabView [controlClose]="true" (onClose)="handleClose($event)" #partiesView [activeIndex] (onChange)="onTabChange($event,partiesView)">
+
+            <p-tabPanel [selected]="list" header="Vendors" leftIcon="fa-industry">
+                <p-dataTable [value]="partieslist" [rows]="10" [paginator]="true" #dta *ngIf="partieslist.length !=0">
+                    <p-column class="p-b-0" field=firstname header="Contact Name" [filter]="show" [sortable]="true" filterMatchMode="contains"
+                        [style]="{'text-align': 'left','width': '14%'}"></p-column>
+                    <p-column class="p-b-0" field=companyname header="Company Name" [filter]="show" [sortable]="true" filterMatchMode="contains"
+                        [style]="{'text-align': 'left','width': '16%'}"></p-column>
+                    <p-column class="p-b-0" field=accheadname header="Group" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'text-align': 'left','width': '16%'}"></p-column>
+
+                    <!-- <p-column class="p-b-0" field=industryname header="Industry Name" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width': '14%'}"></p-column> -->
+                    <p-column class="p-b-0" field=createdby [filter]="show" header="Created By" [sortable]="true" filterMatchMode="contains"
+                        [style]="{'text-align': 'left','width': '18%'}">
+                        <ng-template let-createBy="rowData" pTemplate="body">
+                            {{createBy.createdby}}
+                            <br>
+                            <span class="dd_datespan">{{createBy.createddt | date:display_dtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column class="p-b-0" field=lastupdatedby [filter]="show" header="Updated By" [sortable]="true" filterMatchMode="contains"
+                        [style]="{'text-align': 'left','width': '16%'}">
+                        <ng-template let-updateBy="rowData" pTemplate="body">
+                            {{updateBy.lastupdatedby}}
+                            <br>
+                            <span class="dd_datespan">{{updateBy.lastupdateddt | date:display_dtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column class="p-b-0" field=status header="Status" [sortable]="true" [filter]="show" filterMatchMode="equals" [style]="{'text-align': 'center','width': '11%'}">
+                        <ng-template pTemplate="filter" let-col>
+                            <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="dta.filter($event.value,col.field,col.filterMatchMode)"
+                                styleClass="ui-column-filter"></p-dropdown>
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'text-align': 'center','width': '8%'}">
+                        <ng-template pTemplate="header">
+                            <p>
+                                <button pButton [disabled]="!partieslist" icon="fa-search" id="parties_dt_searcha" (click)="showhidefilter(dta,'parties_dt_searcha')"></button>
+                            </p>
+                        </ng-template>
+
+                        <ng-template let-selectedpro="rowData" pTemplate="body" style="text-align:right">
+                            <button type="button" pButton icon="fa-pencil" (click)="viewproduct(selectedpro,partiesView)"></button>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+                <div *ngIf="partieslist.length==0" class="text-center">
+                    <h3>Create Customers / Vendors, Organization details and GST NO.</h3>
+                    <button pButton type="button" label="Add Contact" icon="fa-plus" (click)="Addproducts(partiesView)"></button>
+
+                </div>
+            </p-tabPanel>
+
+            <p-tabPanel [selected]="customerlist" header="Customers" leftIcon="fa-users">
+                <p-dataTable [value]="customers" [rows]="10" [paginator]="true" #dt *ngIf="customers.length !=0">
+                    <p-column class="p-b-0" field=firstname header="Contact Name" [filter]="show" [sortable]="true" filterMatchMode="contains"
+                        [style]="{'text-align': 'left','width': '14%'}"></p-column>
+                    <p-column class="p-b-0" field=companyname header="Company Name" [filter]="show" [sortable]="true" filterMatchMode="contains"
+                        [style]="{'text-align': 'left','width': '16%'}"></p-column>
+                    <p-column class="p-b-0" field=contactcategory header="Category" [filter]="show" [sortable]="true" filterMatchMode="contains"
+                        [style]="{'text-align': 'left','width': '16%'}"></p-column>
+
+                    <!-- <p-column class="p-b-0" field=industryname header="Industry Name" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width': '14%'}"></p-column> -->
+                    <p-column class="p-b-0" field=createdby [filter]="show" header="Created By" [sortable]="true" filterMatchMode="contains"
+                        [style]="{'text-align': 'left','width': '18%'}">
+                        <ng-template let-createBy="rowData" pTemplate="body">
+                            {{createBy.createdby}}
+                            <br>
+                            <span class="dd_datespan">{{createBy.createddt | date:display_dtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column class="p-b-0" field=lastupdatedby [filter]="show" header="Updated By" [sortable]="true" filterMatchMode="contains"
+                        [style]="{'text-align': 'left','width': '16%'}">
+                        <ng-template let-updateBy="rowData" pTemplate="body">
+                            {{updateBy.lastupdatedby}}
+                            <br>
+                            <span class="dd_datespan">{{updateBy.lastupdateddt | date:display_dtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column class="p-b-0" field=status header="Status" [filter]="show" [sortable]="true" filterMatchMode="equals" [style]="{'text-align': 'center','width': '11%'}">
+                        <ng-template pTemplate="filter" let-col>
+                            <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)"
+                                styleClass="ui-column-filter"></p-dropdown>
+                        </ng-template>
+                    </p-column>
+
+                    <p-column [style]="{'text-align': 'center','width': '8%'}">
+                        <ng-template pTemplate="header">
+                            <p>
+                                <button pButton [disabled]="!partieslist" icon="fa-search" id="parties_dt_search" (click)="showhidefilter(dt,'parties_dt_search')"></button>
+                            </p>
+                        </ng-template>
+
+                        <ng-template let-selectedpro="rowData" pTemplate="body" style="text-align:right">
+                            <button type="button" pButton icon="fa-pencil" (click)="viewproduct(selectedpro,partiesView)"></button>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+                <div *ngIf="customers.length==0" class="text-center">
+                    <h3>Create Customers / Vendors, Organization details and GST NO.</h3>
+                    <button pButton type="button" label="Add Contact" icon="fa-plus" (click)="Addproducts(partiesView)"></button>
+
+                </div>
+            </p-tabPanel>
+            <p-tabPanel [selected]="addnew" header="Add Contact" leftIcon="fa-plus" *ngIf="addparties" [closable]="true" #fileInput>
+                <app-addparties [CustomerorVendor]="CustomerorVendor" [partiesdetails]="partiesdetails" (notifyNewProduct)="notifyNewProduct($event)"></app-addparties>
+            </p-tabPanel>
+            <p-tabPanel [selected]="editpar" header="Edit Contact" leftIcon="fa-pencil" *ngIf="editparties" [closable]="true" #fileInput>
+                <app-addparties [CustomerorVendor]="CustomerorVendor" [ext_customerCategory]="partiesdetails.contactcategory" [partiesdetails]="partiesdetails"
+                    (notifyNewProduct)="notifyNewProduct($event)"></app-addparties>
+            </p-tabPanel>
+        </p-tabView>
+    </div>

@@ -1,0 +1,75 @@
+<div class="ui-g panel">
+  <div class="ui-g-12  p-l-0 p-r-0">
+      <div class="get-started card shadow-boxui-shadow-1">
+          <h1 class="">Settings</h1>
+                <div class="ui-toolbar-group-right ui-breadcrumb ui-widget ui-widget-header ui-helper-clearfix ui-corner-all">
+                    <ul>
+                        <li><a [routerLink]="['/']" class="ui-breadcrumb-home fa fa-home"></a></li>
+                        <li class="ui-breadcrumb-chevron fa fa-chevron-right"></li>
+                        <li role="menuitem">
+                           <a class="ui-menuitem-link" [routerLink]="['/getstarted']">
+                                <span class="ui-menuitem-text">Get Started</span>
+                            </a>
+                        </li>
+                        <li class="ui-breadcrumb-chevron fa fa-chevron-right"></li>
+                        <li role="menuitem">
+                            <a class="ui-menuitem-link">
+                                 <span class="ui-menuitem-text">Settings</span>
+                             </a>
+                         </li>
+                    </ul>
+                </div>
+       </div>
+
+       <div class="ui-g dashboard">
+        <div class="ui-g-12 ui-md-6 ui-lg-3">    
+            <a [routerLink]="['/settings/profile']" class="ui-g card shadow-boxui-shadow-1 overview-box overview-box-1 no-gutter configure-app">
+            <div class="text-center">   
+                <img class="profile" src="assets/images/man.png">
+                <a class=""> <h1>Profile Settings</h1></a>
+            </div>
+          </a> 
+        </div>
+        <div class="ui-g-12 ui-md-6 ui-lg-3">    
+            <a [routerLink]="['/settings/organizationsettings']" class="ui-g card shadow-boxui-shadow-1 overview-box overview-box-1 no-gutter configure-app">
+            <div class="text-center">   
+                <img class="profile" src="assets/images/organization-chart.png">
+                <a class=""> <h1>Organization Settings</h1></a>
+            </div>
+          </a> 
+        </div>
+        <div class="ui-g-12 ui-md-6 ui-lg-3">    
+            <a [routerLink]="['/settings/users']" class="ui-g card shadow-boxui-shadow-1 overview-box overview-box-1 no-gutter configure-app">
+            <div class="text-center">   
+                <img class="profile" src="assets/images/user-setting.png">
+                <a class=""> <h1>Users</h1></a>
+            </div>
+          </a> 
+        </div>
+        <div class="ui-g-12 ui-md-6 ui-lg-3">    
+            <a class="ui-g card shadow-boxui-shadow-1 overview-box overview-box-1 no-gutter configure-app" [routerLink]="['/settings/roles']">
+              <div class="text-center">   
+                  <img class="profile" src="assets/images/user.png">
+                  <a class=""> <h1>Roles</h1></a>
+              </div> 
+            </a>
+        </div>
+        <div class="ui-g-12 ui-md-6 ui-lg-3">    
+            <a [routerLink]="['/settings/license']" class="ui-g card shadow-boxui-shadow-1 overview-box overview-box-1 no-gutter configure-app">
+            <div class="text-center">   
+                <img class="profile" src="assets/images/license.png">
+                <a class=""> <h1>License Information</h1></a>
+            </div>
+          </a> 
+        </div>
+        <div class="ui-g-12 ui-md-6 ui-lg-3">    
+            <a [routerLink]="['/settings/license']" class="ui-g card shadow-boxui-shadow-1 overview-box overview-box-1 no-gutter configure-app">
+            <div class="text-center">   
+                <img class="profile" src="assets/images/man.png">
+                <a class=""> <h1>Auditor LogIn</h1></a>
+            </div>
+          </a> 
+        </div>
+     </div>
+  </div>
+</div>

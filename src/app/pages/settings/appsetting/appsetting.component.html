@@ -1,0 +1,139 @@
+<div id="container" class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0">
+    <div class="ui-g-12 panel-3 p-l-0 p-r-0 p-t-0">
+        <div class="journal-heading">
+            <img class="infobook-logo ui-toolbar-group-left" src="assets/layout/images/e-finance.png">
+            <h1 class="">Application Settings</h1>
+            <div class="ui-toolbar-group-right ui-corner-all">
+                <button [routerLink]="['/getstarted']" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                    <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                    <span class="ui-button-text ui-clickable">ui-btn</span>
+                </button>
+            </div>
+        </div>
+        <div class="ui-g-12 padding-app">
+            <form (ngSubmit)="update(settingList)">
+                <!--<div><pre>{{appsetting|json}}</pre></div>-->
+                <div *ngIf="disabled">
+                    <div class="ui-g-12 ui-lg-6 p-t-0 p-r-0" *ngFor="let appsetting of settinglist;" style="    min-height: 70px;">
+                        <div class="ui-g-12 p-r-0 p-l-0 p-b-0 bank-input">
+                            <label class="p-left-10">
+                                <b>{{getsettingLabels(appsetting.settingname)}}</b>
+                            </label>
+                            <input class="border-width-app" type="text" pInputText [disabled]="true" [(ngModel)]="appsetting.settingvalue" [ngModelOptions]="{standalone: true}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 appsetting-table p-t-0 p-r-0">
+                    <div *ngIf="!disabled" class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 form-group-default p-l-0 p-t-0">
+                        <!-- <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input ">
+                            <label class="ui-g-12 padding-top bold">Date Format</label>
+                            <p-dropdown class="border-width-app-2 p-l-0" [style]="{'width':'100%'}" [ngModelOptions]="{standalone: true}" [(ngModel)]="settingList.DATE_FORMAT" [options]="dateFormats" [filter]="true"></p-dropdown>
+                        </div> -->
+                        <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input ">
+                            <label class="ui-g-12 padding-top bold">CIN NO</label>
+                            <span>
+                            <input type="text" class="p-left-10 input-field tin-width border-width-0" placeholder="Enter CINNO"
+                                pInputText [ngModelOptions]="{standalone: true}" [(ngModel)]="settingList.CIN" />
+                        </span> </div>
+                    </div>
+                    <div *ngIf="!disabled" class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 form-group-default p-t-0">
+
+                        <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input">
+                            <label class="ui-g-12 padding-top bold">GST NO</label>
+                            <span>
+                                <input type="text" class="p-left-10 input-field tin-width border-width-0" placeholder="Enter GSTIN"
+                                    pInputText [ngModelOptions]="{standalone: true}" [(ngModel)]="settingList.GST" />
+                            </span>
+                        </div>
+                    </div>
+                    <!-- <div *ngIf="!disabled" class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 p-b-0 form-group-default p-l-0 p-t-0">
+
+                        <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input">
+                            <label class="ui-g-12 padding-top bold">CINNO</label>
+                            <span>
+                                <input type="text" class="p-left-7 input-field tin-width-2 border-width-0" placeholder="Enter CINO"
+                                    pInputText [ngModelOptions]="{standalone: true}" [(ngModel)]="settingList.CIN" />
+                            </span>
+                        </div>
+                    </div>
+                    <div *ngIf="!disabled" class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 form-group-default p-t-0">
+                        <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input">
+                            <label class="ui-g-12 padding-top bold">Time Zone </label>
+                            <p-dropdown [style]="{'width':' 100%'}" [ngModelOptions]="{standalone: true}" [(ngModel)]="settingList.TIME_ZONE" [options]="time" [filter]="true"></p-dropdown>
+                        </div>
+                    </div> -->
+                    <!-- <div *ngIf="!disabled" class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 form-group-default p-l-0 p-t-0">
+
+                        <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input">
+                            <label class="ui-g-12 padding-top bold">Currency</label>
+                            <span>
+                                <p-dropdown [style]="{'width':' 100%'}" [ngModelOptions]="{standalone: true}" [(ngModel)]="settingList.CURRENCY"
+                                    [options]="currency" [filter]="true"></p-dropdown>
+                            </span>
+                        </div>
+                    </div> -->
+                    <div *ngIf="!disabled" class="ui-g-12 ui-lg-6 ui-md-12 p-l-0 p-r-0 form-group-default p-t-0">
+
+                        <!-- <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input ">
+                            <label class="ui-g-12 padding-top bold">Number of decimal point</label>
+                            <span>
+                                <p-dropdown [style]="{'width':' 100%'}" [ngModelOptions]="{standalone: true}" [(ngModel)]="settingList.NO_OF_DECIMAL_PNT"
+                                    [options]="decimals" [filter]="true"></p-dropdown>
+                            </span>
+                        </div> -->
+                        <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input">
+                            <label class="ui-g-12 padding-top bold">Place of Origin</label>
+                            <p-dropdown [style]="{'width':' 100%'}" [options]="placeofsupplies" [filter]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="settingList.PLACE_OF_SUPPLY"></p-dropdown>
+                        </div>
+                    </div>
+                    <div *ngIf="!disabled" class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 form-group-default p-t-0">
+                        <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input ">
+                            <label class="ui-g-12 padding-top bold">Current Financial Year</label>
+                            <span>
+                                <p-dropdown [style]="{'width':' 100%'}" [options]="finyearlist" [filter]="true" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="settingList.CUR_FIN_YR"></p-dropdown>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- <div *ngIf="!disabled" class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 form-group-default p-t-0">
+                        <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input ">
+                            <label class="ui-g-12 padding-top bold">Previous Financial Year</label>
+                            <span>
+                                <p-dropdown [style]="{'width':' 100%'}" [options]="prevfinyearlist" [filter]="true" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="settingList.PREV_FIN_YR"></p-dropdown>
+                            </span>
+                        </div>
+                    </div> -->
+                    <!-- <div *ngIf="!disabled" class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 form-group-default p-l-0 p-t-0">
+                        <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input">
+                            <label class="ui-g-12 padding-top bold">Place of Origin</label>
+                            <p-dropdown [style]="{'width':' 100%'}" [options]="placeofsupplies" [filter]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="settingList.PLACE_OF_SUPPLY"></p-dropdown>
+                        </div>
+                    </div>
+                    <div *ngIf="!disabled" class="ui-g-12 ui-lg-6 p-r-0 p-t-0">
+                        <div class="ui-g-12 p-b-0 p-l-0 p-r-0 p-t-0 bank-input">
+                            <label class="ui-g-12 padding-top bold">
+                                <b>Payment terms</b>
+                            </label>
+                            <textarea class="text-area" [rows]="3" [cols]="79" pInputTextarea placeholder="Enter Payment Terms" [ngModelOptions]="{standalone: true}" [(ngModel)]="settingList.PAY_TERMS" autoResize="autoResize">
+                           </textarea>
+                        </div>
+                    </div> -->
+                    <div class="ui-g-6 p-t-0 m-t-13 m-t-20 p-r-0 pull-right app-buttons">
+                        <div class="ui-toolbar-group-right ui-corner-all pull-right">
+                            <div *ngIf="disabled" class="ui-toolbar-group-right button-width ui-corner-all  m-r-18">
+                                <button pButton type="button" class="" (click)="edit(settinglist)" icon="fa-pencil" label="Edit"></button>
+                            </div>
+                            <div *ngIf="!disabled" class="ui-toolbar-group-right ui-corner-all m-r-18">
+                                <button pButton type="button" (click)="close()" icon="fa-times" label="Cancel"></button>
+                            </div>
+                            <div *ngIf="!disabled" class="ui-toolbar-group-right ui-corner-all">
+                                <button pButton type="submit" icon="fa-check" label="Update"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

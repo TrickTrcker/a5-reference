@@ -1,0 +1,93 @@
+<div class="panel ui-g-12 m-b-25 p-t-0 p-b-0 p-l-0 p-r-0">
+  <div class="shadow-box ui-shadow-1 bg-white prolist height-auto">
+    <div class="ui-g-12 p-l-0 p-r-0">
+      <div class="journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1>pro-forma Invoices</h1>
+        <div class="ui-toolbar-group-right inlineflex">
+          <button icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span>
+            <span class="ui-button-text ui-clickable">ui-btn</span>
+          </button>
+          <button [routerLink]="['/sales/proformaadd']" icon="fa-plus" label="New" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left">
+            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-plus"></span>
+            <span class="ui-button-text ui-clickable">proforma Invoice</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="ui-g-12 p-l-0 p-r-0">
+      <div class="ui-g-6">
+        <p-chart type="bar" [data]="barData"></p-chart>
+      </div>
+      <div class="ui-g-6">
+        <p-chart type="line" [data]="lineData"></p-chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="ui-g ui-fluid invoice-list-tab">
+    <div class="ui-g-12 ui-lg-12">
+      <p-menu class="tabpanmenu" #menu popup="popup" [model]="invoicelistmainmenu"></p-menu>
+      <p-tabView [controlClose]="true" (onClose)="handletabClose($event)">
+        <p-tabPanel (click)="menu.toggle($event)" header="proforma Invoice list" leftIcon="fa-list">
+          <div class="tabpanelfirst"></div>
+          <p-dataTable #invoicelisttable [value]="invoicelist" selectionMode="single" scrollable="true" scrollHeight="300px"  [paginator]="true"
+            [rows]="5" [responsive]="true">
+            <p-column field="contactname" header="Name" [filter]="true" [sortable]="true"></p-column>
+            <p-column field="invoiceno" header="Invoice No" [filter]="true" [sortable]="true"></p-column>
+            <p-column field="invoicedt" header="Invoice Date" [filter]="true" [sortable]="true">
+              <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                <span>{{selectedinvoice.invoicedt | date: date_dformat }}</span>
+              </ng-template>
+            </p-column>
+            <p-column field="duedate" header="Due Date" [filter]="true" [sortable]="true">
+              <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                <span>{{selectedinvoice.duedate | date: date_dformat }}</span>
+              </ng-template>
+            </p-column>
+            <p-column field="subtotal" header="Sub Total" styleClass="text-right" [filter]="true" [sortable]="true">
+              <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                <span>{{selectedinvoice.subtotal | currency : currency_sy :  'symbol'| slice : 1}}</span>
+              </ng-template>
+            </p-column>
+            <p-column field="invoicetotal" header="Total" styleClass="text-right" [filter]="true" [sortable]="true">
+              <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                <span>{{selectedinvoice.invoicetotal | currency : currency_sy :  'symbol'| slice : 1}}</span>
+              </ng-template>
+            </p-column>
+            <p-column field="pymntamount" header="Paid" styleClass="text-right" [filter]="true" [sortable]="true">
+              <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                <span>{{selectedinvoice.pymntamount | currency : currency_sy :  'symbol'| slice : 1}}</span>
+              </ng-template>
+            </p-column>
+            <p-column styleClass="col-button">
+              <ng-template pTemplate="header">
+                <label>Action</label>
+                <!-- <button type="button" pButton icon="fa-refresh"></button> -->
+              </ng-template>
+              <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                <button type="button" pButton (click)="addTabViewinvoice(selectedinvoice)" icon="fa-eye"></button>
+              </ng-template>
+            </p-column>
+          </p-dataTable>
+        </p-tabPanel>
+        <!-- <p-tabPanel header="Add Product" leftIcon="fa-user" *ngIf="addproduct">
+        <app-products></app-products>
+      </p-tabPanel> -->
+        <!-- <p-tabPanel [closable]="true" *ngFor="let invoice of selectedinvoice; let i = index" header="{{invoice.invoiceno}}">
+          <div class="my_dynamica_lead_tabPanel">
+            <app-view-invoice invoiceid="{{invoice.invoiceid}}"></app-view-invoice>
+          </div>
+
+
+        </p-tabPanel> -->
+      </p-tabView>
+
+    </div>
+    <!-- <div class="content-section invoicelist">    
+        <p-contextMenu #cxtMenu  [model]="invoicelistmenuitem" appendTo="body" ></p-contextMenu>
+    </div> -->
+  </div>
+</div>

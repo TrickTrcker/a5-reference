@@ -1,0 +1,305 @@
+<div class="ui-g ui-fluid white-bg panel">
+  <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-r-0">
+    <div class="view-invoice-content">
+      <div id="pdfcontainer" class="ember-view">
+         <!-- <div class="ui-g-12 p-t-0 invoice-viewlist">
+         <div class="ui-g-12 ui-lg-4 ui-md-4 p-t-0 p-b-0">
+            <div class="invoice-logos" style="display:inline-flex;vertical-align: top; text-align:left;">
+              <img class="infobook-logo" src="assets/images/infobook-logo.png">
+              <span class="title-text">{{credit_feature}}</span>
+            </div>
+          </div> -->
+          <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0 p-b-0 print-text">
+            <div class="ui-toolbar-group-right inlineflex">
+
+              <button icon="fa-print" pbutton="" type="button" class="none ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-print"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+              <!--<button icon="fa-trash" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+               <button icon="fa-arrows-alt" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrows-alt"></span><span class="ui-button-text ui-clickable">ui-btn</span></button> -->
+            <button (click)="pdfdownload()" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+            </div>
+          </div>
+      
+        
+          <!-- <div class="ui-g-12 ui-lg-12 ui-md-8 p-t-0 p-b-0">
+              <div class="ui-toolbar-group-right">
+                <button icon="fa-print" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-print"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+                <button icon="fa-trash" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+                <button icon="fa-print" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrows-alt"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+              </div>
+            </div> 
+          </div>-->
+        <div class="pcs-template " id="printSectionId">
+          <div print-section class="pcs-template-body ">
+            <table style="clear:both;width:100%;margin-top:0px; margin-bottom:15px;table-layout:fixed;">
+              <tbody>
+                <tr>
+                  <td style="width:60%;vertical-align:top;word-wrap: break-word;">
+
+                    <div>
+                      <span class="pcs-orgname"><b>{{creditDeta.companyname}}</b></span><br>
+                      <span class="pcs-label">
+                        <span id="tmp_org_address" style="white-space: pre-wrap;word-wrap: break-word;">{{invoicelineitems.billingaddress}}</span>
+                      </span>
+                    </div>
+                  </td>
+                  <!-- Cnote header start -->
+                  <td class="invoice-prints" style="vertical-align:middle;width: 30%;" align="right">
+                    <table class="invoice-prints-1 view-invoicetable-print" style="table-layout: fixed;word-wrap: break-word;" cellspacing="0" cellpadding="0" border="0">
+                      <tbody>
+                          <tr>
+                            
+                             
+                            </tr>
+                         
+                            <tr>
+                          <td width="25%" style="text-align:right;">
+                            <span class="pcs-label inv-view-label">Transaction No :</span>
+                          </td>
+                          <td width="30%" style="text-align:right;">
+                            <span class="pcs-label" id="tmp_entity_number">{{transno}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="25%" style="text-align:right;">
+                            <span class="pcs-label inv-view-label">Credit Date :</span>
+                          </td>
+                          <td style="text-align:right;">
+                            <span id="tmp_entity_date" class="inv-view-value">{{creditDeta.crdrdate| date:dataFormat }}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="25%" style="text-align:right;">
+                            <span class="pcs-label inv-view-label">Invoice No :</span>
+                          </td>
+                          <td style="text-align:right;">
+                            <span id="tmp_entity_date" class="inv-view-value">{{invoicelineitems.invoiceno}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="25%" style="text-align:right;">
+                            <span class="pcs-label inv-view-label">Reference :</span>
+                          </td>
+                          <td width="30%" style="text-align:right;">
+                            <span id="tmp_due_date" class="inv-view-value">{{creditDeta.reference || "-" }}</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                  <!-- Cnote heade end  -->
+
+                </tr>
+
+              </tbody>
+            </table>
+
+            <table class="pcs-itemtable" style="width:100%;margin-top:0px;table-layout:fixed;" cellspacing="0" cellpadding="0" border="0">
+
+              <thead>
+                <tr style="height:32px;">
+                    <td class="pcs-itemtable-header" style="text-align:center;">
+                        <span class="pcs-label inv-view-label">S.No</span>
+                      </td>
+                  <td class="pcs-itemtable-header" style="text-align:center;">
+                    Due Date
+                  </td>
+                  <td class="pcs-itemtable-header" style="text-align:right;">
+                    Invoice Total(₹)
+                  </td>
+                  <td class="pcs-itemtable-header" style="text-align:right;">
+                    Paid(₹)
+                  </td>
+                  <td class="pcs-itemtable-header" style="text-align:right;">
+                    Credit Amount(₹)
+                  </td>
+                  <td class="pcs-itemtable-header" style="text-align:right; padding:0 10px !important;">
+                    Balance Amount(₹)
+                  </td>
+                </tr>
+              </thead>
+              <tbody class="itemBody">
+                <tr>
+                    <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                        <div class="tmp_item_rate" id="tmp_entity_number"> {{1}}</div>
+                      </td>
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                    <div class="tmp_item_rate">{{invoicelineitems.duedate| date:dataFormat}}</div>
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc">{{invoicelineitems.invoicetotal|currency : currency_Symbol : 'symbol'}}</div>
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                    <span id="tmp_item_rate">{{invoicelineitems.pymntamount|currency : currency_Symbol : 'symbol'}}</span>
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc">{{creditDeta.amount|currency : currency_Symbol : 'symbol'}}</div>
+                  </td>
+                  <td class="pcs-item-row" style="padding:0 10px !important;text-align:right;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc">{{invoicelineitems.balamount|currency : currency_Symbol : 'symbol'}}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="ui-g-12 ui-lg-6 ui-md-6 p-l-0  invoice-tax">
+                <table class="pcs-itemtable" style="margin-top:1px;table-layout:fixed;width:100%;" cellspacing="0" cellpadding="0" border="0">
+                  <thead>
+                    <tr style="height:32px;">
+                      <td class="pcs-itemtable-header pcs-itemtable-description" style="width: 10%; text-align:center;">
+                        S.NO
+                      </td>
+                      <td class="pcs-itemtable-header pcs-itemtable-description">
+                     Product Name
+                      </td>
+                      <td class="pcs-itemtable-header" align="center">
+                          Quantity
+                      </td>
+                      <td class="pcs-itemtable-header" align="center" style="width: 24%">
+                       Return Quantity
+                      </td>
+                      <td class="pcs-itemtable-header" align="center" style="text-align:right !important; padding:0 10px !important;">
+                       Amount
+                      </td>
+                    </tr>
+                  </thead>
+  
+                  <tbody class="itemBody">
+                  <tr *ngFor=" let product of creditDeta.crdetails ; let index=index">
+                    <td class="pcs-item-row" style="padding: 10px 0px 10px 20px; text-align:center;" valign="top">
+                      <div>
+                        <div>
+                          <span id="tmp_item_name" style="word-wrap: break-word;">{{index + 1}}</span><br>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="pcs-item-row" style="padding: 10px 0px 10px 20px;" valign="top">
+                      <div>
+                        <div>
+                          <span id="tmp_item_name" style="word-wrap: break-word;">{{product.prodname}}</span><br>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                      <div class="pcs-item-desc"><span id="tmp_item_qty">{{product.quantity}}</span></div>
+                    </td>
+                    <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                      <span id="tmp_item_rate">{{product.crdrquantity}}</span>
+                    </td>
+                    <td class="pcs-item-row" style="padding:0 10px !important;text-align:right;word-wrap: break-word;" valign="top">
+                      <div class="pcs-item-desc">{{product.basicamount |currency : currency_Symbol : 'symbol'}}</div>
+                    </td>
+                    <!-- <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                      <div class="pcs-item-desc">{{invoice.discntvalue| currency : currency_sy :  'symbol'}}</div>
+                    </td>
+                    <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                      <div class="pcs-item-desc">{{invoice.taxvalue| currency : currency_sy :  'symbol'}}</div>
+                    </td>
+                    <td class="pcs-item-row" style="text-align:right;padding: 10px 10px 10px 5px;word-wrap: break-word;" valign="top">
+                      <span id="tmp_item_amount">   {{invoice.basicamount-invoice.taxvalue| currency : currency_sy :  'symbol'}}</span>
+                    </td> -->
+                  </tr>
+                </tbody>
+                </table>
+              </div>
+              <div class="ui-g-12 ui-lg-6 ui-md-6  p-l-0 p-r-0 invoice-tax">
+                  <table class="pcs-itemtable" style="margin-top:1px;table-layout:fixed;width: 100%" cellspacing="0" cellpadding="0" border="0">
+                    <thead>
+                      <tr style="height:32px;">
+                        <td class="pcs-itemtable-header pcs-itemtable-description text-center" style="text-align:center !important;" align="center">
+                          Tax
+                        </td>
+                        <td class="pcs-itemtable-header" align="center" style="text-align:right !important;">
+                           Amount
+                        </td>
+                        <td class="pcs-itemtable-header" align="center" style="width: 24%">
+                        CGST
+                        </td>
+                        <td class="pcs-itemtable-header" align="center" style="text-align:center !important;">
+                         SGST
+                        </td>
+                        <td class="pcs-itemtable-header" align="center">
+                           IGST
+                        </td>
+                      </tr>
+                    </thead>
+    
+                    <tbody class="itemBody">
+                    <tr *ngFor=" let product of GSTTaxTotal ; let index=index">
+                      <td class="pcs-item-row" style="padding: 10px 0px 10px 20px; text-align:center;" valign="top">
+                        <div>
+                          <div>
+                            <span id="tmp_item_name" style="word-wrap: break-word;">{{product.taxname }}</span><br>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="pcs-item-row" style="padding: 10px 0px 10px 20px;" valign="top" style="text-align:right !important;">
+                        <div>
+                          <div>
+                            <span id="tmp_item_name" style="word-wrap: break-word;text-align:right;">{{product.taxvalue|currency : currency_Symbol : 'symbol'}}</span><br>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                        <div class="pcs-item-desc"><span id="tmp_item_qty">{{product.cgst|currency : currency_Symbol : 'symbol'}}</span></div>
+                      </td>
+                      <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                        <span id="tmp_item_rate">{{product.sgst|currency : currency_Symbol : 'symbol'}}</span>
+                      </td>
+                      <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                        <div class="pcs-item-desc">{{product.igst |currency : currency_Symbol : 'symbol'}}</div>
+                      </td>
+                      <!-- <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                        <div class="pcs-item-desc">{{invoice.discntvalue| currency : currency_sy :  'symbol'}}</div>
+                      </td>
+                      <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                        <div class="pcs-item-desc">{{invoice.taxvalue| currency : currency_sy :  'symbol'}}</div>
+                      </td>
+                      <td class="pcs-item-row" style="text-align:right;padding: 10px 10px 10px 5px;word-wrap: break-word;" valign="top">
+                        <span id="tmp_item_amount">   {{invoice.basicamount-invoice.taxvalue| currency : currency_sy :  'symbol'}}</span>
+                      </td> -->
+                    </tr>
+                  </tbody>
+                  </table>
+                </div>
+            <div class="ui-g-12 ui-lg-12 ui-md-12 p-r-0">
+              <!-- <div class="ui-g-12 ui-lg-12 ui-md-12" id="totaldetail" class="sub-total-row">
+                <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0 p-b-0 ui-toolbar-group-right discount-value discount-value-2 clearfix">
+                  <span class="ui-g-12 ui-lg-4 ui-md-4 p-r-0 p-l-0 text-right m-l-0">Sub Value </span>
+                  <span class="ui-g-12 ui-lg-8 ui-md-8 p-r-0 p-l-0 text-right">{{invoicelineitems.subtotal|currency : currency_Symbol : 'symbol'}}</span>
+                </div>
+                <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0 p-b-0 ui-toolbar-group-right discount-value discount-value-2 clearfix">
+                  <span class="ui-g-12 ui-lg-4 ui-md-4 p-r-0 p-l-0 text-right m-l-0">Discount Value</span>
+                  <span class="ui-g-12 ui-lg-8 ui-md-8 p-r-0 p-l-0 text-right">{{invoicelineitems.discntvalue|currency : currency_Symbol : 'symbol'}}</span>
+                </div>
+                <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0 p-b-0 ui-toolbar-group-right discount-value discount-value-2 clearfix">
+                  <span class="ui-g-12 ui-lg-4 ui-md-4 p-r-0 p-l-0 text-right m-l-0">Tax Value  </span>
+                  <span class="ui-g-12 ui-lg-8 ui-md-8 p-r-0 p-l-0 text-right">{{invoicelineitems.taxtotal|currency : currency_Symbol : 'symbol'}}</span>
+                </div>
+                <div class="ui-g-12 ui-lg-12 ul-md-12 ui-toolbar-group-right discount-value discount-value-2 no-padding clearfix">
+                  <div class="ui-g-12 ui-lg-4 ui-md-4 p-r-0 p-l-0 text-right pull-left m-t-0 m-l-0">Other Expenses </div>
+                  <div class="ui-g-12 ui-lg-8 ui-md-8 text-right pull-left text-right bold no-padding m_l_5 m-t-5 m-b-5">
+                    {{invoicelineitems.otherexpenses|currency : currency_Symbol : 'symbol'}}
+                  </div>
+                </div>
+              </div> -->
+              <!-- <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0 p-b-0 p-l-0 p-r-0">
+                <div class="ui-g-12 ui-lg-5 ui-md-5 text-left p-r-0 ui-toolbar-group-right total-column-value bold clearfix">
+                  <div class="ng-binding">
+                    <div class="net ui-g-12 ui-lg-4 ui-md-4 p-r-0 p-l-0 text-right m-l-0 ">Total</div>
+                    <div class="ui-g-12 ui-lg-8 ui-md-8 p-r-0 p-l-0 text-right bold m_l_5">{{ invoicelineitems.invoicetotal|currency : currency_Symbol : 'symbol'}}</div>
+                  </div>
+                </div>
+              </div> -->
+              <!-- <div class="ui-g-12 ui-lg-12 ul-md-12 amount-word clearfix">
+                <div class="ui-g-12 p-r-0 words">Amount In Words : </div>
+                <div class="ui-g-12 ui-lg-10 ui-md-8 words-2">
+                  {{ ruppesinwords(creditDeta.amount) }}
+                </div>
+              </div> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,194 @@
+<div class="ui-g-12">
+    <div class="ui-g-12 white-bg top-section">
+        <!-- <div class="journal-heading">
+            <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+            <h1 class="">Summary of GSTR-3B</h1>
+            <button (click)="redirecttoprev()" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                style="margin-left:77%">
+                                <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                                <span class="ui-button-text ui-clickable">ui-btn</span>
+                              </button>
+        </div> -->
+        <div class="ui-g-12 ui-lg-4 ui-md-4 p-r-0">
+            <div class="ui-inputgroup ui-g-12 p-l-0 left">
+                <div class="ui-g-12 ui-lg-3 ui-md-3 p-t-0 p-l-0 p-r-0 p-b-0 m-t-5">
+                    <label>Financial Year</label>
+                </div>
+                <div class="ui-g-12 ui-lg-9 ui-md-9 p-t-0 p-l-0 p-r-0 p-b-0">
+                    <p-dropdown [(ngModel)]="selectedyr" [options]="financialyearlist">
+                        <ng-template let-row pTemplate="item">
+                            <div class="ui-helper-clearfix">
+                                <div>{{row.label}}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-g-12 ui-lg-3 ui-md-3 p-l-0 date-button">
+            <div class="ui-g-12 p-l-0">
+                <div class="ui-g-12 ui-lg-3 ui-md-3 p-t-0 p-l-0 p-r-0 p-b-0 m-t-5 from-date">
+                    <label for="acAdvanced">From date</label>
+                </div>
+                <div class="ui-g-12 ui-lg-9 ui-md-9 p-t-0 p-r-0 p-b-0">
+                    <p-calendar [(ngModel)]="startDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-12 ui-lg-3 ui-md-3 date-button">
+            <div class="ui-g-12 p-l-0">
+                <div class="ui-g-12 ui-lg-3 ui-md-3 p-t-0 p-l-0 p-r-0 p-b-0 m-t-5">
+                    <label for="acAdvanced">To date</label>
+                </div>
+                <div class="ui-g-12 ui-lg-9 ui-md-9 p-t-0 p-l-0 p-r-0 p-b-0">
+                    <p-calendar [(ngModel)]="endDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-12 ui-lg-1 ui-md-1 date-button-2">
+            <button pButton type="button" class="brs-width" (click)="getAll(selectedyr)" icon="fa-search" label="Search" style="height:30px;top: 3px;"></button>
+        </div>
+        <div class="ui-g-12 ui-lg-1 ui-md-1 date-button-2 pull-right" style="margin-top: 4px;"> 
+            <button (click)="redirecttoprev()" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                style="margin-left:77%">
+                        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                      </button>
+        </div>
+    </div>
+
+    <div class="user-list ui-g-12 dashboard-tab licence-bg list ">
+        <h3>3.1 Details of Outward Supplies and Inward Supplies liable to reverse charge</h3>
+        <p-dataTable [value]="datalist" [responsive]="true" sortMode="multiple" [rows]="10" #dt>
+            <p-column field="description" header="Description" [sortable]="true" [style]="{'width': '38%'}"></p-column>
+            <p-column field="taxablevalue" header="Tax Value" [sortable]="true" [style]="{'text-align': 'right'}">
+                <ng-template let-taxablevalue="rowData" pTemplate="body" style="text-align:right">
+                    {{taxablevalue.taxablevalue | currency : currency_Symbol :true}}
+                </ng-template>
+            </p-column>
+            <p-column field="igst" header="Integrated Tax" [sortable]="true" [style]="{'text-align': 'right','padding': '2px'}">
+                <ng-template let-igst="rowData" pTemplate="body" style="text-align:right">
+                    {{igst.igst | currency : currency_Symbol :true}}
+                </ng-template>
+            </p-column>
+            <p-column field="cgst" header="Central Tax" [sortable]="true" [style]="{'text-align': 'right'}">
+                <ng-template let-cgst="rowData" pTemplate="body" style="text-align:right">
+                    {{cgst.cgst | currency : currency_Symbol :true}}
+                </ng-template>
+            </p-column>
+            <p-column field="sgst" header="State/UT Tax" [sortable]="true" [style]="{'text-align': 'right','padding': '2px'}">
+                <ng-template let-sgst="rowData" pTemplate="body" style="text-align:right">
+                    {{sgst.sgst | currency : currency_Symbol :true}}
+                </ng-template>
+            </p-column>
+            <p-column field="cess" header="CESS Tax" [sortable]="true" [style]="{'text-align': 'right'}">
+                <ng-template let-cess="rowData" pTemplate="body" style="text-align:right">
+                    {{cess.cess | currency : currency_Symbol :true}}
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+
+        <br>
+        <h3> 3.2 Of the supplies shown in 3.1 (a) above, details of inter-State supplies made to unregistered persons, composition
+            taxable persons and UIN holders</h3>
+        <p-dataTable [value]="gst2List" sortField="description" rowGroupMode="subheader" groupField="description" 
+            [sortableRowGroup]="false">
+            <ng-template pTemplate="rowgroupheader" let-rowData >{{rowData['description']}}</ng-template>
+            <p-column [style]="{'width':'29%'}">
+                <ng-template pTemplate="header" >
+                    <span>Description</span>
+                </ng-template>
+                <!-- <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                    <div>{{rowdata.description}} </div>
+                </ng-template> -->
+            </p-column>
+            <p-column [style]="{'text-align':'center'}">
+                <ng-template pTemplate="header">
+                    <span>Place Of Supply</span>
+                </ng-template>
+                <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                    <div>{{rowdata.pos}} </div>
+                </ng-template>
+            </p-column>
+            <p-column [style]="{'text-align':'right'}">
+                <ng-template pTemplate="header">
+                    <span>Tax Value</span>
+                </ng-template>
+                <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                    <div>{{rowdata.taxablevalue | currency : currency_Symbol :true}} </div>
+                </ng-template>
+            </p-column>
+            <p-column [style]="{'text-align':'right'}">
+                <ng-template pTemplate="header">
+                    <span>Integrated Tax</span>
+                </ng-template>
+                <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                    <div>{{rowdata.igst | currency : currency_Symbol :true}} </div>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+        <br>
+        <h3>4. Eligible ITC</h3>
+        <p-dataTable [value]="gst3List" sortField="groupname" rowGroupMode="subheader" groupField="groupname"
+            [sortableRowGroup]="false">
+            <ng-template pTemplate="rowgroupheader" let-rowData>{{rowData['groupname']}}</ng-template>
+            <p-column [style]="{'width':'28%'}">
+                <ng-template pTemplate="header">
+                    <span>Details</span>
+                </ng-template>
+                <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                    <div>{{rowdata.description}} </div>
+                </ng-template>
+            </p-column>
+            <p-column [style]="{'text-align':'right'}">
+                <ng-template pTemplate="header">
+                    <span>Integrated Tax</span>
+                </ng-template>
+                <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                    <div>{{rowdata.igst | currency : currency_Symbol :true}} </div>
+                </ng-template>
+            </p-column>
+            <p-column [style]="{'text-align':'right'}">
+                <ng-template pTemplate="header">
+                    <span>Central Tax</span>
+                </ng-template>
+                <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                    <div>{{rowdata.cgst | currency : currency_Symbol :true}} </div>
+                </ng-template>
+            </p-column>
+            <p-column [style]="{'text-align':'right'}">
+                <ng-template pTemplate="header">
+                    <span>State/UT Tax</span>
+                </ng-template>
+                <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                    <div>{{rowdata.sgst | currency : currency_Symbol :true}} </div>
+                </ng-template>
+            </p-column>
+            <p-column [style]="{'text-align':'right'}">
+                <ng-template pTemplate="header">
+                    <span>Tax Value</span>
+                </ng-template>
+                <ng-template let-col let-rowdata="rowData" pTemplate="body">
+                    <div>{{rowdata.cess | currency : currency_Symbol :true}} </div>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+        <br>
+        <h3>5. Values of exempt, nil-rated and non-GST inward supplies</h3>
+        <p-dataTable [value]="get4List" [responsive]="true" sortMode="multiple" [rows]="10" #dt>
+            <p-column field="description" header="Description" [sortable]="true" [style]="{'width': '42%'}"></p-column>
+
+            <p-column field="interstate" header="Inter-State Supplies" [sortable]="true" [style]="{'text-align': 'right'}">
+                <ng-template let-interstate="rowData" pTemplate="body" style="text-align:right">
+                    {{interstate.interstate | currency : currency_Symbol :true}}
+                </ng-template>
+            </p-column>
+            <p-column field="intrastate" header="Intra-State Supplies" [sortable]="true" [style]="{'text-align': 'right','padding': '2px'}">
+                <ng-template let-intrastate="rowData" pTemplate="body" style="text-align:right">
+                    {{intrastate.intrastate | currency : currency_Symbol :true}}
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>

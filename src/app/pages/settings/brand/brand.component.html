@@ -1,0 +1,88 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0">
+  <div class="journal-heading roles">
+    <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+    <h1 class="">Brands</h1>
+    <div class="ui-toolbar-group-right ui-corner-all  brand-overlay inlineflex">
+      <button pButton type="button" label="Add" icon="fa-plus" (click)="addbrand($event,op1)"></button>
+      <button [routerLink]="['/getstarted']" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+        <span class="ui-button-text ui-clickable">ui-btn</span>
+      </button>
+      <!--<p-splitButton class="multibutton"  icon="fa fa-check" [model]="menuItems" label="Save"></p-splitButton>-->
+    </div>
+  </div>
+  <div class="ui-g">
+    <div class="ui-g-12 p-l-0 p-t-0 product-list-2">
+      <div class="molal-overlay">
+        <div class="changepass-overlay">
+          <p-dialog #op1 header="" [(visible)]="display" modal="modal" width="350" [responsive]="true">
+            <app-addbrand [branddtls]="branddtls" class="brand-overlay" [addovrlay]="addovrlay" (loadbrandlist)="loadbrandlist()"></app-addbrand>
+          </p-dialog>
+        </div>
+      </div>
+      <!--<div class="ui-g-0">
+      <p-overlayPanel #op1>
+        <app-addbrand [branddtls]="branddtls" class="brand-overlay" [addovrlay]="addovrlay" (loadbrandlist)="loadbrandlist($event)"></app-addbrand>
+      </p-overlayPanel>
+    </div>-->
+      <div class="brand-list brand-list-2 nodata-page ui-g-12" *ngIf="isLoadData">
+        <!--<p-tabView [controlClose]="true">
+          <p-tabPanel header="Brand" leftIcon="fa-book">-->
+        <p-dataTable [value]="brandlist" [rows]="10" [paginator]="true" #dt *ngIf="brandlist.length != 0">
+          <p-column field=brandname header="Brand Name" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width': '22%'}"></p-column>
+          <!-- <p-column field=tenantname header="Company Name" [filter]="show" [sortable]="true" filterMatchMode="contains"></p-column> -->
+          <p-column field=createdby header="Created By" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width': '28%'}">
+            <ng-template let-updatedby="rowData" pTemplate="body">
+              <span>{{ updatedby.createdby }}</span>
+              <br>
+              <span class="dd_datespan">{{ updatedby.createddt | date: display_dtime }}</span>
+            </ng-template>
+          </p-column>
+          <p-column field=lastupdatedby header="Updated By" [filter]="show" [sortable]="true" filterMatchMode="contains" [style]="{'width': '25%'}">
+            <ng-template let-updatedby="rowData" pTemplate="body" style="text-align:center !important">
+              <span>{{ updatedby.lastupdatedby }}</span>
+              <br>
+              <span class="dd_datespan">{{ updatedby.lastupdateddt | date: display_dtime }}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="status" header="Status" [sortable]="true" [filter]="show" filterMatchMode="equals" [style]="{'text-align': 'center','overflow':'visible','width': '13%'}"
+            filterMatchMode="equals">
+            <ng-template pTemplate="filter" let-col>
+              <p-dropdown [options]="changestatus" *ngIf="show" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)"
+                styleClass="ui-column-filter"></p-dropdown>
+            </ng-template>
+          </p-column>
+          <p-column styleClass="text-center" [style]="{'width': '5%','text-align':'center'}">
+            <ng-template pTemplate="header">
+              <p>
+                <button pButton [disabled]="!brandlist" class="center" icon="fa-search" id="bank_dt_search_icon" (click)="showhidefilter(dt,'bank_dt_search_icon')"></button>
+              </p>
+            </ng-template>
+            <ng-template pTemplate="body" let-selectedbrand="rowData">
+              <a pButton (click)="update($event,selectedbrand,op2)" icon="fa-pencil"></a>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+        <div *ngIf="brandlist.length == 0" class="text-center">
+          <h3>Add Own Brands or Create Brands the organization deals with.</h3>
+          <button pButton type="button" label=" Create Brands" icon="fa-plus" (click)="addbrand($event,op1)"></button>
+        </div>
+        <!--</p-tabPanel>
+        </p-tabView>-->
+
+        <!--<div class="ui-g-6">
+            <p-overlayPanel #op2>
+                <app-addbrand [branddtls]="branddtls" [editovrlay]="editovrlay" (loadbrandlist)="loadbrandlist($event)"></app-addbrand> 
+            </p-overlayPanel>
+        </div>-->
+        <div class="molal-overlay">
+          <div class="changepass-overlay brands-overlay">
+            <p-dialog #op2 header="" [(visible)]="edit_display" modal="modal" width="350" [responsive]="true">
+              <app-addbrand [branddtls]="branddtls" [editovrlay]="editovrlay" (loadbrandlist)="loadbrandlist()"></app-addbrand>
+            </p-dialog>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

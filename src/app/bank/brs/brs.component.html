@@ -1,0 +1,115 @@
+<div class="ui-g-12 p-l-0 p-t-0 licence-bg">
+        <div class="journal-heading">
+            <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+            <h1 class="">Bank Reconciliation Statement</h1>
+            <div class="ui-toolbar-group-right ui-corner-all">
+                <button pButton type="button" label="Import" icon="fa-plus" (click)="openpage('banks/brsupload')"></button>
+                <!-- <button pButton type="button" label="Matching" icon="fa-object-group" (click)="openpage('banks/brsmatching')"></button> -->
+            </div>
+        </div>
+        <div class="ui-g-12 invoice-list-tab brs-list-tab brsmatching-list">
+            <p-dataTable #brslisttable [value]="brslist" selectionMode="single" [paginator]="true" [rows]="10" [responsive]="true">
+                    <p-column field="stmtfromdt" header="Statement Date" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                            <ng-template let-selectedbrs="rowData" pTemplate="body">
+                                <span>{{selectedbrs.stmtfromdt | date: date_dformat }} - {{selectedbrs.stmttodt | date: date_dformat }}</span>
+                            </ng-template>
+                        </p-column>
+                <p-column field="bankid" header="Bank Name" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                    <ng-template let-selectedbrs="rowData" pTemplate="body">
+                        <span>{{ getbankname(selectedbrs.bankid) }}</span>
+                    </ng-template>
+                </p-column>
+               
+                <p-column field="finyear" header="Fin.year" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                    <ng-template let-selectedbrs="rowData" pTemplate="body">
+                        <p>{{selectedbrs.finyear}}</p>
+                    </ng-template>
+                </p-column>
+               
+               
+                <p-column field=reconstatus [style]="{'text-align':'center','width':'13%'}" [filter]="show" filterMatchMode="contains">
+                    <ng-template pTemplate="header">
+                        <label>Status</label>
+                    </ng-template>
+                    <ng-template let-selectedbrs="rowData" pTemplate="body">
+                        <span *ngIf="selectedbrs.reconstatus == 'U' " >Unreconciled</span>
+                        <span *ngIf="selectedbrs.reconstatus == 'R' " >Reconciled</span>
+                    </ng-template>
+                </p-column>
+                <p-column field=status [style]="{'text-align':'center','width':'13%'}" [filter]="show" filterMatchMode="contains">
+                        <ng-template pTemplate="header">
+                            <label>Action <button pButton icon="fa-search" (click)="showhidefilter()"></button></label>
+                        </ng-template>
+                        <ng-template let-selectedbrs="rowData" pTemplate="body">
+                                <button *ngIf="selectedbrs.reconstatus == 'U' " pButton type="button" icon="fa-object-group" (click)="openmatchingpage(selectedbrs)"></button>
+                        </ng-template>
+                    </p-column>
+    
+            </p-dataTable>
+            <!-- <p-dataTable #brslisttable [value]="brslist" selectionMode="single" [paginator]="true" [rows]="10" [responsive]="true">
+    
+                <p-column field="txnno" header="Tranx No" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                    <ng-template let-selectedbrs="rowData" pTemplate="body">
+                        <span>{{selectedbrs.txnno }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="txndate" header="Tranx Date" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                    <ng-template let-selectedbrs="rowData" pTemplate="body">
+                        <span>{{selectedbrs.txndate | date: date_dformat }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="description" header="Description" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                    <ng-template let-selectedbrs="rowData" pTemplate="body">
+                        <p>{{selectedbrs.description}}</p>
+                    </ng-template>
+                </p-column>
+                <p-column field="debit" styleClass="text-right" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                    <ng-template pTemplate="header">
+                        <label>Debit</label>
+                    </ng-template>
+                    <ng-template let-selectedbrs="rowData" pTemplate="body">
+                        <span>{{selectedbrs.debit | currency : currency_sy : 'symbol' }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="credit" styleClass="text-right" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                    <ng-template pTemplate="header">
+                        <label>Credit</label>
+                    </ng-template>
+                    <ng-template let-selectedbrs="rowData" pTemplate="body">
+                        <span>{{selectedbrs.credit | currency : currency_sy : 'symbol' }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="closingbal" styleClass="text-right" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                    <ng-template pTemplate="header">
+                        <label>Closing Balance</label>
+                    </ng-template>
+                    <ng-template let-selectedbrs="rowData" pTemplate="body">
+                        <span>{{selectedbrs.closeingbal | currency : currency_sy : 'symbol' }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field=status [style]="{'text-align':'center','width':'13%'}" [filter]="show" filterMatchMode="contains">
+                    <ng-template pTemplate="header">
+                        <label>Status
+                            <button pButton icon="fa-search" (click)="showhidefilter()"></button>
+                        </label>
+                    </ng-template>
+                    <ng-template let-selectedbrs="rowData" pTemplate="body">
+                        <span>{{ selectedbrs.reconstatus }}</span>
+                    </ng-template>
+                </p-column>
+    
+            </p-dataTable> -->
+    
+            <!-- <p-tabView [activeIndex]="activeIndex">
+                <p-tabPanel header="BRS List">
+    
+                </p-tabPanel>
+                <p-tabPanel header="Upload">
+                    <app-brsupload (updatebrslist)="refreshbrslist($event)" ></app-brsupload>
+                </p-tabPanel>
+                <p-tabPanel header="BRS Matching">
+                    <app-brsmatching (brsUpdateevent)="brsUpdateEvent($event)"></app-brsmatching>
+                </p-tabPanel>
+            </p-tabView> -->
+        </div>
+    </div>

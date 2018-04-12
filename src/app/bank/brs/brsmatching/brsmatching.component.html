@@ -1,0 +1,156 @@
+<p-growl sticky="sticky">
+  </p-growl>
+  <div class="ui-g-12 p-l-0 p-t-0 licence-bg">
+    <div class="journal-heading">
+      <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+      <h1 class="">BRS - Matching</h1>
+      <div class="ui-toolbar-group-right ui-corner-all inlineflex">
+        <button pButton type="button" label="Import" icon="fa-plus" (click)="openpage('banks/brsupload')"></button>
+        <button pButton type="button" icon="fa-close" (click)="openpage('banks/brslist')"></button>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-r-0 p-t-0">
+      <div class="ui-g-12 ui-lg-12 ul-md-12">
+        <div class="ui-g-12 ui-lg-12 ul-md-6 receipt p-b-0 p-t-0 p-l-0 p-r-0 p-t-0 brs-m">
+          <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-2 p-t-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-t-0 ui-lg-12 ul-md-12 bold p-r-0 p-b-0 ">
+                <div class=" m-t-13" for="acAdvanced">Bank Statement Date</div>
+              </div>
+              <div class="ui-g-12 ui-lg-12 ul-md-12 p-b-0 fromdate">
+                <span class="bold">From : </span>
+                <span>{{ brsfromdate | date: date_dformat }}</span>
+                <span class="bold">To : </span>
+                <span>{{ brstodate | date: date_dformat }}</span>
+                <!-- <p-calendar #fromtodate_calendar class="width ui-calendar" [showIcon]="true" [(ngModel)]="fromtodate" selectionMode="range" showOnFocus="true"
+                  dateFormat="dd/mm/yy" readonlyInput="true"></p-calendar> -->
+              </div>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-lg-3 ul-md-4 p-b-2 p-t-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 ui-lg-12 ul-md-12 p-t-0  bold p-r-0 p-b-0 ">
+                <div class=" m-t-13" for="acAdvanced">Bank Name</div>
+              </div>
+              <div class="ui-g-12 ui-lg-12 ul-md-12 p-b-0 ">
+                {{ selectedbank.bankname }}
+                <!-- <p-dropdown [filter]="true" [style]="{'width':'100%','margin-top':'-2px'}" [autoWidth]="false" class="pdropdown" [options]="BankList"
+                  [(ngModel)]="selectedbank"></p-dropdown> -->
+              </div>
+            </div>
+          </div>
+          <!-- <div class="ui-g-12 ui-lg-1 ul-md-2 p-b-0 brs-matching">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-l-0 p-r-0 button-width" style="margin-top: 20px;">
+                <button pButton type="button" class="pull-left blue-btn" (click)="getbrslist(true)" icon="fa-search" label="Search"></button>
+              </div>
+            </div>
+          </div> -->
+          <div class="ui-g-2 ui-lg-1 ul-md-2 pull-left m-t-7 p-l-0 p-t-0 button-width brs-matching" style="padding-top:0px;float: right;">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-l-0 p-r-0  button-width" >
+                <button pButton type="button" class="blue-btn pull-left" icon="fa fa-save" (click)="updatebrsstatement()" label="Update"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="ui-g-12 ui-lg-12 ul-md-12 p-b-0 p-l-0 p-r-0  m-t-10 brsmatching-list product-list">
+          <p-dataTable #brslistable [value]="brslist" [editable]="true" scrollable="true" scrollHeight="200px">
+            <p-column header="#" [style]="{'width':'2%'}">
+              <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+                <span>{{ridx + 1}}</span>
+              </ng-template>
+            </p-column>
+            <p-column field="txnno" header="Trxn No" [style]="{'width':'17%'}">
+              <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+                <span>{{selectedtrans.txnno}}</span>
+              </ng-template>
+            </p-column>
+            <p-column field="txndate" header="Trxn Date" [style]="{'width':'15%'}">
+              <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+                <span>{{selectedtrans.txndate | date: date_dformat}}</span>
+              </ng-template>
+            </p-column>
+  
+            <p-column field="debit" header="Debit" [style]="{'width':'15%','text-align':'right'}">
+              <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+                <span>{{selectedtrans.debit | currency : currency_sy : 'symbol'}}</span>
+              </ng-template>
+            </p-column>
+            <p-column field="credit" header="Credit" [style]="{'width':'15%','text-align':'right'}">
+              <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+                <span>{{selectedtrans.credit | currency : currency_sy : 'symbol'}}</span>
+              </ng-template>
+            </p-column>
+    
+            <p-column field="remarks" header="Remarks" [style]="{'width':'30%','text-align':'center'}">
+              <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+                <span title="{{selectedtrans.remarks}}">{{selectedtrans.remarks}}</span>
+              </ng-template>
+            </p-column>
+            <p-column field="feature" [style]="{'width':'10%','text-align':'right'}">
+              <ng-template pTemplate="header">
+                <label>Matching</label>
+              </ng-template>
+              <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+                <!-- <span>{{selectedtrans.feature}} - {{selectedtrans.pymtrectno}}</span> -->
+                <div style="height:25px;" >
+                    <!-- <button *ngIf="selectedtrans.reconstatus == 'U' " pButton type="button" icon="fa-object-group" (click)="matchwithLedger(selectedtrans)"></button> -->
+                  <button pButton type="button" icon="fa-object-group" (click)="matchwithLedger(selectedtrans)"></button>
+                </div>
+                
+              </ng-template>
+            </p-column>
+            <p-column field="reconstatus" header="Status" [style]="{'width':'10%'}" >
+              <ng-template let-col let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="editor">
+                <!-- <textarea [rows]="2" [cols]="20" [(ngModel)]="selectedtrans[col.field]" pInputTextarea autoResize="autoResize"></textarea> -->
+                <p-dropdown [filter]="true" [(ngModel)]="selectedtrans[col.field]" (onChange)="onBRSTypeSelect($event,selectedtrans,ridx,brslistable);"
+                  [options]="brstypeList" [autoWidth]="false" [style]="{'width':'100%'}" required="true" appendTo="body">
+                </p-dropdown>
+              </ng-template>
+              <ng-template let-col let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+                <span>{{selectedtrans.reconstatus}}</span>
+              </ng-template>
+            </p-column>
+          </p-dataTable>
+        </div>
+        <div class="clearfix"></div>
+  
+        <p-dialog [(visible)]="ledgerdisplay" [width]="500">
+          <p-header>
+            Bank Transaction Amount :
+            <span *ngIf="selectedTrans.credit"> {{ selectedTrans.credit }} </span> 
+                <span *ngIf="selectedTrans.debit"> {{ selectedTrans.debit }} </span> 
+          </p-header>
+          <div class="attendance-border" style="margin-bottom: 5px;">
+            <i class="fa fa-search" style="margin: 4px 0px 9px 15px;"></i>
+            <input style="width: 75%;" class="searchbox ui-inputtext" #gb type="text" pInputText size="50" placeholder="Search Employees...">
+            <button *ngIf="isMatching()" pButton type="button" (click)="applymatching()" class="blue-btn width-100" icon="fa fa-refresh" label="Apply" style="float: right"></button>
+          </div>
+          <p-dataTable #ledgerTable [value]="brsledgerList" [(selection)]="selectedLedgers"  [globalFilter]="gb"
+          [paginator]="true" [rows]="10" [headerCheckboxToggleAllPages]="true" (onRowSelect)="onRowCheckboxSelection($event)"
+          (onRowUnselect)="onRowCheckboxSelection($event)" >
+            <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
+            <p-column field="ledgerdate" header="Trans. Date" [style]="{'width':'20%'}" [editable]="true">
+            </p-column>
+            <p-column field="ledgerdate" header="Trans. Date" [style]="{'width':'20%'}" [editable]="true">
+            </p-column>
+            <p-column field="feature" header="Feature" [style]="{'width':'20%'}" [editable]="true">
+            </p-column>
+            <p-column field="txnrefno" header="Ref. No" [style]="{'width':'20%'}" [editable]="true">
+            </p-column>
+            <p-column field="amount" header="Amount" [style]="{'width':'20%'}" [editable]="true">
+              <ng-template let-col let-trans="rowData" let-ridx="rowIndex" pTemplate="body">
+                <span *ngIf="trans.crdr == 'C'">{{trans.cramount}}</span>
+                <span *ngIf="trans.crdr == 'D'">{{trans.dramount}}</span>
+              </ng-template>
+            </p-column>
+            
+        </p-dataTable>
+        </p-dialog>
+  
+      </div>
+    </div>
+  </div>
+  

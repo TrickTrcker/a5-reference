@@ -1,0 +1,198 @@
+<div class="ui-fluid ui-g-12 licence-bg p-r-0 p-l-0 p-t-0">
+
+        <div class="bg-1">
+          <div class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0">
+            <div class="journal-heading">
+              <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+              <h1>BRS Report</h1>
+              <span>
+                <i class="fa fa-fw fa-question-circle" pTooltip="Tap on BRS to View"></i>
+              </span>
+      
+              <div class="ui-toolbar-group-right inlineflex">
+                <button [routerLink]="['/reports/list']" icon="fa-window-close " pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                  <span class="ui-button-icon-left center-icon ui-clickable fa fa-times"></span>
+                  <span class="ui-button-text ui-clickable">ui-btn</span>
+                </button>
+                <button (click)="pdfdownload(selectedbank)" icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                    <span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span>
+                    <span class="ui-button-text ui-clickable">ui-btn</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ui-g-12 ui-lg-12 ui-md-12 margin-brs p-b-0">
+          <div class="ui-g-12 ui-lg-4 ul-md-4 p-b-2 p-t-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-t-0 ui-lg-12 ul-md-12 bold p-r-0 p-b-0 ">
+                <div class=" m-t-13" for="acAdvanced">Bank Statement Date</div>
+              </div>
+              <div class="ui-g-12 ui-lg-12 ul-md-12 p-b-0 fromdate">
+                <p-calendar #fromtodate_calendar class="width ui-calendar" [showIcon]="true" [(ngModel)]="fromtodate" selectionMode="range"
+                  showOnFocus="true" dateFormat="dd/mm/yy" readonlyInput="true"></p-calendar>
+              </div>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-lg-3 ul-md-4 p-b-2 p-t-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 ui-lg-12 ul-md-12 p-t-0  bold p-r-0 p-b-0 ">
+                <div class=" m-t-13" for="acAdvanced">Bank Name</div>
+              </div>
+              <div class="ui-g-12 ui-lg-12 ul-md-12 p-b-0 ">
+                <p-dropdown [filter]="true" [style]="{'width':'100%','margin-top':'-2px'}" [autoWidth]="false" class="pdropdown" [options]="BankList"
+                  [(ngModel)]="selectedbank"></p-dropdown>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="ui-g-12 ui-lg-1 ul-md-2 p-b-0 brs-matching">
+              <div class="ui-g form-group">
+                <div class="ui-g-12 p-l-0 p-r-0 button-width" style="margin-top: 20px;">
+                  <button pButton type="button" class="pull-left blue-btn" (click)="getbrslist(true)" icon="fa-search" label="Search"></button>
+                </div>
+              </div>
+            </div> -->
+          <div class="ui-g-2 ui-lg-1 ul-md-2 pull-left m-t-7 p-l-0 p-t-0 button-width brs-matching" style="padding-top:0px;float: right;">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-l-0 p-r-0  button-width">
+                <button pButton type="button" class="blue-btn pull-left" (click)="getbrsListAll(startdate,enddate)" icon="fa-search" label="Search"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="ui-g-12 ui-lg-12 ui-md-12 margin-brs p-b-0">
+          <div class="receipt-register">
+          <div class="ui-g-12 ui-lg-2 ui-md-3">
+            <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+              <label for="acAdvanced">From date</label>
+            </div>
+            <div class="ui-inputgroup ui-g-12 p-l-0 left">
+              <p-calendar [(ngModel)]="startdate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-lg-2 ui-md-3">
+            <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+              <label for="acAdvanced">To date</label>
+            </div>
+            <div class="ui-inputgroup ui-g-12 p-l-0 left">
+              <p-calendar [(ngModel)]="enddate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-lg-2 ui-md-2 date-button-2" style="margin-top:23px">
+            <button pButton type="button" (click)="getbrsListAll(startdate,enddate)" icon="fa-search" label="Search"></button>
+          </div>
+        </div>
+      </div> -->
+        <div class="invoice-list-tab ui-g-12 p-t-0 brsreport_table">
+          <p-tabView [activeIndex]>
+            <p-tabPanel header="BRS List" leftIcon="fa-book">
+              <p-dataTable #brslisttable [value]="brslist" selectionMode="single" [responsive]="true" #brsreport>
+      
+                <p-column field="txndate" header="Date" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width':'10%'}">
+                  <ng-template let-selectedbrs="rowData" pTemplate="body">
+                    <span>{{selectedbrs.txndate }}</span>
+                  </ng-template>
+                </p-column>
+                <p-column field="description" header="Particulars" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width':'20%'}">
+                  <ng-template let-selectedbrs="rowData" pTemplate="body">
+                    <span>{{selectedbrs.description }}</span>
+                  </ng-template>
+                </p-column>
+                <p-column field="feature" header="Vch Type" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width':'20%'}">
+                  <ng-template let-selectedbrs="rowData" pTemplate="body">
+                    <div style="width: 10%;float:left;font-weight:bold;">
+                      <div *ngIf="selectedbrs.crdr =='C' ">By</div>
+                      <div *ngIf="selectedbrs.crdr =='D' ">To</div>
+                    </div>
+                    <div style="width: 75%;float:right;">
+                      <p>{{selectedbrs.description}}</p>
+                    </div>
+                  </ng-template>
+                </p-column>
+                <p-column field="debit" styleClass="text-right" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width':'25%'}">
+                  <ng-template pTemplate="header">
+                    <label>Debit</label>
+                    <!-- <button type="button" pButton icon="fa-refresh"></button> -->
+                  </ng-template>
+                  <ng-template let-selectedbrs="rowData" pTemplate="body">
+                    <span>{{selectedbrs.dramount | currency : currency_sy : 'symbol' }}</span>
+                  </ng-template>
+                </p-column>
+                <p-column field="credit" styleClass="text-right" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width':'25%'}">
+                  <ng-template pTemplate="header">
+                    <label>Credit</label>
+                    <!-- <button type="button" pButton icon="fa-refresh"></button> -->
+                  </ng-template>
+                  <ng-template let-selectedbrs="rowData" pTemplate="body">
+                    <span>{{selectedbrs.cramount | currency : currency_sy : 'symbol' }}</span>
+                  </ng-template>
+                </p-column>
+                <p-footer>
+                  <div *ngIf=" closingbalancesign !='' " style="">
+                    <table border="0">
+                      <tr>
+                        <td style="width: 50%">
+                            <div  class="text-right">
+                                <span style="padding:0px 15px;" *ngIf="closingbalancesign =='C' ">By</span>
+                                <span style="padding:0px 15px;" *ngIf="closingbalancesign =='D' ">To</span>
+                               Closing Balance
+                            </div>
+                        </td>
+                        <td class="text-right"  style="width: 25%">
+                            <span *ngIf="closingbalancesign == 'C' "> {{ closingbalanceamount | currency : currency_sy : 'symbol' }} </span>
+                        </td>
+                        <td class="text-right" style="width: 25%">
+                            <span *ngIf="closingbalancesign == 'D' "> {{ closingbalanceamount | currency : currency_sy : 'symbol' }} </span>
+                        </td>
+                      </tr>
+                    </table>
+      
+                    
+                  </div>
+                  <div *ngIf=" ( creditTotal > 0 || debitTotal > 0 ) " style="border-top: 1px solid #ddd;    padding: 10px 0px;">
+                      <div style="width:45%;float:left">
+                         
+                      </div>
+                      <div class="text-right" style="width:25%;float:right">
+                            {{ creditTotal | currency : currency_sy : 'symbol' }}
+                        </div>
+                      <div class="text-right" style="width:25%;float:right">
+                          {{ debitTotal | currency : currency_sy : 'symbol' }}
+                      </div>
+                     
+                    </div>
+                </p-footer>
+                <!-- <p-column field="closeingbal" styleClass="text-right" [filter]="show" filterMatchMode="contains" [sortable]="true">
+                  <ng-template pTemplate="header">
+                    <label>Closeing Bal.</label>
+                  </ng-template>
+                  <ng-template let-selectedbrs="rowData" pTemplate="body">
+                    <span>{{selectedbrs.closeingbal | currency : currency_sy : 'symbol' }}</span>
+                  </ng-template>
+                </p-column>
+                <p-column field="closeingbal" styleClass="text-right">
+                  <ng-template pTemplate="header">
+                    <label>
+                      <button pButton icon="fa-search" id="brs_search" (click)="showhidefilter(brsreport,'brs_search')"></button>
+                    </label>
+                  </ng-template>
+                  <ng-template let-selectedbrs="rowData" pTemplate="body">
+                    <span>{{ selectedbrs.reconstatus }}</span>
+                  </ng-template>
+                </p-column> -->
+                <!-- <p-column styleClass="col-button">
+                        <ng-template pTemplate="header">
+                          <label>Action</label>
+                        </ng-template>
+                      </p-column> -->
+              </p-dataTable>
+            </p-tabPanel>
+            <!-- <p-tabPanel header="Upload">
+                      <app-brsupload></app-brsupload>
+                    </p-tabPanel> -->
+            <!-- <p-tabPanel header="BRS Matching">
+                      <app-brsmatching (brsUpdateevent)="brsUpdateEvent($event)"></app-brsmatching>
+                    </p-tabPanel> -->
+          </p-tabView>
+        </div>
+      </div>

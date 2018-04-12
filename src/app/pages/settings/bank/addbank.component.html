@@ -1,0 +1,147 @@
+<!-- <p-growl [value]="msgs" sticky="sticky">
+</p-growl> -->
+<!-- <div class="ui-g-6 ui-lg-12 p-l-0 "> -->
+<!-- <div class="col-md-12  bg-white "> -->
+<!-- <h2 style="margin-bottom: 0px;">Bank Details</h2> -->
+<div class=" p-l-0 p-r-0  bank-add-page clearfix" style="margin-left: 0px; margin-right: 0px;">
+    <form novalidate [formGroup]="bankForm" (ngSubmit)="formsubmit(bankForm.value)">
+        <div class="ui-g-12 p-b-0  ">
+            <!-- <div class="ui-g-6 p-b-0"> -->
+            <div class="ui-g form-group p-10">
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 form-group-default">
+                    <div class="ui-g-12 p-t-0 p-r-0 p-l-0 p-b-0 bank-input required">
+                        <label class="ui-g-12"> Bank </label>
+                        <!-- <p-dropdown [style]="{'width':'100%'}" [filter]="true" [options]="bankList" placeholder="Select Bank" formControlName="bankname">
+                            <ng-template let-bank pTemplate="item">
+                                <div>{{bank.label}}</div>
+                            </ng-template>
+                        </p-dropdown> -->
+                        <input type="text" maxlength="{{max50}}" pInputText formControlName="bankname" class="ui-g-12" placeholder="Bank Name">
+
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 form-group-default">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input required">
+                        <label class="ui-g-12"> Account Number</label>
+                        <!-- <label>Account Number </label> -->
+                        <input type="text" maxlength="{{max30}}" pInputText formControlName="accountno" (keypress)="numberOnly($event)" class="ui-g-12" placeholder="Account Number">
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 p-b-0 form-group-default">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input required">
+                        <label class="ui-g-12">IFSC Code </label>
+                        <input type="text" maxlength="{{max11}}" pInputText formControlName="ifsccode" class="ui-g-12" placeholder="IFSC Code" required>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 p-b-0 form-group-default">
+                        <div class="ui-g-12 p-r-0 p-l-0 p-t-0 p-b-0 bank-input required">
+                            <label class="ui-g-12"> Opening Balance </label>
+                            <div class="ui-g-12 ui-lg-10 ul-md-8 p-t-0 p-b-0 p-r-0 p-l-0">
+                                <input type="text" maxlength="{{amtlength}}" pInputText placeholder="Opening Balance" (keypress)="numberOnly($event)" class="text-right"
+                                    name="openingbalance" formControlName="openingbalance" style="width:100%;"/>
+                            </div>
+                            <div class="ui-g-12 ui-lg-2 ul-md-4 p-t-0 p-b-0 p-r-0 p-l-0">
+                                    <p-dropdown [options]="crdr_opt" formControlName="ob_crdr" [style]="{'width':'100%'}">
+                                        <ng-template let-item pTemplate="selectedItem">
+                                            <span style="vertical-align:middle">{{ getcrdrLabel(item) }}</span>
+                                        </ng-template>
+                                        <ng-template let-item pTemplate="item">
+                                            <div>{{ getcrdrLabel(item) }}</div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                   
+                                </div>
+                        </div>
+                    </div>
+                
+                <!-- <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 ">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                        <label class="ui-g-12">Swift Code </label>
+                        <input type="text" maxlength="{{max11}}" pInputText formControlName="swiftcode" class="ui-g-12" placeholder="Swift Code">
+                    </div>
+                </div> -->
+            </div>
+            <div class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 ">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                    <label class="ui-g-12">Swift Code </label>
+                    <input type="text" maxlength="{{max11}}" pInputText formControlName="swiftcode" class="ui-g-12" placeholder="Swift Code">
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 ">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                    <label class="ui-g-12">Branch Name </label>
+                    <input type="text" maxlength="{{max50}}" pInputText formControlName="branchname" class="ui-g-12" placeholder="Branch Name">
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-6 ui-md-12 p-r-0 p-t-0">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                    <label class="ui-g-12">Branch Code</label>
+                    <input type="text" maxlength="{{max11}}" pInputText formControlName="branchcode" class="ui-g-12" placeholder="Branch Code">
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 ">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 p-l-0 bank-input">
+                    <label class="ui-g-12">Country </label>
+                    <p-dropdown [style]="{'width':'100%'}" [filter]="true" [options]="countryList" placeholder="Select Country" formControlName="countryname" (ngModelChange)="oncountryChange($event)">
+                        <ng-template let-country pTemplate="item">
+                            <div>{{country.label}}</div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 ">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                    <label class="ui-g-12">State </label>
+                    <p-dropdown [style]="{'width':'100%'}" [filter]="true" [options]="stateList" placeholder="Select State" formControlName="statename" (ngModelChange)="onstateChange($event)">
+                        <ng-template let-state pTemplate="item">
+                            <div>{{state.label}}</div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 ">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                    <label class="ui-g-12">City </label>
+                    <p-dropdown [style]="{'width':'100%'}" [filter]="true" [options]="cityList" placeholder="Select City" formControlName="cityname">
+                        <ng-template let-city pTemplate="item">
+                            <div>{{city.label}}</div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 ">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                    <label class="ui-g-12">Zip Code </label>
+                    <input type="text" (keypress)="numberOnly($event)" pInputText formControlName="zipcode" class="ui-g-12" placeholder="Zip Code">
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 ">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                    <label class="ui-g-12">Address </label>
+                    <input type="text" pInputText formControlName="address" class="ui-g-12" placeholder="Address">
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 p-b-0 form-group-default">
+                <div class="ui-g-12 p-t-0 p-b-0 p-r-0 bank-input required p-bt-13" *ngIf="banklist?.bankid">
+                    <label class="ui-g-12 p-l-0">Status </label>
+                    <p-radioButton name="status" value="Active" label="Active" formControlName="status"></p-radioButton>
+                    <p-radioButton name="status" value="Inactive" label="Inactive" formControlName="status" [style]="{'margin-left': '15px'}"></p-radioButton>
+                </div>
+            </div>
+            <div class="ui-g-12 p-t-0 m-t-13">
+                <div class="ui-toolbar-group-right ui-corner-all pull-right">
+                    <button icon="fa fa-check" pButton type="submit" label='{{buttonText}}'></button>
+                </div>
+
+            </div>
+            <!-- </div> -->
+        </div>
+
+    </form>
+</div>
+<!--</div>-->
+<!--</div>-->

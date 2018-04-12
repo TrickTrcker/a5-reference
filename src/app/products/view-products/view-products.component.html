@@ -1,0 +1,148 @@
+<div class="ui-g ui-fluid white-bg panel-2">
+  <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-r-0">
+    <div class="view-invoice-content">
+      <div id="pdfcontainer" class="ember-view">
+        <div class="ui-g-12 p-t-0 p-b-0 invoice-viewlist m-b-15">
+     
+            <div class="ui-g-12 ui-lg-12 ui-md-8 p-t-0 p-b-0">
+              <div class="ui-toolbar-group-right">
+  
+                <!-- <button routerLink: ['/accounts/debitnote'] icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-chevron-left"></span><span class="ui-button-text ui-clickable">ui-btn</span></button> -->
+                <button icon="fa-print" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-print"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+                <button icon="fa-trash" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+                <button icon="fa-print" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrows-alt"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+              </div>
+            </div>
+        </div>
+        <div class="pcs-template" id="printSectionId">
+          <div print-section class="pcs-template-body ">
+            <table style="clear:both;width:100%;margin-top:20px;table-layout:fixed;">
+              <tbody>
+                <tr>
+                  <td style="width:60%;vertical-align:top;word-wrap: break-word;">
+                    <div>
+                      <span class="pcs-orgname"><b>{{product.prodname}}</b></span><br>
+                      <!-- <span class="pcs-label">
+                          <span id="tmp_org_address" style="white-space: pre-wrap;word-wrap: break-word;">{{invoiceDeta.billingaddress}}</span>
+                        </span> -->
+                    </div>
+                  </td>
+                  <td class="invoice-prints receipt" style="vertical-align:bottom;width: 92%;" align="right">
+                    <table class="invoice-prints-1 view-invoice-print" style="table-layout: fixed;word-wrap: break-word;" cellspacing="0" cellpadding="0"
+                      border="0">
+                      <tbody *ngIf="hsndetails">
+                        <tr>
+                          <td width="25%">
+                            <span class="pcs-label inv-view-label">HSN Code :</span>
+                          </td>
+                          <td width="30%">
+                            <span class="pcs-label product-center-text" id="tmp_entity_number">{{product.hsncode}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="25%">
+                            <span class="pcs-label inv-view-label">Category Name :</span>
+                          </td>
+                          <td style="text-align:right;">
+                            <span id="tmp_entity_date" class="inv-view-value product-center-text">{{hsndetails.categoryname}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="25%">
+                            <span class="pcs-label inv-view-label">CGST(%) :</span>
+                          </td>
+                          <td width="30%">
+                            <span id="tmp_due_date" class="inv-view-value product-center-text">{{hsndetails.cgstpercent}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="25%">
+                            <span class="pcs-label inv-view-label">SGST(%) :</span>
+                          </td>
+                          <td width="30%">
+                            <span id="tmp_due_date" class="inv-view-value product-center-text">{{hsndetails.sgstpercent}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="25%">
+                            <span class="pcs-label inv-view-label">IGST(%) :</span>
+                          </td>
+                          <td width="30%">
+                            <span id="tmp_due_date" class="inv-view-value product-center-text">{{hsndetails.igstpercent}}</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="pcs-itemtable sub-total-row" style="width:100%;margin-top:20px;table-layout:fixed;border-bottom: 1px solid #d5d5d5;" cellspacing="0" cellpadding="0" border="0">
+              <thead>
+                <tr style="height:32px;">
+                  <td class="pcs-itemtable-header" style="padding:5px 0 5px 5px;text-align: center;word-wrap: break-word;width: 10%;">
+                    S.No
+                  </td>
+                  <td class="pcs-itemtable-header pcs-itemtable-description">
+                    Product Name
+                  </td>
+
+                  <td class="pcs-itemtable-header" align="right">
+                    Product Code
+                  </td>
+                  <td class="pcs-itemtable-header" style="text-align:center">
+                    Status
+                  </td>
+                  <td class="pcs-itemtable-header" style="text-align:center">
+                    Brand
+                  </td>
+                  <td class="pcs-itemtable-header" align="center">
+                    UOM
+                  </td>
+                  <td class="pcs-itemtable-header" align="center">
+                    Category
+                  </td>
+                  <td class="pcs-itemtable-header" align="center" style="padding:5px 10px 5px 5px;text-align:right;word-wrap: break-word;">
+                    MRP
+                  </td>
+                </tr>
+              </thead>
+              <tbody class="itemBody ">
+                <tr>
+                  <td class="pcs-item-row" style="padding: 10px 0 10px 5px;text-align: center;word-wrap: break-word;" valign="top">
+                    {{1}}
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 0px 10px 5px;" valign="top">
+                    <div>
+                      <div>
+                        <span id="tmp_item_name" style="word-wrap: break-word;">{{product.prodname}}</span><br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc"><span id="tmp_item_qty">{{product.productcode}}</span></div>
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                    <span id="tmp_item_rate">{{product.status}}</span>
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc" *ngIf="selectedbrandetails">{{selectedbrandetails.brandname }}</div>
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 0px 5px 3px;text-align:center;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc">{{product.uomdesc}}</div>
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:center;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc" *ngIf="selectedcatdetails">{{selectedcatdetails.categoryname}}</div>
+                  </td>
+                  <td class="pcs-item-row" style="text-align:right;padding: 10px 10px 10px 5px;word-wrap: break-word;" valign="top">
+                    <span id="tmp_item_amount">{{product.mrp| currency : currency_sy :  'symbol'}}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="ui-g-12 ui-lg-12 ul-md-12 invoice-to-table card">
+  <p-dataTable [value]="cheatsheetvalues" class="help-doc-table">
+    <p-column field="description" header="Description">
+      <ng-template let-col let-selectedkey="rowData" pTemplate="body">
+        <span>{{selectedkey[col.field]}}</span>
+      </ng-template>
+    </p-column>
+    <p-column field="combo" header="Shotcut Key">
+      <ng-template let-col let-selectedkey="rowData" pTemplate="body">
+        <ul style="list-style: none;">
+          <li *ngFor="let key of selectedkey[col.field]">
+            {{key}}
+          </li>
+        </ul>
+      </ng-template>
+    </p-column>
+    <p-column field="formatted" header="Formatted Key">
+      <ng-template let-col let-selectedkey="rowData" pTemplate="body">
+        <ul  style="list-style: none;">
+          <li *ngFor="let key of selectedkey[col.field]">
+            {{key}}
+          </li>
+        </ul>
+      </ng-template>
+    </p-column>
+  </p-dataTable>
+</div>

@@ -1,0 +1,135 @@
+<div class="ui-fluid ui-g-12 licence-bg p-r-0 p-t-0 p-l-0">
+    <div class="bg-1">
+        <div class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0">
+            <div class="journal-heading">
+                <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+                <h1>Invoice Register</h1>
+                <span>
+                    <i class="fa fa-fw fa-question-circle" pTooltip="Tap on invoice to View"></i>
+                </span>
+
+                <div class="ui-toolbar-group-right inlineflex">
+                    <button [routerLink]="['/reports/list']" icon="fa-window-close " pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                        <span class="ui-button-icon-left ui-clickable center-icon fa fa-times"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                    </button>
+                    <!-- <button (click)="pdfdownload(selectedcontact,invoiceDate,DueDate,'print')" icon="fa-print" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-print"></span><span class="ui-button-text ui-clickable">ui-btn</span></button> -->
+                    <button (click)="pdfdownload(selectedcontact,invoiceDate,DueDate)" icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-g-12 ui-lg-12 ui-md-12 p-b-0">
+        <div class="receipt-register">
+            <div class="ui-g-12 ui-lg-3 ui-md-3">
+                <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 ">
+                    <label for="acAdvanced">Invoice Number </label>
+                </div>
+                <div class="ui-inputgroup ui-g-12 p-l-0 left">
+                    <input type="text" pInputText placeholder="Invoice Number" [(ngModel)]="InvoiceNumber">
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-3 ui-md-3 p-l-0 drop-button">
+                <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+                    <label for="acAdvanced">Customers</label>
+                </div>
+                <div class="ui-g-12 width p-l-0">
+                    <p-dropdown [filter]="true" [options]="contactlist" [(ngModel)]="selectedcontact" (onChange)="onContactSelect($event)">
+                        <ng-template let-car pTemplate="item">
+                            <div class="ui-helper-clearfix">
+                                <div>{{car.label}}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-2 ui-md-2 p-l-0 date-button">
+                <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+                    <label for="acAdvanced">From date</label>
+                </div>
+                <div class="ui-g-12  p-l-0">
+                    <p-calendar [(ngModel)]="invoiceDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-2 ui-md-2 date-button">
+                <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+                    <label for="acAdvanced">To date</label>
+                </div>
+                <div class="ui-g-12  p-l-0">
+                    <p-calendar [(ngModel)]="DueDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-2 ui-md-2 date-button-2" style="padding-top: 30px;">
+                <button pButton type="button" (click)="getInvoiceList(invoiceDate,DueDate)" icon="fa-search" label="Search"></button>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="ui-g-12 ui-lg-8 ui-md-8 p-t-0 p-b-0 download-btn">
+      <div class="ui-toolbar-group-right">
+        <button (click)="pdfdownload(selectedcontact,invoiceDate,DueDate)" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+          <span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span>
+          <span class="ui-button-text ui-clickable">ui-btn</span>
+        </button>
+      </div>
+    </div> -->
+    <div class="ui-g-12 invoice-list-tab invoice-list-tab-report p-t-0">
+        <p-tabView [activeIndex]="activetabindex" #invtabactive (onClose)="handleTabClose($event,invtabactive)">
+            <p-tabPanel [selected]="list" header="List" leftIcon="fa-book">
+                <p-dataTable #invoicelisttable [value]="invoicelist" selectionMode="single" [(selection)]="selectedCar" [paginator]="true"
+                    [rows]="10" [responsive]="true">
+                    <p-column field="contactname" [filter]="show" header="Name" [sortable]="true"></p-column>
+                    <p-column field="invoiceno" [filter]="show" header="Invoice No" [style]="{'text-align':'left'}" [sortable]="true"></p-column>
+                    <p-column field="invoicedt" [filter]="show" header="Invoice Date" [sortable]="true">
+                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                            <span>{{selectedinvoice.invoicedt | date: date_dformat }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="duedate" header="Due Date" [filter]="show" [sortable]="true">
+                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                            <span>{{selectedinvoice.duedate | date: date_dformat }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="subtotal" styleClass="text-right" [filter]="show" [sortable]="true">
+                        <ng-template pTemplate="header">
+                            <label>Sub Total</label>
+                            <!-- <button type="button" pButton icon="fa-refresh"></button> -->
+                        </ng-template>
+                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                            <span>{{selectedinvoice.subtotal | currency : currency_sy : 'symbol'}}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="invoicetotal" header="Total" [filter]="show" styleClass="text-right" [sortable]="true">
+                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                            <span>{{selectedinvoice.invoicetotal | currency : currency_sy : 'symbol'}}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="pymntamount" header="Paid" [filter]="show" styleClass="text-right" [sortable]="true" [style]="{'text-align': 'right'}">
+                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                            <span>{{selectedinvoice.pymntamount | currency : currency_sy : 'symbol' }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column styleClass="col-button">
+                        <ng-template pTemplate="header">
+                            <label>
+                                <button pButton icon="fa-search" id="addproduct_search_icon" (click)="showhidefilter(invoicelisttable,'addproduct_search_icon')"></button>
+                            </label>
+
+                        </ng-template>
+                        <ng-template let-selectedinvoice="rowData" pTemplate="body">
+                            <a pButton (click)="addTabViewinvoice(selectedinvoice,invtabactive)" icon="fa-eye"></a>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </p-tabPanel>
+            <p-tabPanel [closable]="true" *ngFor="let invoice of selectedinvoice; let i = index" [(selected)]="tabs" header="{{invoice.invoiceno}}">
+                <div class="my_dynamica_lead_tabPanel">
+                    <app-view-invoice invoiceid="{{invoice.invoiceid}}" feature="{{invoice.feature}}"></app-view-invoice>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

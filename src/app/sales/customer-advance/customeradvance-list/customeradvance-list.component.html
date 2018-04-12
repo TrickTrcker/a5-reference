@@ -1,0 +1,102 @@
+<div class="panel">
+    <div class="ui-g-12 m-b-15 p-t-0 p-b-0 p-l-0 p-r-0">
+        <div class="bg-1">
+            <div class="ui-g-12 p-t-0 p-l-0 p-r-0">
+                <div class="journal-heading">
+                    <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+                    <h1>Customer Advance</h1>
+                    <span>
+                        <i class="fa fa-fw fa-question-circle" pTooltip="Tap on Customer Advance to View or Edit"></i>
+                    </span>
+
+                    <div class="ui-toolbar-group-right">
+                        <!--<button icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>-->
+                        <!-- <button [routerLink]="['/sales/customeradvanceaddedit']" icon="fa-plus" label="New" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-plus"></span><span class="ui-button-text ui-clickable">Customer Advance</span></button> -->
+                        <button [routerLink]="['/sales/Addcustomeradvance']" icon="fa-plus" label="New" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left">
+                            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-plus"></span>
+                            <span class="ui-button-text ui-clickable">Add</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="payment-tabview ui-g-12">
+        <p-tabView>
+            <p-tabPanel header="" leftIcon="fa-pie-chart">
+                <div class="ui-g-12">
+
+                    <div class="ui-g-6 list-graphs">
+                        <div class="shadow-box ui-shadow-1">
+                            <p-blockUI [blocked]="transactionNoRecordDisp.cusAdvance" [target]="advSummary">
+                                <i class="fa fa-lock fa-5x" style="position:absolute;top:29%;left:46%"></i>
+                            </p-blockUI>
+                            <p-panel #advSummary>
+                                <p-chart type="bar" *ngIf="customerAdvanceSummaryData" [data]="customerAdvanceSummaryData" [options]="barChartConfig"></p-chart>
+                            </p-panel>
+                        </div>
+                    </div>
+                    <div class="ui-g-6 list-graphs">
+                        <div class="shadow-box ui-shadow-1">
+                            <p-blockUI [blocked]="transactionNoRecordDisp.topsales" [target]="salesSummary">
+                                <i class="fa fa-lock fa-5x" style="position:absolute;top:29%;left:46%"></i>
+                            </p-blockUI>
+                            <p-panel #salesSummary>
+                                <p-chart *ngIf="topSalesData" type="pie" [data]="topSalesData" [options]="chartConfig"></p-chart>
+                            </p-panel>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="" leftIcon="fa-list-ol">
+                <div class="roles-table customer-advance m-b-30">
+                    <div class="ui-g-12">
+                        <p-dataTable [value]="matchedlist" selectionMode="single" [paginator]="true" [rows]="5" [responsive]="true" #customersearch>
+                            <p-column field="companyname" header="Customer Name" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width': '15%'}"></p-column>
+                            <p-column field="pymtrectno" header="Receipt No" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'width': '13%'}"></p-column>
+                            <p-column field="pymtamount" header="Receipt Total" [filter]="show" filterMatchMode="contains" [sortable]="true" [style]="{'text-align': 'right','width': '13%'}">
+                                <ng-template let-currency="rowData" pTemplate="body">
+                                    <span>{{currency.pymtamount| currency : currency_sy : 'symbol'}}</span>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="pymtrectdt" header="Receipt Date" [filter]="show" filterMatchMode="contains" [sortable]="true" styleClass="text-center"
+                                [style]="{'text-align': 'center','width': '13%'}">
+                                <ng-template let-date="rowData" pTemplate="body">
+                                    <span>{{date.pymtrectdt| date: date_dformat}}</span>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="pymtrecttype" header="Receipt Type" [filter]="show" filterMatchMode="contains" [sortable]="true" styleClass="text-center"
+                                [style]="{'text-align': 'left','width': '15%'}">
+                                <ng-template let-receipt="rowData" pTemplate="body">
+                                    <span class="advance" *ngIf="receipt.pymtrecttype == 'ADVANCE'"> Advance </span>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="createdby" header="Created By" [style]="{'text-align': 'left','width':'18%'}" styleClass="text-left" [filter]="show"
+                                filterMatchMode="contains" [sortable]="true">
+                                <ng-template let-date="rowData" pTemplate="body">
+                                    <span>{{date.createdby}}</span>
+                                    <br>
+                                    <span class="dd_datespan">{{date.createddt | date: dateformat }}</span>
+                                </ng-template>
+                            </p-column>
+                            <p-column styleClass="col-button">
+                                <ng-template pTemplate="header">
+                                    <label>
+                                        <button pButton class="" icon="fa-search" id="customer_search_icon" (click)="showhidefilter(customersearch,'customer_search_icon')"></button>
+                                    </label>
+                                </ng-template>
+                                <ng-template let-selectedrec="rowData" pTemplate="body" style="text-align:right">
+                                    <a pButton [routerLink]="['../viewcustomeradvance', selectedrec.pymtrectid ]" icon="fa-eye"></a>
+                                    <a pButton [routerLink]="['../customeradvanceupdate', selectedrec.pymtrectid ]" icon="fa-pencil"></a>
+                                    <a pButton (click)="pdfdownload(selectedrec.pymtrectid,selectedrec.pymtrectno)" icon="fa-arrow-down"></a>
+
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+
+</div>

@@ -1,0 +1,78 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0 p-b-0">
+    <div class="journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1 class="">Debit Note </h1>
+        <div class="ui-toolbar-group-right ui-corner-all addproducts">
+            <button pButton type="button" label="Add" icon="fa-plus" (click)="Addproducts(debitview)"></button>
+        </div>
+    </div>
+
+    <div class="bank-list credit-note-list product-list ui-g-12">
+        <p-tabView [controlClose]="true" (onClose)="handleClose($event,debitview)" #debitview [activeIndex]="activetabindex">
+            <p-tabPanel [selected]="list" header="Debit List" leftIcon="fa-book">
+                <p-dataTable [value]="alldebit" selectionMode="single" [paginator]="true" [rows]="10" [responsive]="true" #debitnotetable>
+                    <p-column field="companyname" header="Vendor Name" [style]="{'width':'15%'}" [filter]="show" filterMatchMode="contains" [sortable]="true"></p-column>
+                    <p-column field="transno" header="Transaction No" [style]="{'width':'15%','text-align':'left'}" [filter]="show" filterMatchMode="contains" [sortable]="true"></p-column>
+                    <!-- <p-column field="crdrrefno" header="	Bill No"  [style]="{'width':'15%'}" [filter]="show" filterMatchMode="contains" [sortable]="true"></p-column> -->
+                    <p-column styleClass="col-button" [filter]="show" [style]="{'width':'15%'}" filterMatchMode="contains" [sortable]="true" [style]="{'text-align': 'center'}">
+                        <ng-template pTemplate="header">
+                            Transaction Date
+                        </ng-template>
+                        <ng-template let-alldebit="rowData" pTemplate="body">
+                            {{alldebit.crdrdate | date:dataFormat}}
+                        </ng-template>
+                    </p-column>
+                    <!-- <p-column field="totalamount" header="Bill Total (₹)" [sortable]="true"></p-column> -->
+                    <!-- <p-column styleClass="col-button" [filter]="show"  [style]="{'width':'15%'}"  filterMatchMode="contains" [sortable]="true" [style]="{'text-align': 'right'}">
+            <ng-template pTemplate="header">
+              Bill Total
+            </ng-template>
+            <ng-template let-alldebit="rowData" pTemplate="body">
+              {{alldebit.totalamount | currency : currency_Symbol : 'symbol'}}
+            </ng-template>
+          </p-column> -->
+                    <p-column styleClass="col-button" [filter]="show" [style]="{'width':'18%'}" filterMatchMode="contains" [sortable]="true" [style]="{'text-align': 'right'}">
+                        <ng-template pTemplate="header">
+                            Debit Amount
+                        </ng-template>
+                        <ng-template let-alldebit="rowData" pTemplate="body">
+                            {{alldebit.amount | currency : currency_Symbol : 'symbol'}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="createdby" styleClass="col-button" [filter]="show" [style]="{'width':'22%','text-align':'left'}" [sortable]="true">
+                        <ng-template pTemplate="header">
+                            Created By
+                        </ng-template>
+                        <ng-template let-createdby="rowData" pTemplate="body">
+                            {{createdby.createdby }}<br>
+                            <span class="dd_datespan">{{createdby.createddt | date:displaydtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column styleClass="col-button" [style]="{'width':'12%'}">
+                        <ng-template pTemplate="header">
+                            <label><button pButton icon="fa-search" id="debitnote_search_icon" (click)="showhidefilter(debitnotetable,'debitnote_search_icon')"></button></label>
+                        </ng-template>
+                        <ng-template let-selectedviewdebit="rowData" pTemplate="body">
+                            <button type="button" pButton icon="fa-eye" (click)="addTabviewdebit(selectedviewdebit,debitview)"></button>
+                            <!-- <button type="button" pButton icon="fa-pencil" (click)="editDeposit(selectedviewdebit,debitview)"></button> -->
+                            <a pButton type="button" (click)="pdfdownload(selectedviewdebit.crdrid,selectedviewdebit.transno)" icon="fa-arrow-down"></a>
+                            <button type="button" pButton icon="fa-trash" (click)="deleteRecord(selectedviewdebit)"></button>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </p-tabPanel>
+            <p-tabPanel [selected]="addnew" header="Add Debit Note" leftIcon="fa-plus" *ngIf="addproduct" [closable]="true" #fileInput>
+                <!-- <app-debit-note (notifyNewDebitNote)="notifyNewDebitNote($event)"></app-debit-note> -->
+                <app-new-debit-note (notifyNewDebitNote)="notifyNewDebitNote($event)"></app-new-debit-note>
+            </p-tabPanel>
+            <!-- <p-tabPanel [selected]="activeTab_edit" header="Edit Debit Note" leftIcon="fa-plus" *ngIf="showEdit" [closable]="true" #fileInput>
+        <app-debit-note (notifyNewDebitNote)="notifyNewDebitNote($event)" [debitidlist]="debitidlist"></app-debit-note>
+      </p-tabPanel> -->
+            <p-tabPanel header="{{debit.transno}}" leftIcon="fa-eye" *ngFor="let debit of selectedviewdebit" [closable]="true" #fileInput>
+                <div class="my_dynamica_lead_tabPanel">
+                    <app-view-dnote crdrid={{debit.crdrid}}></app-view-dnote>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

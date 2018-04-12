@@ -1,0 +1,110 @@
+<div class="ui-fluid ui-g-12 licence-bg p-r-0 p-l-0 p-t-0">
+  
+      <div class="bg-1">
+          <div class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0">
+              <div class="journal-heading">
+                  <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+                  <h1>Outstanding Payments</h1>
+                  <span>
+                          <i class="fa fa-fw fa-question-circle" pTooltip="Tap on outstanding invoices to View"></i>
+                      </span>
+  
+                  <div class="ui-toolbar-group-right inlineflex">
+                      <button [routerLink]="['/reports/list']" icon="fa-close-windows" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                              <span class="ui-button-icon-left ui-clickable center-icon fa fa-times"></span>
+                              <span class="ui-button-text ui-clickable">ui-btn</span>
+                          </button>
+                      <!-- <button icon="fa-print" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-print"></span><span class="ui-button-text ui-clickable">ui-btn</span></button> -->
+                      <button (click)="pdfdownload(selectedCon,invoiceDate,DueDate)" icon="fa-arrow-down" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                              <span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span>
+                              <span class="ui-button-text ui-clickable">ui-btn</span>
+                          </button>
+  
+  
+                  </div>
+              </div>
+          </div>
+      </div>
+  
+  
+      <div class="ui-g-12 ui-lg-12 ui-md-12 p-b-0">
+          <div class="receipt-register">
+              <div class="ui-g-12 ui-lg-3 ui-md-3 p-l-0 drop-button">
+                  <div class="ui-g-12 p-t-0 p-r-0 p-b-0 req required-4">
+                      <label for="acAdvanced">Vendors</label>
+                  </div>
+                  <div class="ui-g-12 width ">
+                      <p-dropdown [filter]="true" [options]="contactlist" [(ngModel)]="selectedCon" (onChange)="onContactSelect($event)"></p-dropdown>
+                  </div>
+              </div>
+  
+              <div class="ui-g-12 ui-lg-3 ui-md-3 p-l-0 date-button">
+                  <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+                      <label for="acAdvanced">From date</label>
+                  </div>
+                  <div class="ui-g-12  p-l-0">
+                      <p-calendar [(ngModel)]="invoiceDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+                  </div>
+              </div>
+  
+              <div class="ui-g-12 ui-lg-3 ui-md-3 date-button">
+                  <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+                      <label for="acAdvanced">To date</label>
+                  </div>
+                  <div class="ui-g-12  p-l-0">
+                      <p-calendar [(ngModel)]="DueDate" [showIcon]="true" showOnFocus="true" dateFormat="dd-mm-yy" readonlyInput="readonlyInput"></p-calendar>
+                  </div>
+              </div>
+  
+              <div class="ui-g-12 ui-lg-2 ui-md-2 date-button-2" style="padding-top: 30px">
+                  <button pButton type="button" class="brs-width" (click)="getoutstandingInv(invoiceDate,DueDate)" icon="fa-search" label="Search"></button>
+              </div>
+          </div>
+      </div>
+  
+      <div class="ui-g-12 invoice-list-tab p-t-0">
+          <p-dataTable [value]="list" selectionMode="single" [paginator]="true" [rows]="paginator" [responsive]="true" #paytabviews>
+              <p-column field="billno" header="Bill Number" [filter]="show" [sortable]="true" [style]="{'width':'14%'}">
+                  <ng-template let-rowdata="rowData" pTemplate="body">
+                      <span>{{rowdata.billno }}</span>
+                  </ng-template>
+              </p-column>
+              <p-column field="contactname" header="Vendor Name" [filter]="show" [sortable]="true" [style]="{'width':'15%'}">
+                  <ng-template let-rowdata="rowData" pTemplate="body">
+                      <span>{{rowdata.contactname }}</span>
+                  </ng-template>
+              </p-column>
+              <p-column field="billdt" header="Bill Date" [filter]="show" [sortable]="true" [style]="{'width':'12%','text-align': 'center'}">
+                  <ng-template let-rowdata="rowData" pTemplate="body">
+                      <span>{{rowdata.billdt| date:date_dformat }}</span>
+                  </ng-template>
+              </p-column>
+              <p-column field="duedate" [filter]="show" header="Due Date" [sortable]="true" [style]="{'text-align': 'center'}">
+                  <ng-template let-rowdata="rowData" pTemplate="body">
+                      <span>{{rowdata.duedate | date:date_dformat  }}</span>
+                  </ng-template>
+              </p-column>
+              <p-column field="billtotal" header="Bill Amount" [filter]="show" [sortable]="true" [style]="{'text-align': 'right','width':'12%'}">
+                  <ng-template let-rowdata="rowData" pTemplate="body">
+                      <span>{{rowdata.billtotal | currency : currency_sy : 'symbol' }}</span>
+                  </ng-template>
+              </p-column>
+              <p-column field="balamount" header="Balance Amount" [filter]="show" [sortable]="true" [style]="{'text-align': 'right','width':'15%'}">
+                  <ng-template let-rowdata="rowData" pTemplate="body">
+                      <span>{{rowdata.balamount | currency : currency_sy : 'symbol' }}</span>
+                  </ng-template>
+              </p-column>
+              <p-column field="InvoiceAge" header="Bill Days" [filter]="show" [sortable]="true" [style]="{'text-align': 'right'}">
+                  <ng-template let-rowdata="rowData" pTemplate="body">
+                      <span>{{rowdata.InvoiceAge }}</span>
+                  </ng-template>
+              </p-column>
+              <p-column field="DueAge" header="Due Days" [filter]="show" [sortable]="true" [style]="{'text-align': 'right'}">
+                  <ng-template let-rowdata="rowData" pTemplate="body">
+                      <span>{{rowdata.DueAge }}</span>
+                  </ng-template>
+              </p-column>
+  
+          </p-dataTable>
+      </div>
+  </div>

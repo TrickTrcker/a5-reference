@@ -1,0 +1,19 @@
+
+.tree_footercols
+{
+    display: table;
+    float: left !important;
+    padding: 20px 0px 10px 0px;
+    text-align: right;
+    border-bottom: 1px solid #b2b2b2;
+    font-weight: bold;
+    color: #292929;
+}
+.ui-treetable .ui-treetable-footer {
+   min-height: 35px !important;
+}
+.datatable_container{
+    // min-height: calc( 95vh );
+    overflow-y: auto;
+    overflow-x: hidden;
+}

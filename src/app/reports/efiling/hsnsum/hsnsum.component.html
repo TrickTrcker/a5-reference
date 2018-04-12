@@ -1,0 +1,81 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0 p-b-0">
+    <div class="journal-heading m-b-10">
+        <div class="ui-helper-clearfix">
+            <div class="ui-g-12 ui-lg-4 ui-md-4 p-t-0 p-b-0">
+            <img class="infobook-logo ui-toolbar-group-left">
+            <h1 style="float:left">HSN</h1>
+            </div>
+            <div class="ui-toolbar-group-left ui-g-12 ui-lg-7 ui-md-7 p-t-0 p-b-0 text-right" [hidden]="disabled == false">
+                <span class="">{{selectedyear}}</span><br>
+                <span style="font-size:12px" class="pcs-label inv-view-label">{{startDate}}  -  {{endDate}}</span>
+            </div>
+            <div class="ui-toolbar-group-right ui-corner-all brand-overlay">
+                    <p-dropdown [(ngModel)]="selectedyr" [options]="financialyearlist" [hidden]="disabled == true" (onChange)="getHSNList($event.value,'N')">
+                    <ng-template let-row pTemplate="item">
+                        <div class="ui-helper-clearfix">
+                            <div>{{row.label}}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+                <button (click)="ExporttoCSV()" icon="fa-file-excel-o" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-file-excel-o"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                      </button>
+                      <button (click)="redirecttoprev()" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                      </button>
+                <!-- <button [disabled]="disabled == false" [routerLink]="['/']" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                    <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                    <span class="ui-button-text ui-clickable">ui-btn</span>
+                  </button> -->
+            </div>
+        </div>
+    </div>
+    <div class="user-list-1 ui-g-12 product-list">
+        <p-dataTable [value]="hsnsumdata" selectionmode="single" [paginator]="true" [rows]="10" exportFilename="hsnsum" #dt>
+            <div class="ui-datatable ui-widget ui-datatable-reflow">
+                <div class="ui-datatable-tablewrapper">
+                    <p-column field="hsncode" header="HSN Code" [sortable]="true"></p-column>
+                    <p-column field="prodname" header="Description" [sortable]="true"></p-column>
+                    <p-column field="uomdesc" header="UQC" [sortable]="true" ></p-column>
+                    <p-column field="quantity" header="Total Quantity" [sortable]="true" [style]="{'text-align':'right'}">
+                        <ng-template let-quantity="rowData" pTemplate="body" style="text-align:right">
+                            {{quantity.quantity}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="totalvalue" header="Total Value" [sortable]="true" [style]="{'text-align':'right'}">
+                        <ng-template let-totalvalue="rowData" pTemplate="body" style="text-align:right">
+                            {{totalvalue.totalvalue | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="taxvalue" header="Tax value" [sortable]="true" [style]="{'text-align':'right'}">
+                        <ng-template let-taxvalue="rowData" pTemplate="body" style="text-align:right">
+                            {{taxvalue.taxvalue | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="igst" header="Integrated Tax Amount" [sortable]="true" [style]="{'text-align':'right'}"  hidden="true">
+                        <ng-template let-igst="rowData" pTemplate="body" style="text-align:right">
+                            {{igst.igst | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="cgst" header="Central Tax Amount" [sortable]="true" [style]="{'text-align':'right'}"  hidden="true">
+                        <ng-template let-cgst="rowData" pTemplate="body" style="text-align:right">
+                            {{cgst.cgst | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="sgst" header="State/UT Tax Amount" [sortable]="true" [style]="{'text-align':'right'}"  hidden="true">
+                        <ng-template let-sgst="rowData" pTemplate="body" style="text-align:right">
+                            {{sgst.sgst | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="cessamount" header="Cess Amount" [sortable]="true" [style]="{'text-align':'right'}">
+                        <ng-template let-cess="rowData" pTemplate="body" style="text-align:right">
+                            {{cess.cessamount | currency : currency_Symbol : 'symbol' }}
+                        </ng-template>
+                    </p-column>
+                </div>
+            </div>
+        </p-dataTable>
+    </div>
+</div>

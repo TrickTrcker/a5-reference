@@ -1,0 +1,77 @@
+<div class="ui-g-12 licence-bg p-l-0 p-r-0 p-t-0">
+    <div class="journal-heading">
+        <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+        <h1 class="">Bank Withdraw</h1>
+        <div class="ui-toolbar-group-right ui-corner-all">
+            <button pButton type="button" label="Add" icon="fa-plus" (click)="AddDeposite(bwviewtab)"></button>
+        </div>
+    </div>
+    <div class=" bank-list bank-list-3 ui-g-12 product-list-2">
+        <p-tabView [controlClose]="true" (onClose)="handleClose($event,bwviewtab)" [activeIndex]="activetabIndex" #bwviewtab>
+            <p-tabPanel [selected]="list" header="Withdraw" leftIcon="fa-book">
+                <p-dataTable [value]="allbankwithdraw" selectionMode="single" scrollable="true" [paginator]="true" [rows]="10" [responsive]="true"
+                    #bankwithdrawtable>
+                    <p-column field="journalno" header="Trans.No" [filter]="show" [style]="{'width':'15%'}" [sortable]="true" filterMatchMode="contains"></p-column>
+                    <p-column field="journaldt" styleClass="col-button" [filter]="show" [sortable]="true" [style]="{'width':'15%'}" filterMatchMode="contains">
+                        <ng-template pTemplate="header">
+                            Trans.Date
+                        </ng-template>
+                        <ng-template let-allbankwithdraw="rowData" pTemplate="body">
+                            {{allbankwithdraw.journaldt | date:datafromat}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="accheadname" header="Bank Name" [filter]="show" [style]="{'width':'21%','text-align':'left'}" [sortable]="true" filterMatchMode="contains"></p-column>
+                    <p-column field="fromaccno" header="Account No" [filter]="show" [style]="{'width':'21%','text-align':'left'}" [sortable]="true"
+                        filterMatchMode="contains"></p-column>
+                    <p-column field="createdby" header="Created By" [filter]="show" [sortable]="true" [style]="{'width':'22%','text-align':'left'}"
+                        filterMatchMode="contains">
+                        <ng-template let-createdBy="rowData" pTemplate="body" style="text-align:right">
+                            {{createdBy.createdby}}
+                            <br>
+                            <span class="dd_datespan">{{createdBy.createddt | date:displaydtime }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="journaltotal" styleClass="col-button" [filter]="show" [style]="{'width':'20%'}" filterMatchMode="contains">
+                        <ng-template pTemplate="header">
+                            Amount
+                        </ng-template>
+                        <ng-template let-journalTot="rowData" pTemplate="body" style="text-align:right">
+                            {{journalTot.journaltotal | currency : currency_Symbol : 'symbol'}}
+                        </ng-template>
+                    </p-column>
+                    <!--<p-column field="{{journaltotal}}  |currency : currency_Symbol : 'symbol'" header="Amount "  [filter]="show" [sortable]="true"></p-column>-->
+                    <p-column [style]="{'width':'18%'}" filterMatchMode="contains">
+                        <ng-template pTemplate="header">
+                            <p>
+                                <button pButton id="bankwithdraw_search_icon" icon="fa-search" (click)="showhidefilter(bankwithdrawtable,'bankwithdraw_search_icon')"></button>
+                            </p>
+                        </ng-template>
+                        <ng-template let-selecteddeps="rowData" pTemplate="body" style="text-align:center">
+                            <button type="button" pButton (click)="addTabViewwithdraw(selecteddeps,bwviewtab)" icon="fa-eye"></button>
+                            <button type="button" pButton icon="fa-pencil" (click)="viewDeposite(selecteddeps,bwviewtab)"></button>
+                            <a pButton type="button" (click)="pdfdownload(selecteddeps.journalid,selecteddeps.journalno)" icon="fa-arrow-down"></a>
+                            <button type="button" pButton icon="fa-trash" (click)="deleteRecord(selecteddeps)"></button>
+                            
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </p-tabPanel>
+            <p-tabPanel [selected]="addnew" header="Add Withdraw" leftIcon="fa-plus" *ngIf="adddeposit" [closable]="true" #fileInput>
+                <app-bankwithdraw [withdrawls]="withdrawls" (notifyNewBankTransaction)="notifyNewBankWithDraw($event)"></app-bankwithdraw>
+            </p-tabPanel>
+            <p-tabPanel [selected]="editpro" header="Edit Withdraw" leftIcon="fa-pencil" *ngIf="editdeposit" [closable]="true" #fileInput>
+                <app-bankwithdraw [withdrawls]="withdrawls" (notifyNewBankTransaction)="notifyNewBankWithDraw($event)"></app-bankwithdraw>
+            </p-tabPanel>
+            <p-tabPanel [selected]="viewdeposit" [closable]="true" *ngFor="let withdraw of selecteddeps; let i = index" header="{{withdraw.journalno}}"
+                leftIcon="fa-eye">
+                <div class="my_dynamica_lead_tabPanel">
+                    <!-- I can add content to this div with tabView.onChange() api -->
+                    <app-view-bankwithdraw journalid="{{withdraw.journalid}}"></app-view-bankwithdraw>
+
+                </div>
+
+
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

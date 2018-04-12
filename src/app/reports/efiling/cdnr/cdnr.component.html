@@ -1,0 +1,160 @@
+<div class="ui-g-12 p-l-0 p-r-0 licence-bg">
+    <div class="card-w-title">
+        <div class="journal-heading m-b-10">
+            <div class="ui-helper-clearfix">
+                <div class="ui-g-12 ui-lg-4 ui-md-4 p-t-0 p-b-0">
+                    <img class="infobook-logo ui-toolbar-group-left">
+                    <h1 class="pull-left">CDNR </h1>
+                </div>
+                <div class="ui-toolbar-group-left ui-g-12 ui-lg-7 ui-md-7 p-t-0 p-b-0 text-right">
+                    <span class="">{{selectedyear}}</span><br>
+                    <span style="font-size:12px" class="pcs-label inv-view-label">{{startDate}}  -  {{endDate}}</span>
+
+                </div>
+                <div class="ui-toolbar-group-right ui-corner-all brand-overlay ui-g-12 ui-lg-1 ui-md-1 p-t-0 p-b-0 text-right inlineflex" style="padding-left: 4%;">
+                    <button (click)="ExporttoCSV()" icon="fa-file-excel-o" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                                <span class="ui-button-icon-left ui-clickable fa fa-fw fa-file-excel-o"></span>
+                                <span class="ui-button-text ui-clickable">ui-btn</span>
+                              </button>
+
+                    <button (click)="redirecttoprev()" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                            <span class="ui-button-text ui-clickable">ui-btn</span>
+                          </button>
+                </div>
+            </div>
+        </div>
+        <div class="user-list ui-g-12">
+                <p-dataTable [value]="cdnrdata" selectionmode="single" [paginator]="true" [rows]="10" exportFilename="cdnr"  *ngIf="isExist == true" #dt>
+                        <div class="ui-datatable ui-widget ui-datatable-reflow">
+                            <div class="ui-datatable-tablewrapper">
+                                <p-column field="gstno" header="GSTIN Supplier" [sortable]="true"></p-column>
+                                <p-column field="voucherno" header="Advance Payment Voucher Number" [sortable]="true" hidden="true">
+                                    <ng-template let-voucherno="rowData" pTemplate="body" style="text-align: left">
+                                        <span>{{voucherno.voucherno }}</span>
+                                       
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="crdrrefno" header="Refund Voucher Number" [sortable]="true" hidden="true">
+                                    <ng-template let-crdrrefno="rowData" pTemplate="body" style="text-align: left">
+                                        <span>{{crdrrefno.crdrrefno }}</span>
+                                      
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="crdrdate" header="Note/Refund Voucher date" [sortable]="true" hidden="true"></p-column>
+                                <p-column field="refdate" header="Invoice/Advance Payment Voucher date" [sortable]="true" hidden="true"></p-column>
+                                <p-column field="pregst" header="Pre GST" [sortable]="true" hidden="true"></p-column>
+                                <p-column field="doctype" header="Document Type" [sortable]="true" hidden="true"></p-column>
+                                <p-column field="reason" header="Reason For Issuing document" [sortable]="true" hidden="true"></p-column>
+                                <p-column field="supplytype" header="Supply Type" [sortable]="true" hidden="true"></p-column>
+                                <p-column field="vouchervalue" header="Refund Voucher Value" [sortable]="true" hidden="true"></p-column>
+                                <p-column field="rate" header="Rate" [sortable]="true" >
+                                    <ng-template let-rate="rowData" pTemplate="body" style="text-align:right">
+                                        <span>{{rate.rate}}%</span>
+        
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="taxablevalue" header="Tax" [sortable]="true" [style]="{'text-align':'right','width':'9%'}">
+                                    <ng-template let-taxablevalue="rowData" pTemplate="body" style="text-align: left">
+                                        <span>{{taxablevalue.taxablevalue | currency : currency_Symbol :true }}</span>
+                                     
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="igst" header="Integ Tax Paid" [sortable]="true" [style]="{'text-align':'right'}">
+                                    <ng-template let-igst="rowData" pTemplate="body" style="text-align: left">
+                                        <span>{{igst.igst | currency : currency_Symbol :true }}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="cgst" header="Central Tax Paid" [sortable]="true" [style]="{'text-align':'right'}">
+                                    <ng-template let-cgst="rowData" pTemplate="body" style="text-align: left">
+                                        <span>{{cgst.cgst | currency : currency_Symbol :true }}</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="sgst" header="State Tax Paid" [sortable]="true" [style]="{'text-align':'right'}">
+                                    <ng-template let-sgst="rowData" pTemplate="body" style="text-align: left">
+                                        <span>{{sgst.sgst | currency : currency_Symbol :true }}</span>
+                                    </ng-template>
+                                </p-column>
+                                <!-- <p-column field="cessamount" header="Cess Paid" [sortable]="true"></p-column> -->
+                                <p-column field="eitc" header="Eligibility For ITC" [sortable]="true" hidden="true"></p-column>
+                                <!-- <p-column field="aigst" header="Availed ITC Tax " [sortable]="true" [style]="{'text-align':'right'}">
+                                    <ng-template let-aigst="rowData" pTemplate="body" style="text-align: left">
+                                        <span>{{aigst.aigst }}</span>
+                                        <br>
+                                        <span class="dd_datespan">{{ aigst.acgst | currency : currency_Symbol :true}}</span>
+                                        <br>
+                                        <span class="dd_datespan">{{ aigst.asgst | currency : currency_Symbol :true }}</span>
+                                    </ng-template>
+                                </p-column> -->
+                                <p-column field="cessamount" header="Cess ITC Amount" [sortable]="true" [style]="{'text-align':'right'}">
+                                    <ng-template let-cessamount="rowData" pTemplate="body" style="text-align: left">
+                                        <span>{{cessamount.cessamount | currency : currency_Symbol :true }}</span>
+                                        <br>
+                                        <span class="dd_datespan">{{ cessamount.acessamount | currency : currency_Symbol :true}}</span>
+        
+                                    </ng-template>
+                                </p-column>
+                                <!-- <p-column field="aigst" header="Availed ITC Integrated Tax" [sortable]="true"></p-column> -->
+                                <p-column field="acgst" header="Availed ITC Central Tax" [sortable]="true" hidden="true"></p-column>
+                                <p-column field="asgst" header="Availed ITC State/UT Tax" [sortable]="true" hidden="true"></p-column>
+                                <p-column field="acessamount" header="Availed ITC Cess" [sortable]="true" hidden="true"></p-column>
+                            </div>
+                        </div>
+                    </p-dataTable>
+            <p-dataTable [value]="cdnrdata" selectionmode="single" [paginator]="true" [rows]="10" exportFilename="cdnr"  *ngIf="isExist == false" #dt>
+                <div class="ui-datatable ui-widget ui-datatable-reflow">
+                    <div class="ui-datatable-tablewrapper">
+                        <p-column field="gstno" header="GSTIN" [sortable]="true"></p-column>
+                        <p-column field="receivername" header="Receiver Name" [sortable]="true"></p-column>
+                        <p-column field="voucherno" header="Invoice" [sortable]="true" >
+                                <ng-template let-voucherno="rowData" pTemplate="body" style="text-align: left">
+                                    <span>{{voucherno.voucherno }}</span>
+                                    <br>
+                                    <span class="dd_datespan">{{ voucherno.refdate | date: date_dformat}}</span>
+                                    <!-- <br>
+                                    <span class="dd_datespan">{{ voucherno.vouchervalue}}</span> -->
+                                </ng-template>
+                            </p-column>
+                        <p-column field="crdrrefno" header="Refund Voucher Number" [sortable]="true" >
+                            <ng-template let-crdrrefno="rowData" pTemplate="body" style="text-align: left">
+                                <span>{{crdrrefno.crdrrefno }}</span>
+                                <br>
+                                <span class="dd_datespan">{{ crdrrefno.crdrdate | date: date_dformat}}</span>
+                            </ng-template>
+                        </p-column>
+                      
+                        <p-column field="crdrdate" header="Note/Refund Voucher date" [sortable]="true" hidden="true"></p-column>
+                        <p-column field="refdate" header="Invoice date" [sortable]="true" hidden="true"></p-column>
+
+                        <p-column field="doctype" header="Document Type" [sortable]="true" hidden="true"></p-column>
+                        <p-column field="pos" header="Place of Supply" [sortable]="true" hidden="true"></p-column>
+                        <p-column field="vouchervalue" header="Refund Voucher Value" [sortable]="true" ></p-column>
+                        <p-column field="applipcttaxrate" header="Applicable Tax Rate" [sortable]="true" [style]="{'text-align':'right'}" hidden="true">
+                            <ng-template let-rate="rowData" pTemplate="body" style="text-align: left">
+                                <span>{{rate.applipcttaxrate}}%</span>
+                            </ng-template>
+                        </p-column>
+                        <p-column field="rate" header="Rate" [sortable]="true" hidden="true">
+                            <ng-template let-rate="rowData" pTemplate="body" style="text-align:right">
+                                <span>{{rate.rate}}%</span>
+
+                            </ng-template>
+                        </p-column>
+                        <p-column field="taxablevalue" header="Taxable Value" [sortable]="true" [style]="{'text-align':'right'}">
+                            <ng-template let-taxablevalue="rowData" pTemplate="body" style="text-align: left">
+                                <span>{{taxablevalue.taxablevalue  }}</span>
+                            </ng-template>
+                        </p-column>
+                        <p-column field="cessamount" header="Cess Amount" [sortable]="true" [style]="{'text-align':'right'}">
+                            <ng-template let-cessamount="rowData" pTemplate="body" style="text-align: left">
+                                <span>{{cessamount.cessamount  }}</span>
+                            </ng-template>
+                        </p-column>
+                        <p-column field="pregst" header="Pre GST" [sortable]="true" hidden="true"></p-column>
+
+                    </div>
+                </div>
+            </p-dataTable>
+        </div>
+    </div>
+</div>

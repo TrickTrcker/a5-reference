@@ -1,0 +1,155 @@
+<div class="ui-g ui-fluid white-bg panel-2 ">
+  <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-r-0">
+    <div class="view-invoice-content">
+      <div id="pdfcontainer" class="ember-view">
+        <div class="ui-g-12 p-t-0 p-b-0 invoice-viewlist m-b-15">
+          <div class="ui-g-12 ui-lg-4 ui-md-4 p-t-0 p-b-0">
+            <div class="invoice-logos" style="display:inline-flex;vertical-align: top; text-align:left;">
+              <img class="infobook-logo" src="assets/images/infobook-logo.png">
+              <span class="title-text">{{journal_feature}}</span>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-lg-8 ui-md-8 p-t-0 p-b-0">
+            <div class="ui-toolbar-group-right inlineflex">
+
+              <button (click)="redirecttoprev()" icon="fa-check" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                <span class="ui-button-text ui-clickable">ui-btn</span>
+              </button>
+              <button icon="fa-print" pbutton="" type="button" class="none ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                <span class="ui-button-icon-left ui-clickable fa fa-fw fa-print"></span>
+                <span class="ui-button-text ui-clickable">ui-btn</span>
+              </button>
+              <button (click)="pdfdownload()" pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable fa fa-fw fa-arrow-down"></span><span class="ui-button-text ui-clickable">ui-btn</span>
+              </button>
+            
+             
+            </div>
+          </div>
+        </div>
+       
+        <div class="pcs-template" id="printSectionId">
+          <div print-section class="pcs-template-body ">
+            <table style="clear:both;width:100%;margin-top:20px;table-layout:fixed;">
+              <tbody>
+                <tr>
+                  <td style="width:60%;vertical-align:top;word-wrap: break-word;">
+
+                    <div>
+                      <span class="pcs-orgname">
+                        <b>{{journalData.contactname}}</b>
+                      </span>
+                      <br>
+                      <span class="pcs-label">
+                        <span id="tmp_org_address" style="white-space: pre-wrap;word-wrap: break-word;">{{journalData.billingaddress}}</span>
+                      </span>
+                    </div>
+                  </td>
+                  <td class="invoice-prints" style="vertical-align:bottom;width: 30%;" align="right">
+                    <table class="invoice-prints-1" style="table-layout: fixed;word-wrap: break-word;" cellspacing="0" cellpadding="0" border="0">
+                      <tbody>
+                        <tr>
+                          <td width="25%" style="text-align:right">
+                            <span class="pcs-label inv-view-label">Journal No:</span>
+                          </td>
+                          <td width="30%" style="text-align:right">
+                            <span class="pcs-label" id="tmp_entity_number">{{journalData.journalno}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="25%" style="text-align:right">
+                            <span class="pcs-label inv-view-label">Journal Type :</span>
+                          </td>
+                          <td width="30%" style="text-align:right">
+                            <span class="pcs-label" id="tmp_entity_number">{{journalData.type}}</span>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td width="25%" style="text-align:right">
+                            <span class="pcs-label inv-view-label">Journal Date :</span>
+                          </td>
+                          <td style="text-align:right;">
+                            <span id="tmp_entity_date" class="inv-view-value">{{journalData.journaldt| date:dataFormat }}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="25%" style="text-align:right">
+                            <span class="pcs-label inv-view-label">Reference No :</span>
+                          </td>
+                          <td style="text-align:right;">
+                            <span id="tmp_entity_date" class="inv-view-value">{{journalData.attchment }}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="25%">
+                          </td>
+                          <td width="30%">
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="pcs-itemtable" style="width:100%;margin-top:20px;table-layout:fixed;" cellspacing="0" cellpadding="0" border="0">
+              <thead>
+                <tr style="height:32px;">
+                  <td class="pcs-itemtable-header" align="left">
+                    Account
+                  </td>
+                  <td class="pcs-itemtable-header" style="text-align:right">
+                    Credit Amount
+                  </td>
+                  <td class="pcs-itemtable-header" style="text-align:right">
+                    Debit Amount
+                  </td>
+                </tr>
+              </thead>
+              <tbody class="itemBody">
+                <tr *ngFor=" let journal of journaldatas; let index=index">
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:left;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc">{{journal.accheadname}}</div>
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc">{{journal.cramount|currency : currency_Symbol : 'symbol' }}</div>
+                  </td>
+                  <td class="pcs-item-row" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc">{{journal.dramount|currency : currency_Symbol : 'symbol' }}</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="pcs-item-row b-t-1" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                    Total :
+                  </td>
+                  <td class="pcs-item-row b-t-1" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc">{{journalTotal|currency : currency_Symbol : 'symbol'}}</div>
+                  </td>
+                  <td class="pcs-item-row b-t-1" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" valign="top">
+                    <div class="pcs-item-desc">{{journalTotal|currency : currency_Symbol : 'symbol'}}</div>
+                  </td>
+                </tr>
+                  <div *ngIf="journalData">
+                    <div class="ui-g-12 ui-lg-12 ui-md-12">
+                      <div class="pcs-item-row ui-g-12 ui-lg-4 ui-md-12" style="padding: 41px 10px 5px 10px;text-align:left;word-wrap: break-word;"
+                        valign="top">Narration :</div>
+                      <div class="pcs-item-row ui-g-12 ui-lg-8 ui-md-12" style="padding: 28px 10px 5px 10px;text-align:left;word-wrap: break-word;"
+                        valign="top">
+                        <p>{{journalData.remarks|| "-"}}</p>
+                      </div>
+                    </div>
+                  </div>
+              </tbody>
+            </table>
+            <div class="ui-g-12 ui-lg-12 ui-md-12" id="totaldetail" class="sub-total-row">
+              <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0 p-b-0 p-l-0 p-r-0">
+                <div class="ng-binding">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

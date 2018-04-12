@@ -1,0 +1,42 @@
+.app-invoice-list {
+  .headingclass {
+    padding: 10px 15px;
+  }
+  .bg-white {
+    background-color: #fff;
+  }
+  .height-auto {
+    height: auto;
+  }
+  .p-10 {
+    padding: 10px;
+  }
+  .prolist .addbutton {
+    margin-top: -60px;
+    margin-right: 10px;
+  }
+  .clearfix {
+    clear: both;
+  }
+  .invoicelist {
+    .ui-contextmenu {
+      width: 200px !important;
+    }
+    .ui-tabview {
+      position: initial;
+    }
+  }
+  .ui-menu {
+    width: 200px;
+  }
+}
+.invoice-list-tab 
+.ui-tabview-panel
+ table tr th:nth-child(6) {
+  text-align: center !important;
+}
+.ui-menu{
+  .ui-menuitem-link{
+    padding: .50em;
+  }
+}

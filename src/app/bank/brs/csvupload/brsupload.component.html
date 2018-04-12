@@ -1,0 +1,145 @@
+<p-growl [value]="msgs" sticky="sticky">
+</p-growl>
+<!-- <p-blockUI [blocked]="uploadinginprogress" [target]="uploadpanel">
+  <div class="text-center">Please wait...</div>
+</p-blockUI> -->
+<div class="ui-g-12 p-l-0 p-t-0 licence-bg">
+  <div class="journal-heading">
+    <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+    <h1 class="">Import Bank Statements</h1>
+    <div class="ui-toolbar-group-right ui-corner-all">
+      <!-- <button pButton type="button" label="Matching" icon="fa-clone" (click)="openpage('banks/brsmatching')"></button> -->
+      <button pButton type="button"  icon="fa-close" (click)="openpage('banks/brslist')"></button>
+    </div>
+  </div>
+  <div class="ui-g-12 invoice-list-tab brs-list-tab">
+
+    <p-panel #uploadpanel class="ui-g ui-fluid panel brsupload-table">
+
+      <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-r-0 p-t-0">
+        <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-r-0 p-t-0 p-b-0">
+          <div class="ui-g-12 ui-lg-12 receipt ul-md-6 p-b-0 m-l-0">
+            <div class="ui-g-12 ui-lg-3 ul-md-4 p-b-0">
+              <div class="ui-g form-group">
+                <div class="ui-g-12 p-t-0 bank-label p-l-0 p-r-0 p-b-0 req required-4">
+                  <label for="acAdvanced">Bank</label>
+                </div>
+                <div class="ui-g-12 p-l-0 p-r-0">
+                  <p-dropdown [filter]="true" [style]="{'width':'100%'}" [autoWidth]="false" class="pdropdown" [options]="BankList" [(ngModel)]="selectedbank"></p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-lg-3 ul-md-4 p-b-0">
+              <div class="ui-g form-group">
+                <div class="ui-g-12 p-t-0 p-l-0 p-r-0 bank-label p-b-0 req required-4">
+                  <label for="acAdvanced">From Date - To Date</label>
+                </div>
+                <div class="ui-g-12 p-l-0 p-r-0">
+                  <p-calendar [showIcon]="true" [(ngModel)]="fromtodate" selectionMode="range" showOnFocus="true" dateFormat="dd/mm/yy" readonlyInput="true"></p-calendar>
+                </div>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-lg-3 ul-md-4 p-b-0">
+              <div class="ui-g form-group">
+                <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 bank-label dummt-text req required-4">
+                  <label for="acAdvanced">Remarks</label>
+                </div>
+                <div class="ui-g-12 p-l-0 p-r-0 p-b-0 p-t-0 upload">
+                  <textarea [rows]="2" class="uploads" pInputText [cols]="30" [(ngModel)]="remarks" pInputTextarea autoResize="autoResize"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-lg-3 ul-md-4 p-b-0 sample-data">
+              <div class="ui-g form-group data-bg">
+                <div class="ui-g-12 ui-lg-10 bank-label ul-md-10 p-t-0 p-l-0 p-r-0 p-b-0 req required-4">
+                  <label for="acAdvanced">Download Sample Format</label>
+                </div>
+                <div class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0 ui-lg-2 ul-md-2">
+                  <a href="assets/sample-bankdata.csv" download>
+                    <span class="ui-button-icon-left fa fa-fw fa-download"></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="ui-g-12 ui-lg-5 ul-md-4 p-b-0 p-t-0">
+              <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-b-0">
+                <div class="ui-g form-group">
+                  <div class="ui-g-12 p-t-0 bank-label p-l-0 p-r-0 p-b-0 button-brs-color req required-4">
+                    <label for="acAdvanced">Upload CSV File</label>
+                  </div>
+                  <div class="ui-g-12 uil-lg-9 ui-md-9 p-l-0 p-r-0 brs-file brs-m  upload-border margin-right button-color button-icon-color">
+                    <p-fileUpload #fileInput name="filekey" url="{{uploadurl}}" (onBeforeSend)="onBeforeSend($event)" (onBeforeUpload)="prepRequest($event)"
+                      (onUpload)="onUploadSuccess($event)" (onError)="onUploadError($event)" accept=".csv" maxFileSize="1000000"
+                      (onSelect)="csvUploader($event,fileInput)" (onClear)="clearcsv($event)" multiple="false">
+                      <ng-template pTemplate="toolbar">
+                        <div></div>
+                      </ng-template>
+                    </p-fileUpload>
+                    <!-- <p-fileUpload name="myfile[]" customUpload="true" 
+                  (uploadHandler)="csvUploader($event)"></p-fileUpload> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="ui-g-12 ui-lg-2 ul-md-4 p-l-0 pull-right p-b-0">
+            <div class="ui-g form-group">
+              <div class="ui-g-12 p-t-0 p-l-0 p-r-0 p-b-0 button-brs-color req required-4">
+                <label for="acAdvanced">Upload</label>
+              </div>
+              <div class="ui-g-2 ui-lg-12 ul-md-2 pull-right p-l-0 ">
+                <button pButton type="button" class="blue-btn" (click)="uploadBankStatement()" icon="fa-upload" iconPos="left" label="Upload"></button>
+              </div>
+            </div>
+          </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="ui-g-12 ui-lg-12 ul-md-12 p-l-0 p-r-0 p-t-0 p-b-0 brsmatching-list-2 product-list-3">
+        <p-dataTable [value]="formatedcsvdata" [editable]="true" scrollable="true" scrollHeight="175px">
+          <p-column field="tranx_no" header="#" [style]="{'width':'2%'}">
+            <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+              <span>{{ridx + 1}}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="tranx_no" header="Trxn No" [style]="{'width':'17%'}">
+            <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+              <span>{{selectedtrans.tranx_no}}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="tranx_date" header="Trxn Date" [style]="{'width':'15%'}">
+            <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+              <span>{{selectedtrans.tranx_date}}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="description" header="Description" [style]="{'width':'20%'}" [editable]="true">
+            <ng-template let-col let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="editor">
+              <textarea [rows]="2" [cols]="20" [(ngModel)]="selectedtrans[col.field]" pInputTextarea autoResize="autoResize"></textarea>
+            </ng-template>
+            <ng-template let-col let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+              <span>{{selectedtrans.description}}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="debit" header="Debit" [style]="{'width':'15%','text-align':'right'}">
+            <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+              <span>{{selectedtrans.debit}}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="credit" header="Credit" [style]="{'width':'15%','text-align':'right'}">
+            <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+              <span>{{selectedtrans.credit}}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="availbalance" header="Avail. Balance" [style]="{'width':'15%','text-align':'right'}">
+            <ng-template let-selectedtrans="rowData" let-ridx="rowIndex" pTemplate="body">
+              <span>{{selectedtrans.availbalance}}</span>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+      </div>
+
+
+    </p-panel>
+  </div>
+</div>

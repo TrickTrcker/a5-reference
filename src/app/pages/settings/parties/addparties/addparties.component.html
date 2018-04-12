@@ -1,0 +1,297 @@
+<!-- <p-growl [value]="msgs" sticky="sticky">
+</p-growl> -->
+<div class="ui-g-12 col-md-12 margin-b-10 p-t-0 p-l-0">
+    <form [formGroup]="par" (ngSubmit)="save(par.value)">
+        <div class="ui-g form-group p-10">
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-lg-4 ui-md-5 p-t-0 p-r-0 ">
+                    <h3 class="first p-b-0" style="margin-bottom:1px">Basic Details</h3>
+                </div>
+                <div *ngIf=" CustomerorVendor == 'Customer' " class="ui-g-12 ui-lg-8 ui-md-7 p-t-0 p-r-0 form-group-default">
+                    <div>
+                        <label style="margin: 0px 10px;">Contact Category</label>
+                        <p-radioButton name="crdr" value="B2B" label="B2B" formControlName="contactcategory" (onClick)="onchangeCategory($event)"></p-radioButton>
+                        <p-radioButton name="crdr" value="B2C" label="B2C" formControlName="contactcategory" (onClick)="onchangeCategory($event)"
+                            [style]="{'margin-left': '15px'}"></p-radioButton>
+                    </div>
+                    <!-- <div *ngIf="partiesdetails != null" style="text-align: right; font-weight: bold;">
+                            <label style="margin: 0px 10px;">Contact Category</label>
+                            <span> {{ partiesdetails?.contactcategory }} </span>
+                    </div> -->
+                </div>
+            </div>
+            <div class="bank-t">
+                <div *ngIf=" contactcategory == 'B2B' || CustomerorVendor == 'Vendor' " class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 form-group-default">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0  bank-input required">
+                        <label class="ui-g-12"> Company Name </label>
+                        <input type="text" maxlength="{{max50}}" placeholder="Company Name" class="ui-g-12" formControlName="companyname">
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 form-group-default">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input required">
+                        <label class="ui-g-12"> Contact Type </label>
+                        <p-dropdown #groupdropdown (onChange)="setContactType($event)" [options]="contactslist" [style]="{'width': '100%'}" [filter]="true"
+                            [disabled]="partiesdetails?.contactid" placeholder="Select Contact Type" formControlName="contactype">
+                            <ng-template let-group pTemplate="item">
+                                <div>{{group.label}}</div>
+                            </ng-template>
+                        </p-dropdown>
+                        <!--<input type="text" pInputText placeholder="select group" class="ui-g-12" formControlName="subaccheadname">-->
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 form-group-default">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input required">
+                        <label class="ui-g-12">Contact Name </label>
+                        <input type="text" maxlength="{{max50}}" pInputText placeholder="Enter Name" class="ui-g-12" formControlName="firstname">
+                    </div>
+
+                </div>
+
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 form-group-default">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input required">
+                        <label class="ui-g-12"> Phone Number </label>
+                        <input type="text" maxlength="{{phoneno}}" pInputText pKeyFilter="int" placeholder="Phone Number"  class="ui-g-12"
+                            formControlName="mobileno">
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 form-group-default">
+                    <div class="ui-g-12 p-b-0 p-r-0 p-l-0 bank-input required">
+
+                        <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0">
+                            <label class="ui-g-12 p-t-0">Opening Balance</label>
+                            <div class="ui-g-12 ui-lg-10 ul-md-9 p-t-0 p-b-0 p-r-0 p-l-0">
+                                <input type="text" maxlength="{{amtlength}}" pInputText pKeyFilter="money" placeholder="Opening Balance" class="ui-g-12 text-right"
+                                    name="openingbalance" formControlName="openingbalance">
+                            </div>
+                            <div class="ui-g-12 ui-lg-2 ul-md-3 p-t-0 p-b-0 p-r-0 p-l-0">
+                                <p-dropdown [options]="crdr_opt" formControlName="ob_crdr" [style]="{'width':'100%'}">
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle">{{ getcrdrLabel(item) }}</span>
+                                    </ng-template>
+                                    <ng-template let-item pTemplate="item">
+                                        <div>{{ getcrdrLabel(item) }}</div>
+                                    </ng-template>
+                                </p-dropdown>
+                                <!-- <p-radioButton name="crdr" value="C" label="Credit" formControlName="ob_crdr"></p-radioButton>
+                                <p-radioButton name="crdr" value="D" label="Debit" formControlName="ob_crdr" [style]="{'margin-left': '15px'}"></p-radioButton> -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 ">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                        <label class="ui-g-12"> Industry </label>
+                        <p-dropdown [options]="industries" [style]="{'width': '100%'}" [filter]="true" placeholder="Select Industry" formControlName="industryname">
+                            <ng-template let-industry pTemplate="item">
+                                <div>{{industry.label}}</div>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 ">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                        <label class="ui-g-12"> Email ID </label>
+                        <input type="email" maxlength="{{max50}}" pInputText placeholder="Email ID" class="ui-g-12" formControlName="emailid">
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 ">
+
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                        <label class="ui-g-12">Department</label>
+                        <input type="text" maxlength="{{max50}}" pInputText placeholder="Department" class="ui-g-12" formControlName="cntctdeprtmnt">
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                        <label class="ui-g-12">Designation</label>
+                        <input type="text" maxlength="{{max50}}" pInputText placeholder="Designation" class="ui-g-12" formControlName="cntctdesignation">
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0 form-group-default">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input gstcontainer required">
+                        <label class="ui-g-12">GST NO</label>
+                        <input type="text" maxlength="{{gstlength}}" pInputText placeholder="GSTIN" class="ui-g-12" formControlName="gstno">
+                    </div>
+                </div>
+
+
+                <!-- <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                        <label class="ui-g-12">TIN</label>
+                        <input type="text" maxlength="{{gstlength}}" pInputText placeholder="TIN" class="ui-g-12" formControlName="tinno">
+                    </div>
+                </div> -->
+                <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                    <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                        <label class="ui-g-12">Website</label>
+                        <input type="text" maxlength="{{max50}}" pInputText placeholder="Website" class="ui-g-12" formControlName="socialids">
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12" *ngIf="openedfromothers == false">
+                <div>
+                    <h3 class="first p-b-0" style="margin-bottom:1px">Billing Address</h3>
+                </div>
+                <div class="bank-transfer ui-g-12 p-l-0 p-r-0">
+
+                    <div class="row width100">
+                        <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                            <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                                <label class="ui-g-12">Street Address</label>
+                                <input type="text" maxlength="{{max50}}" pInputText placeholder="Street Address" class="ui-g-12" formControlName="billaddress">
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                            <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                                <label class="ui-g-12">Pin Code</label>
+                                <input type="text" maxlength="{{pinlength}}" pInputText placeholder="Pin Code" (keypress)="numberOnly($event)" class="ui-g-12"
+                                    formControlName="billzipcode">
+                            </div>
+                        </div>
+
+                        <!-- <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                        <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                            <label class="ui-g-12"> Country </label>
+                            <p-dropdown [options]="countrys" [style]="{'width': '100%'}" [filter]="true" placeholder="Select Country" formControlName="billcountryname" (onChange)="loadstate($event,'B')">
+                                <ng-template let-country pTemplate="item">
+                                    <div>{{country.label}}</div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div> -->
+                    </div>
+
+
+                    <div class="row width100">
+                        <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                            <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                                <label class="ui-g-12"> State </label>
+                                <p-dropdown [options]="billstates" [style]="{'width': '100%'}" [filter]="true" placeholder="Select State" formControlName="billstatename"
+                                    (onChange)="loadcities($event,'B')">
+                                    <ng-template let-state pTemplate="item">
+                                        <div>{{state.label}}</div>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                            <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                                <label class="ui-g-12"> City </label>
+                                <p-dropdown [options]="billcities" [style]="{'width': '100%'}" [filter]="true" placeholder="Select City" formControlName="billcityname">
+                                    <ng-template let-city pTemplate="item">
+                                        <div>{{city.label}}</div>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="ui-g-12 p-l-0">
+                    <label>
+                        <p-checkbox formControlName="agreed" binary="true" (onChange)="checkbox()" label="Copy From Billing Address">Same as Billing Address</p-checkbox>
+                    </label>
+                </div>
+                <br>
+
+                <div class="ui-g-12 p-l-0">
+                    <h3 class="first p-b-0" style="margin-bottom:1px">Shipping Address</h3>
+                </div>
+                <!-- <div class="receipt ui-g-12"> -->
+                <div class="bank-transfer ui-g-12 p-l-0 p-r-0">
+                    <div class="row width100">
+
+
+
+                        <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                            <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                                <label class="ui-g-12">Street Address</label>
+                                <input type="text" maxlength="{{max50}}" pInputText placeholder="Street Address" class="ui-g-12" formControlName="shipaddress">
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                            <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                                <label class="ui-g-12">Pin Code</label>
+                                <input type="text" maxlength="{{pinlength}}" pInputText placeholder="Pin Code" (keypress)="numberOnly($event)" class="ui-g-12"
+                                    formControlName="shipzipcode">
+                            </div>
+                        </div>
+
+                        <!-- <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                        <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                            <label class="ui-g-12"> Country </label>
+                            <p-dropdown [options]="countrys" [style]="{'width': '100%'}" [filter]="true" placeholder="Select Country" formControlName="shipcountryname" (onChange)="loadstate($event,'S')">
+                                <ng-template let-country pTemplate="item">
+                                    <div>{{country.label}}</div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div> -->
+                    </div>
+                    <div class="row width100">
+                        <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                            <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                                <label class="ui-g-12"> State</label>
+                                <p-dropdown [options]="shipstates" [style]="{'width': '100%'}" [filter]="true" placeholder="Select State" formControlName="shipstatename"
+                                    (onChange)="loadcities($event,'S')">
+                                    <ng-template let-state pTemplate="item">
+                                        <div>{{state.label}}</div>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                            <div class="ui-g-12 p-t-0 p-b-0 p-r-0 p-l-0 bank-input">
+                                <label class="ui-g-12"> City</label>
+                                <p-dropdown [options]="shipcities" [style]="{'width': '100%'}" [filter]="true" placeholder="Select City" formControlName="shipcityname">
+                                    <ng-template let-city pTemplate="item">
+                                        <div>{{city.label}}</div>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12 ui-lg-6 ui-md-12 p-t-0 p-r-0">
+                            <div class="ui-g-12 p-t-0 p-r-0 bank-input bank-active" *ngIf="partiesdetails?.contactid">
+                                <label class="ui-g-12"> Status </label>
+                                <!-- <p-dropdown required [style]="{'width': '100%'}" [options]="changestatus" placeholder="select status" formControlName="status">
+                <ng-template let-status pTemplate="item">
+                  <div>{{status.value}}</div>
+                </ng-template>
+              </p-dropdown> -->
+                                <p-radioButton name="status" value="Active" label="Active" formControlName="status"></p-radioButton>
+                                <p-radioButton name="status" value="Inactive" label="Inactive" formControlName="status"></p-radioButton>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- </div> -->
+                    <!-- <div class="row ui-md-12">
+            <div class="col-md-4 pull-right">
+              <button type="submit" pButton label="save" style="width:100px" class="blue-btn"></button>
+            </div>
+          </div> -->
+
+
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-12 ui-md-12 p-t-0">
+                <div class="ui-toolbar-group-right ui-corner-all">
+                    <button icon="fa fa-check" pButton type="submit" label='{{buttonText}}'></button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>

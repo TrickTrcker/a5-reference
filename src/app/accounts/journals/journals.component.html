@@ -1,0 +1,175 @@
+<div class="ui-g-12 ui-fluid journal-panel p-l-0 p-r-0 p-t-0">
+    <div class="bg-white">
+        <div class="journal-heading">
+            <img class="infobook-logo ui-toolbar-group-left" src="assets/images/infobook-logo.png">
+            <h1>Journals</h1>
+            <!-- <div class="ui-toolbar-group-right">
+        <div class="ui-toolbar-group-right">
+            <button [routerLink]="['/accounts/journals/list']" icon="fa-window-close " pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-clickable center-icon fa fa-times"></span><span class="ui-button-text ui-clickable">ui-btn</span></button>
+        </div>
+        <div class="ui-toolbar-group-right multibutton-3">
+          <p-splitButton icon="fa fa-check" [model]="menuItems" label="Save"></p-splitButton>
+        </div>
+      </div> -->
+            <div class="ui-toolbar-group-right ">
+                <!-- <div class="ui-g-12 ui-g-1 ui-lg-3 p-t-0">
+                    <button [routerLink]="['/accounts/journals/list']" icon="fa-window-close " pbutton="" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">
+                        <span class="ui-button-icon-left ui-clickable center-icon fa fa-times"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                    </button>
+                </div> -->
+                <div class="ui-toolbar-group-right multibutton-3 multibutton-2 p-t-0">
+                    <p-splitButton icon="fa fa-check" [model]="menuItems" (onClick)="buttonupdateorcreate()" label="Save"></p-splitButton>
+                </div>
+            </div>
+        </div>
+
+        <form [formGroup]="journalForm" (ngSubmit)="generateJournal(journalForm)">
+            <div class="ui-g-12 form-group p-10 p-t-0 p-b-0">
+                <div class=" p-b-0 ui-g-12 product-add margin-b-journals">
+                    <div class="row width100">
+                        <div class="ui-g-4 form-group-default">
+                            <div class="ui-g-3 req required-3">
+                                <label> Date </label>
+                            </div>
+                            <div class="ui-g-8" style="padding:0px">
+                                <p-calendar class="ui-g-12  p-t-0" formControlName="journaldt" showIcon="true" showOnFocus="true" dateFormat="dd-mm-yy" required></p-calendar>
+                            </div>
+                        </div>
+                        <div class=" ui-g-4 form-group-default">
+                            <div class="ui-g-4 req required-4">
+                                <label> Journal Type</label>
+                            </div>
+                            <div class="ui-g-8" style="padding:0px">
+                                <p-dropdown [options]="journalfeat" formControlName="type" class="ui-g-12 drop p-t-0" [style]="{'width': '100%'}" required>
+                                    <ng-template let-item pTemplate="item">
+                                        <div class="ui-helper-clearfix select-box">
+                                            <div class="elipsis_div">{{item.label}}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="ui-g-4 form-group-default">
+                            <div class="ui-g-4">
+                                <label for="input">Reference No</label>
+                            </div>
+                            <div class="ui-g-8" style="padding:0px">
+                                <input id="input" formControlName="reference" pinputtext="" type="text" class=" bank-input ui-inputtext ui-corner-all ui-state-default ui-widget">
+                            </div>
+                        </div>
+                        
+                        <div class="ui-g-12 ui-lg-4 ui-md-4 form-group-default clearfix" *ngIf="autogenyn=='N'">
+                            <div class="ui-g-12 ui-lg-3 ui-md-3 p-r-0">
+                                <label for="journalno">Journal No</label>
+                            </div>
+                            <div class="ui-g-12 ui-lg-9 ui-md-9 p-t-0">
+                                <input id="journalno" formControlName="journalno" pinputtext="" type="text" class=" bank-input ui-inputtext ui-corner-all ui-state-default ui-widget">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="ui-g-12 ui-md-12 journal-page bg-lightb">
+                        <div class="ui-g-12 ui-md-4 account text-center">
+                            <label>
+                                <b>Account</b>
+                            </label>
+                        </div>
+                        <div class="ui-g-12 ui-md-3 p-r-0 debit-text text-right">
+                            <label>
+                                <b>Debit</b>
+                            </label>
+                        </div>
+                        <div class="ui-g-12 ui-md-3 p-r-0 credits-text text-right">
+                            <label>
+                                <b>Credit</b>
+                            </label>
+                        </div>
+                        <div class="ui-g-12 ui-md-2">
+                            <label></label>
+                        </div>
+                    </div>
+                    <div formArrayName="journalsArray" class="ui-g-12 ui-md-12  invoice-to-table p-t-0 p-b-0 journal-width  card">
+                        <div *ngFor="let journal of getJournalArray().controls; let index=index;let last = last" [formGroupName]="index" class="ui-g ui-md-12  p-b-1 journal-selectbox">
+                            <div class="ui-md-4 p-r-0 p-l-0 p-t-0 p-b-0 bank-input bank-input-2 receipt-journals">
+                                <p-dropdown [options]="treestructuredBooks" (onChange)="onSelectAccountTypes($event,index,journal)" formControlName="account"
+                                    class="drop" filter="true" placeholder="Select Account" [style]="{'width': '94%'}" appendTo="body">
+                                    <ng-template let-item pTemplate="item">
+                                        <div class="ui-helper-clearfix select-box">
+                                            <div class="elipsis_div">{{item.label}}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                                <button pButton class="leger-button" type="button" icon="fa-plus" pTooltip="Add New Ledger" tooltipPosition="top" iconPos="right" (click)="displayaddLedger(journal,index,'')"></button>
+                            </div>
+                            <div class="ui-md-3 p-t-0 p-b-0 receipt-journals receipt-journals-2">
+                                <input type="text" maxlength="{{amtlength}}" pInputText appNumberonly placeholder="0" [id]="'debit'+index" formControlName="debit"
+                                    class="ui-g-12 input-box  text-right" (keyup)="onResetAmountType($event,journal,'credit')">
+                            </div>
+                            <div class="ui-md-3 p-t-0 p-b-0 receipt-journals p-l-0 p-r-0 receipt-journals-2">
+
+                                <input type="text" maxlength="{{amtlength}}" pInputText placeholder="0" appNumberonly formControlName="credit" [id]="'credit'+index"
+                                    (keyup)="onResetAmountType($event,journal,'debit')" [ngClass]="{
+                                'ui-g-10': (last && index==1 || index >1 && !last) , 
+                                'ui-g-12':index==0,
+                                'ui-g-8': index >1 && last
+                             }" class="text-right input-box">
+                            </div>
+                            <div class="ui-md-1 p-l-0 p-r-0 p-t-0">
+                                <div *ngIf="index>1" class="ui-g-1 receipt-trash receipt-trash-2">
+                                    <button type="button" icon="fa-trash" (click)="removeJournalEntry(index)" pButton></button>
+                                </div>
+                                <div *ngIf="last" class="p-b-0 receipt-journals m-t-2">
+                                    <button type="button" class=" pull-right" pButton (click)="addJournalEntry()" icon="fa-plus"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-12 ui-md-12 receipt totalvalue p-t-0 ">
+                <div class="ui-g-12 ui-lg-2 ui-md-12">
+                    <label></label>
+                </div>
+                <div class="ui-g-12 ui-lg-2 ui-md-12 p-t-0 ">
+                    <label></label>
+                </div>
+                <div class="ui-g-12 ui-lg-3 ui-md-12 text-right p-r-0">
+                    <!-- <label ><b>₹-</b></label> -->
+                    <div [hidden]=" !dtotal && !dtotaldiff ">
+                        <label>
+                            <strong>Debit Total </strong>:{{ dtotal | currency : currency_Symbol : 'symbol' }}</label>
+                        <br/>
+                        <label *ngIf="dtotaldiff && dtotaldiff<0"> [ {{dtotaldiff | currency : currency_Symbol : 'symbol'}} ] </label>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-3 ui-md-12 text-right p-r-0">
+                    <!-- <label ><b>₹-</b></label> -->
+                    <div [hidden]=" !ctotal && !dtotaldiff ">
+                        <label>
+                            <strong>Credit Total</strong>: {{ ctotal | currency : currency_Symbol : 'symbol'}}</label>
+                        <br/>
+                        <label *ngIf="ctotaldiff && ctotaldiff<0">[ {{ctotaldiff | currency : currency_Symbol : 'symbol'}} ]</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row ui-g-12">
+                <div class="ui-g-12">
+                    <textarea style="border:1px solid #d5d5d5; width: 99%; color: #464646;" formControlName="remarks" [rows]="3" [cols]="40"
+                        pInputTextarea placeholder="Comments" autoResize="autoResize"></textarea>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <!-- add ledger start -->
+    <div class="molal-overlay">
+        <div class="invoice-overlay category-overlay">
+            <p-dialog (onHide)="onhideLedgerpopup($event)" [(visible)]="addledgerdisplay" modal="modal" width="500" [responsive]="true">
+                <app-addledger [ledgerdtls]="ledgerdtls" [openedfromothers]=addledgerdisplay (notifyNewEntry)="addLedgerDetection($event)"></app-addledger>
+            </p-dialog>
+        </div>
+    </div>
+    <!-- add ledger end -->
+</div>

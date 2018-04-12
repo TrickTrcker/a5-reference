@@ -1,0 +1,21 @@
+
+.product-table-padding.product-table .ui-tabview-panels .ui-tabview-panel {
+    padding: 10px !important;
+}
+.border-tab .ui-tabview .ui-tabview-panel {
+    padding: 35em 1em !important;
+    border: 1px solid #c7cdd1;
+    border-top: 0 none;
+}
+
+.invoice-list {
+    .ui-widget-content{
+        display: inline-block !important;
+    }
+}
+.tabview-height .ui-tabview .ui-tabview-panel {
+    // padding: 0.5em 1em;
+    // border: 1px solid #c7cdd1;
+    border-top: 0 none;
+    height: 450px;
+}

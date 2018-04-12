@@ -1,0 +1,39 @@
+<!-- <p-growl [value]="msgs" sticky="sticky">
+</p-growl> -->
+<div class="molal-overlay p-t-0 p-r-0 p-l-0">
+    <div class="changepass-overlay ui-content p-t-0 p-r-0 p-l-0">
+        <div class="ui-g-12 ui-fluid changepass-overlay brand-overlay p-t-0 p-r-0 p-l-0 p-b-0">
+            <div class="card-w-title brand-overlay brand-overlay-2 p-t-0 p-r-0  p-b-0">
+                <h2 class=" m-b-5"><b>{{title}}</b></h2>
+                <form [formGroup]="categoryform" (ngSubmit)="save(categoryform.value)">
+                    <div class="ui-g-12 form-group p-l-0 p-r-0 p-b-0 p-t-0">
+                        <div class="ui-g-12 ui-lg-12 ui-md-12 p-l-0 p-r-0 p-t-0 form-group-default">
+                            <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input required">
+                                <label class="ui-g-12">Name</label>
+                                <input class="ui-g-12 p-b-0 p-t-0" maxlength="{{categoryName}}" type="text" pInputText placeholder="Enter Category Name" formControlName="categoryname">
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-lg-12 ui-md-12 p-b-0 p-t-0 p-r-0 p-l-0 form-group-default">
+                            <div class="ui-g-12 p-t-0 bank-input required" *ngIf="catgdetails?.categoryid">
+                                <label class="ui-g-12 p-l-0"> Status</label>
+                                <!-- <p-dropdown required [style]="{'width': '100%'}" [options]="changestatus" placeholder="select status" formControlName="status">
+                              <ng-template let-status pTemplate="item">
+                                <div>{{status.value}}</div>
+                              </ng-template>
+                            </p-dropdown> -->
+                                <p-radioButton name="status" value="Active" label="Active" formControlName="status"></p-radioButton>
+                                <p-radioButton name="status" value="Inactive" label="Inactive" formControlName="status" [style]="{'margin-left': '15px'}"></p-radioButton>
+                            </div>
+                        </div>
+                        <div class="row ui-md-12 p-r-0">
+                            <div class="ui-g-2 pull-right p-l-0 p-r-0">
+                                <button pButton type="submit" label="{{buttonText}}" icon="fa-check" class="pull-right"></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

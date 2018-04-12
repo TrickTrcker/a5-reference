@@ -1,0 +1,135 @@
+
+<div class="col-md-12  bg-white">
+    <form [formGroup]="bank" class="formgroup" (ngSubmit)="createbank(bank.value)">
+        <div class="ui-g form-group p-10 p-l-0 p-r-0 p-b-0 p-t-0 ">
+            <div class="receipt ui-g-12 bank-t p-b-0 p-l-0 p-r-0">
+                <div class="ui-g-12 ui-lg-4 ui-md-4 form-group-default">
+                    <div class="ui-g-12 ui-lg-2 ui-md-2 required required-6">
+                        <label for="input ui-g-12 bold">Date</label>
+                    </div>
+                    <div class="ui-g-12  ul-md-12 p-t-0 p-r-0 receipt-date receipt-date-2 calc border-calc">
+                        <p-calendar class="ui-dropdown calc" [showIcon]="true" readonlyInput="readonlyInput" dateFormat="dd/mm/yy" formControlName="Docmentdata"></p-calendar> <span style="margin-left:35px">{{Docmentdata|date}}</span>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-4 ui-md-4 form-group-default" *ngIf="autogenyn=='N'">
+                    <div class="ui-g-12 ui-lg-3 ui-md-12 required required-5">
+                        <label for="journalno">Trans.No</label>
+                    </div>
+                    <div class="ui-g-12 ui-lg-9 ui-md-9 ul-md-12 p-t-0  p-r-0">
+                        <input id="journalno" formControlName="DocmentNo" pinputtext="" type="text" class=" bank-input ui-inputtext ui-corner-all ui-state-default ui-widget">
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="ui-g-12 ui-lg-4 ui-md-12 p-l-0 form-group-default">
+                <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input required required-3">
+                    <label class="ui-g-12 bold">From </label>
+                    <p-dropdown [filter]="true" formControlName="selectedfrom" placeholder="Select Bank " (onChange)="onSelectedBankFrom()" [style]="{'width':'91%'}" [autoWidth]="false" [options]="BankList" name="selectedfrom">
+                        <ng-template let-BankList pTemplate="item">
+                            <div class="ui-helper-clearfix select-box">
+                                <div class="elipsis_div">{{BankList.label}}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown> -->
+            <!-- add bank start -->
+            <!-- <button class="brand-button" pButton type="button" icon="fa-plus" pTooltip="Add Bank" tooltipPosition="top" iconPos="right"
+                     (click)="displayaddbanks()"></button> -->
+            <!-- add bank end -->
+            <!-- </div>
+            </div> -->
+            <div class="ui-g-12 ui-lg-4 ui-md-12 p-r-0 form-group-default" style="padding-left: 0px;">
+                <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input bank-input-2 required required-3">
+                    <label class="ui-g-12 padding-top bold">From </label>
+                    <p-autoComplete field="subaccheadname" class="pdropdown" placeholder="Select Bank" [suggestions]="filterformlist" name="selectedUOMdesc" formControlName="selectedfrom" (completeMethod)="searchfrom($event)" [dropdown]="true" [minLength]="0" (onSelect)="selectfrom($event)"
+                        (onDropdownClick)="handleDropdownClick($event,'from')" (onChange)="onSelectedBankFrom()" [style]="{'width': '87%'}" emptyMessage={{autocomplete_emptymessage}}>
+                        <ng-template let-from pTemplate="item">
+                            <div class="ui-helper-clearfix select-box">
+                                <div class="elipsis_div">{{from.subaccheadname}}</div>
+                            </div>
+                        </ng-template>
+                    </p-autoComplete>
+                    <!-- add bank start -->
+                    <button class="brand-button" pButton type="button" icon="fa-plus" pTooltip="Add Bank" tooltipPosition="top" iconPos="right" (click)="displayaddbanks()"></button>
+                    <!-- add bank end -->
+                </div>
+            </div>
+            <div class="ui-g-12 ui-lg-4 ui-md-12 p-r-0 form-group-default">
+                <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input bank-input-2 required required-3">
+                    <label class="ui-g-12 padding-top bold">To </label>
+                    <p-autoComplete field="subaccheadname" class="pdropdown" placeholder="Select Bank" [suggestions]="filtertolist" name="selected" formControlName="selectedto" (completeMethod)="searchto($event)" [dropdown]="true" [minLength]="0" (onSelect)="selectto($event)"
+                        (onDropdownClick)="handleDropdownClick($event,'to')" [style]="{'width': '87%'}" emptyMessage={{autocomplete_emptymessage}}>
+                        <ng-template let-to pTemplate="item">
+                            <div class="ui-helper-clearfix select-box">
+                                <div class="elipsis_div">{{to.subaccheadname}}</div>
+                            </div>
+                        </ng-template>
+                    </p-autoComplete>
+                    <!-- add bank start -->
+                    <button class="brand-button" pButton type="button" icon="fa-plus" pTooltip="Add Bank" tooltipPosition="top" iconPos="right" (click)="displayaddbanksTo()"></button>
+                    <!-- add bank end -->
+                </div>
+            </div>
+            <!-- <div class="ui-g-12 ui-lg-4 ui-md-12 p-r-0 form-group-default">
+                <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input bank-input-2 required required-4">
+                  <label class="ui-g-12 padding-top bold">To </label>
+                  <p-autoComplete field="subaccheadname" [suggestions]="filtertolist" placeholder="Select Bank "  name="selectedto" formControlName="selectedto"
+                  formControlName="selectedto" (completeMethod)="searchto($event)" [dropdown]="true" [minLength]="0" (onSelect)="selectto($event)" (onDropdownClick)="handleDropdownClick($event,'to')"
+                    emptyMessage={{autocomplete_emptymessage}}>
+                    <ng-template let-to pTemplate="item">
+                      <div class="ui-helper-clearfix select-box">
+                        <div class="elipsis_div">{{to.subaccheadname}}</div>
+                      </div>
+                    </ng-template>
+                  </p-autoComplete>
+                </div>
+              </div> -->
+            <!-- <div class="ui-g-12 ui-lg-4 ui-md-12 form-group-default">
+                <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input required required-4">
+                    <label class="ui-g-12 bold">To </label>
+                    <p-dropdown [filter]="true" pInputText (onChange)="onSelectedBankTo()" placeholder="Select Bank " [style]="{'width':'100%'}" [autoWidth]="false" [options]="BankList" name="selectedto" formControlName="selectedto">
+                        <ng-template let-BankList pTemplate="item">
+                            <div class="ui-helper-clearfix select-box">
+                                <div class="elipsis_div">{{BankList.label}}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div> -->
+            <div class="ui-g-12 ui-lg-4 ui-md-12 p-r-0 form-group-default">
+                <div class="ui-g-12  p-r-0 p-l-0 p-t-0 p-b-0 bank-input required required-5" style="height: 100%;">
+                    <label class="ui-g-12 bold "> Amount </label>
+                    <input type="text" maxlength="{{amtlength}}" class="ui-g-12 text-right " pInputText placeholder="Enter Amount" (keypress)=numberOnly($event) name="Amount" formControlName="amount">
+                </div>
+            </div>
+            <div class="ui-g-12 p-l-0 p-r-0 p-t-0 p-b-0">
+                <div class="ui-g-12 bank-field p-l-0 p-t-0 p-b-0 p-r-0">
+                    <!-- <input type="text" pInputText placeholder=" Narration " class="ui-g-12" name="Remark" formControlName="Remark"> -->
+                    <textarea autoresize="autoResize" class="ui-g-12 m-l-5 ng-pristine ng-valid ui-inputtext ui-corner-all ui-state-default ui-widget ng-touched" pinputtextarea="" pInputText placeholder=" Use this field to comments your payment amount " name="Remark" formControlName="Remark"
+                        ng-reflect-auto-resize="autoResize" ng-reflect-rows="3" ng-reflect-cols="20" rows="3" cols="20" style="height: 75px;margin:0;"></textarea>
+                    <!-- <span><i class="fa fa-fw fa-question-circle" pTooltip="Use this field to comments your payment amount"></i> </span> -->
+                </div>
+            </div>
+            <div class="ui-g-12 p-r-0">
+                <div class="ui-g-1 pull-right">
+                    <button type="submit" pButton label="Save" icon="fa fa-check" *ngIf="!bankfind" style="width:65px" class="blue-btn"></button>
+                    <button type="submit" pButton *ngIf="bankfind" icon="fa fa-check" label="Update" style="width:78px" class="blue-btn"></button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- add bank start -->
+    <div class="molal-overlay">
+        <div class="invoice-overlay">
+            <p-dialog header="Add Bank Details" (onHide)="onhideBankpopup($event)" [(visible)]="addbank_display" modal="modal" width="700" [responsive]="true">
+                <app-addbank [banklist]=[] [openedfromothers]="addbank_display" (notifyNewBank)="addbankDetection($event)"></app-addbank>
+            </p-dialog>
+        </div>
+    </div>
+    <div class="molal-overlay">
+        <div class="invoice-overlay">
+            <p-dialog header="Add Bank Details" (onHide)="onhideBankpopupTO($event)" [(visible)]="addbankto_display" modal="modal" width="700" [responsive]="true">
+                <app-addbank [banklist]=[] [openedfromothers]="addbankto_display" (notifyNewBank)="addbankDetectionTo($event)"></app-addbank>
+            </p-dialog>
+        </div>
+    </div>
+    <!-- add bank end -->
+</div>
